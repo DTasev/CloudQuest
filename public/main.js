@@ -1,3 +1,5 @@
+var player;
+
 function clear(canvas, ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
@@ -16,10 +18,11 @@ function drawCircle(ctx) {
 }
 
 function drawPlayer(canvas, ctx) {
-    var playerSprite = document.getElementById("playerSprite");
+
     // x 809 y 577
 
-    var f = 0;
+    ctx.fillRect(player.x,player.y, player.width, player.height);
+   /* var f = 0;
         f++;
         // draw the car
         if (f == 2) {
@@ -28,7 +31,7 @@ function drawPlayer(canvas, ctx) {
         if (f == 6) {
             f = 0;
         }
-        ctx.drawImage(playerSprite, 809, 577, 60, 56, 50, 60, 30, 40);
+        ctx.drawImage(playerSprite, 809, 577, 60, 56, 50, 60, 30, 40);*/
 }
 
 function render(canvas, ctx) {
@@ -72,16 +75,33 @@ function gameLoop(canvas, ctx) {
 
     //TODO initialise player and obstacles
 
+    player = new Player(40, 50, 10, 20, 5);
+
+
+
     return setInterval(function () {
         gameLoop(canvas, ctx)
     }, 1000 / FRAMES);
 })();
 
 var imageLoader = (function(){
-    this.images = [];
+    this.images = {
+        "idle0" : "Idle__000.png",
+        "idle1" : "Idle__001.png",
+        "idle2" : "Idle__002.png",
+        "idle3" : "Idle__003.png",
+        "idle4" : "Idle__004.png",
+        "idle5" : "Idle__005.png",
+        "idle6" : "Idle__006.png",
+        "idle7" : "Idle__007.png",
+        "idle8" : "Idle__008.png",
+        "idle9" : "Idle__009.png"
+    };
 
     this.loadImages = function () {
-        
+        for(var img in images){
+
+        }
     }
 })
 
@@ -142,6 +162,8 @@ var assetLoader = (function() {
         downloadAll: this.downloadAll
     };
 })();
+
 assetLoader.finished = function() {
     startGame();
 }
+
