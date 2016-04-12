@@ -37,5 +37,13 @@ var Player = (function () {
     Player.prototype.toString = function () {
         return "x->" + this.x + " y->" + this.y + " width->" + this.width + " height->" + this.height;
     };
+
+    Player.prototype.gravity = function () {
+        this.y += 1;
+    };
+    Player.prototype.render = function (ctx) {
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    };
+
     return Player;
 })();
