@@ -14,17 +14,15 @@ function initialise() {
 
     return setInterval(function () {
         gameLoop(canvas, ctx)
-    }, 1000 / 60);
+    }, 1000 / FRAMES);
 }
 
 function clear(canvas, ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
-function drawSquare(ctx) {
-    ctx.beginPath();
+function drawSquare(canvas, ctx) {
     ctx.fillStyle = "rgb(0, 0, 0)";
-    ctx.fillRect(20, 20, 50, 50);
-    ctx.closePath();
+    ctx.fillRect(0, canvas.height-50, canvas.width, 50);
 }
 function drawCircle(ctx) {
     ctx.beginPath();
@@ -34,9 +32,27 @@ function drawCircle(ctx) {
     ctx.fill();
 
 }
+function drawPlayer(canvas, ctx) {
+    var playerSprite = ctx.getElementById("playerSprite");
+    // x 809 y 577
+
+var f = 0;
+    f++;
+    // draw the car
+    if (f == 2) {
+        f = 4;
+    }
+    if (f == 6) {
+        f = 0;
+    }
+    ctx.drawImage(playerSprite, 809, 577, 30, 40, )
+    ctx.drawImage(cars, p.width, f * p.height, p.width, p.height, p.x, p.y, p.width, p.height);
+
+}
 function render(canvas, ctx) {
-    drawSquare(ctx);
+    drawSquare(canvas, ctx);
     drawCircle(ctx);
+    drawPlayer(canvas, ctx);
 }
 function handleInput() {
 
