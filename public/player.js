@@ -31,7 +31,7 @@ var Player = (function () {
     };
 
     Player.prototype.getVerticalCenter = function () {
-        return (this.height+ this.y + this.y) / 2;
+        return (this.height + this.y + this.y) / 2;
     };
 
     Player.prototype.toString = function () {
@@ -41,8 +41,11 @@ var Player = (function () {
     Player.prototype.gravity = function () {
         this.y += 1;
     };
+
     Player.prototype.render = function (ctx) {
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        var i = assetLoader.hero.dead[0];
+
+        ctx.drawImage(i, 0, 0, i.width, i.height, this.x, this.y, this.width, this.height);
     };
 
     return Player;

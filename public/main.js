@@ -49,12 +49,14 @@ function handleInput() {
 }
 
 function applyGravity() {
+    // create gravity class
     for (var i = 0; i < gameObjects.length; i++) {
         gameObjects[i].gravity();
     }
 }
+
 function update() {
-    applyGravity();
+    //applyGravity();
 }
 
 function gameLoop(canvas, ctx) {
@@ -121,8 +123,6 @@ function KeyboardController(keys, repeat) {
 }
 
 (function main() {
-    debugger;
-
     var FRAMES = 60;
 
     canvas = document.getElementById("gameCanvas");
@@ -145,7 +145,7 @@ function KeyboardController(keys, repeat) {
 
     //TODO initialise player and obstacles
 
-    var player = new Player(40, 50, 10, 20, 5);
+    var player = new Player(40, 50, 50, 60, 5);
     gameObjects.push(player);
 
 
