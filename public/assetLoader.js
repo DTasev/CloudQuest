@@ -1,5 +1,5 @@
 var assetLoader = (function assetLoaderInit() {
-    var FRAMES_COUNT = 9,
+    var FRAMES_COUNT = 10,
     	SEPARATOR = '__',
     	PADDING = '000',
     	BASE_URL = '/heroSprites/',
