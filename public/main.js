@@ -121,7 +121,7 @@ function KeyboardController(keys, repeat) {
 }
 
 (function main() {
-    console.log('hello');
+    debugger;
 
     var FRAMES = 60;
 
