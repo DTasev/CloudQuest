@@ -4,10 +4,15 @@
 var FRAMES = 60;
 var i = 30;
 
+function loadAssets() {
+
+}
+
 function initialise() {
     canvas = document.getElementById("gameCanvas");
     ctx = canvas.getContext('2d');
 
+    loadAssets();
     //TODO set keyboard controls
 
     //TODO initialise player and obstacles
@@ -20,10 +25,12 @@ function initialise() {
 function clear(canvas, ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
+
 function drawSquare(canvas, ctx) {
     ctx.fillStyle = "rgb(0, 0, 0)";
-    ctx.fillRect(0, canvas.height-50, canvas.width, 50);
+    ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
 }
+
 function drawCircle(ctx) {
     ctx.beginPath();
     ctx.arc(90, 90, 30, 0, Math.PI * 2, true);
@@ -32,11 +39,12 @@ function drawCircle(ctx) {
     ctx.fill();
 
 }
+
 function drawPlayer(canvas, ctx) {
     var playerSprite = document.getElementById("playerSprite");
     // x 809 y 577
 
-var f = 0;
+    var f = 0;
     f++;
     // draw the car
     if (f == 2) {
