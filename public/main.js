@@ -63,7 +63,7 @@ function gameLoop(canvas, ctx) {
 }
 
 (function main() {
-    console.log('hello');
+    debugger;
 
     var FRAMES = 60;
     var i = 30;
