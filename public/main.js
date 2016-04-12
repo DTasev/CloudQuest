@@ -45,7 +45,7 @@ var f = 0;
     if (f == 6) {
         f = 0;
     }
-    ctx.drawImage(playerSprite, 809, 577, 30, 40, 50, 60, 30, 40);
+    ctx.drawImage(playerSprite, 809, 577, 60, 56, 50, 60, 30, 40);
 
 }
 function render(canvas, ctx) {
