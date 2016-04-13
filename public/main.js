@@ -33,7 +33,7 @@ function drawPlayer(canvas, ctx) {
 }
 
 
-function render(canvas, ctx) {
+function render(ctx) {
     for (var i = 0; i < gameObjects.length; i++) {
         gameObjects[i].render(ctx);
     }
@@ -51,6 +51,7 @@ function handleInput() {
  */
 function update() {
     for(var i = 0; i < gameObjects.length; i++){
+        // collision first, apply gravity if applicable, i.e isn't colliding with ground etc
         gravityManager.applyGravity(gameObjects[i]);
     }
     /*
@@ -71,7 +72,7 @@ function gameLoop(canvas, ctx) {
     update();
 
     // render objects for the frame on screen
-    render(canvas, ctx);
+    render(ctx);
 }
 /**
  * Source from http://stackoverflow.com/questions/3691461/remove-key-press-delay-in-javascript
