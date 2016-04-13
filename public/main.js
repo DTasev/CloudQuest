@@ -38,25 +38,26 @@ function drawPlayer(canvas, ctx) {
      ctx.drawImage(playerSprite, 809, 577, 60, 56, 50, 60, 30, 40);*/
 }
 
+
 function render(canvas, ctx) {
-    drawSquare(canvas, ctx);
-    drawCircle(ctx);
     drawPlayer(canvas, ctx);
 }
+
 
 function handleInput() {
 
 }
 
-function applyGravity() {
-    // create gravity class
-    for (var i = 0; i < gameObjects.length; i++) {
-        gameObjects[i].gravity();
-    }
-}
-
+/**
+ * Handles the collisions between the gameObjects
+ */
 function update() {
-    //applyGravity();
+    gravityManager.applyGravity(gameObjects);
+    /*
+     update consists of
+     -> handle the collision between objects
+     -> apply gravity if not colliding with ground
+     */
 }
 
 function gameLoop(canvas, ctx) {
@@ -125,18 +126,15 @@ function KeyboardController(keys, repeat) {
 (function main() {
     var FRAMES = 60;
 
-    canvas = document.getElementById("gameCanvas");
-    ctx = canvas.getContext('2d');
+    var canvas = document.getElementById("gameCanvas");
+    var ctx = canvas.getContext('2d');
 
-    //TODO set keyboard controls
     KeyboardController({
         37: function () {
             playerDirection = LEFT;
-            console.log('left arrow key' + playerDirection);
         },
         39: function () {
             playerDirection = RIGHT;
-            console.log('right arrow key' + playerDirection);
         },
         32: function () {
             PLAYER_JUMPING = true;

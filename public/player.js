@@ -38,14 +38,8 @@ var Player = (function () {
         return "x->" + this.x + " y->" + this.y + " width->" + this.width + " height->" + this.height;
     };
 
-    Player.prototype.gravity = function () {
-        this.y += 1;
-    };
-
     Player.prototype.render = function (ctx) {
-        var i = assetLoader.hero.dead[0];
-
-        ctx.drawImage(i, 0, 0, i.width, i.height, this.x, this.y, this.width, this.height);
+        renderManager.renderImage(ctx, this);
     };
 
     return Player;

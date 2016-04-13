@@ -29,7 +29,7 @@ var assetLoader = (function assetLoaderInit() {
 			frameNumber = (PADDING + f).slice(-PADDING.length);
 
 			frames[f].src = BASE_URL +  states[s] + SEPARATOR + frameNumber + EXTENSION;
-			console.log(frames[f].src);
+			//console.log(frames[f].src);
 		}
 
 		hero[states[s].toLowerCase()] = frames;
