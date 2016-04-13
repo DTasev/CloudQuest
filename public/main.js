@@ -52,7 +52,9 @@ function handleInput() {
 function update() {
     for(var i = 0; i < gameObjects.length; i++){
         // collision first, apply gravity if applicable, i.e isn't colliding with ground etc
+
         gravityManager.applyGravity(gameObjects[i]);
+        // apply animation effects, i.e. deflation of platforms, changing of sprite picture
     }
     /*
      update consists of
