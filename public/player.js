@@ -1,10 +1,11 @@
 var Player = (function () {
-    function Player(x, y, width, height, speed) {
+    function Player(x, y, width, height, runningSpeed, gravityWeight) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.speed = speed;
+        this.runningSpeed = runningSpeed;
+        this.gravityWeight = gravityWeight;
     }
 
     /**

@@ -15,12 +15,10 @@
 var gravityManager = (function (){
 
     // Gravity constant that will be applied to all objects
-    var GRAVITY_CONSTANT = 0.3;
+    var GRAVITY_CONSTANT = 1;
 
-    this.applyGravity = function (gameObjects) {
-        for(var i = 0; i < gameObjects.length; i++){
-            gameObjects[i].y += GRAVITY_CONSTANT;
-        }
+    this.applyGravity = function (gameObject) {
+            gameObject.y += GRAVITY_CONSTANT*gameObject.gravityWeight;
     };
 
     return this;

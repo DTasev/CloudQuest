@@ -13,18 +13,12 @@ function drawSquare(canvas, ctx) {
 }
 
 function drawCircle(ctx) {
-    ctx.beginPath();
-    ctx.arc(90, 90, 30, 0, Math.PI * 2, true);
-    ctx.closePath();
-    ctx.fillStyle = "rgb(0,0,0)";
-    ctx.fill();
+
 }
 
 function drawPlayer(canvas, ctx) {
 
-    for (var i = 0; i < gameObjects.length; i++) {
-        gameObjects[i].render(ctx);
-    }
+
 
     /* var f = 0;
      f++;
@@ -40,11 +34,15 @@ function drawPlayer(canvas, ctx) {
 
 
 function render(canvas, ctx) {
-    drawPlayer(canvas, ctx);
+    for (var i = 0; i < gameObjects.length; i++) {
+        gameObjects[i].render(ctx);
+    }
 }
 
 
 function handleInput() {
+    playerMovementManager.handleMovement(playerDirection, gameObjects[0]);
+    playerDirection = 0;
 
 }
 
@@ -52,7 +50,9 @@ function handleInput() {
  * Handles the collisions between the gameObjects
  */
 function update() {
-    gravityManager.applyGravity(gameObjects);
+    for(var i = 0; i < gameObjects.length; i++){
+        gravityManager.applyGravity(gameObjects[i]);
+    }
     /*
      update consists of
      -> handle the collision between objects
@@ -143,8 +143,10 @@ function KeyboardController(keys, repeat) {
 
     //TODO initialise player and obstacles
 
-    var player = new Player(40, 50, 50, 60, 5);
+    var player = new Player(40, 50, 50, 60, 5, 0.2);
+    var platform = new Platform(100, 110, 20, 1, 0.5);
     gameObjects.push(player);
+    gameObjects.push(platform);
 
 
     return setInterval(function () {
