@@ -169,7 +169,7 @@ function KeyboardController(keys, repeat) {
 
 
     player = new Player(40, 30, 50, 60, 3, 5);
-    var basePlatform = new Platform(0, canvas.height - 50, 1000, 50, 0.5, 'rgb(0,0,0)');
+    var basePlatform = new Platform(0, canvas.height - 50, 1000, 50, 0, 'rgb(0,0,0)');
 
     gameObjects.push(player);
     renderArray.push(player);

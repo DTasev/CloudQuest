@@ -36,48 +36,63 @@ var collisionDetector = (function () {
     this.rectangleCollision = function (rectangle1, rectangle2) {
 
         // check Y axis 1st
-        var rectSides2 = loadRectangleSides(rectangle1);
-        var rectSides1 = loadRectangleSides(rectangle2);
+        var rectSides1 = loadRectangleSides(rectangle1);
+        var rectSides2 = loadRectangleSides(rectangle2);
 
         // if intersecting return all intersections
-        if (!(rectSides2[SIDE_LEFT] > rectSides1[SIDE_RIGHT] ||
-            rectSides2[SIDE_RIGHT] < rectSides1[SIDE_LEFT] ||
-            rectSides2[SIDE_TOP] > rectSides1[SIDE_BOTTOM] ||
-            rectSides2[SIDE_BOTTOM] < rectSides1[SIDE_TOP])) {
+        /*
+         if (!(rectSides2[SIDE_LEFT] > rectSides1[SIDE_RIGHT] ||
+         rectSides2[SIDE_RIGHT] < rectSides1[SIDE_LEFT] ||
+         rectSides2[SIDE_TOP] > rectSides1[SIDE_BOTTOM] ||
+         rectSides2[SIDE_BOTTOM] < rectSides1[SIDE_TOP])) {
 
-            var checkLeft = rectangle1.getHorizontalCenter() > rectangle2.getHorizontalCenter(); // check if colliding on left
-            var checkRight = rectangle1.getHorizontalCenter() < rectangle2.getHorizontalCenter(); // check if colliding on right
-            //var checkBottom = rectangle1.getVerticalCenter() < rectangle2.getVerticalCenter(); // bottom vs top
-            var checkBottom = (((rectSides1[SIDE_TOP] +10 > rectSides2[SIDE_BOTTOM] - 2) && rectSides2[SIDE_BOTTOM] < rectSides1[SIDE_TOP] + 10));
-            var checkTop = rectangle1.getVerticalCenter() > rectangle2.getVerticalCenter(); // top vs bottom
+         */
+            if (!(rectSides1[SIDE_RIGHT] < rectSides2[SIDE_LEFT] ||
+                rectSides1[SIDE_LEFT] > rectSides2[SIDE_RIGHT] ||
+                rectSides1[SIDE_BOTTOM] < rectSides2[SIDE_TOP] ||
+                rectSides1[SIDE_TOP] > rectSides2[SIDE_BOTTOM])) {
 
-            return [checkLeft, checkRight, checkBottom, checkTop];
 
-        } else {
-            return false;
+                var checkLeft = rectangle1.getHorizontalCenter() > rectangle2.getHorizontalCenter(); // check if colliding on left
+
+                var checkRight = rectangle1.getHorizontalCenter() < rectangle2.getHorizontalCenter(); // check if colliding on right
+
+                //var checkBottom = rectangle1.getVerticalCenter() < rectangle2.getVerticalCenter(); // bottom vs top
+
+                // - 2 AND + 10 are padding to have an accurate calculation
+                var checkBottom = (((rectSides1[SIDE_BOTTOM] - 2  < rectSides2[SIDE_TOP] + 10)));
+
+                var checkTop = rectangle1.getVerticalCenter() > rectangle2.getVerticalCenter(); // top vs bottom
+
+                return [checkLeft, checkRight, checkBottom, checkTop];
+
+            } else {
+                return false;
+            }
         }
-    };
+        ;
 
-    this.outOfBoundsDetector = function (canvasContext, object) {
-        if (object.x < 0 ||
-            object.y < 0 ||
-            object.x + object.width > canvasContext.x + canvasContext.width ||
-            object.y + object.height > canvasContext.y + canvasContext.height) {
+        this.outOfBoundsDetector = function (canvasContext, object) {
+            if (object.x < 0 ||
+                object.y < 0 ||
+                object.x + object.width > canvasContext.x + canvasContext.width ||
+                object.y + object.height > canvasContext.y + canvasContext.height) {
 
-            return [
-                object.x < 0,
-                object.y < 0,
-                object.x + object.width > canvasContext.x + canvasContext.width,
-                object.y + object.height > canvasContext.y + canvasContext.height
-            ];
+                return [
+                    object.x < 0,
+                    object.y < 0,
+                    object.x + object.width > canvasContext.x + canvasContext.width,
+                    object.y + object.height > canvasContext.y + canvasContext.height
+                ];
 
-        }else{
-            return false;
-        }
-    };
+            } else {
+                return false;
+            }
+        };
 
-    this.rectangleAndArcCollision = function (rectangle, circle) {
-        //TODO
-    };
-    return this;
-})();
+        this.rectangleAndArcCollision = function (rectangle, circle) {
+            //TODO
+        };
+        return this;
+    }
+    )();
