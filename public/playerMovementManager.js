@@ -2,15 +2,21 @@
  * Created by dimta on 13-Apr-16.
  */
 var playerMovementManager = (function () {
-    // speed multiplier tracker
+    // initial speed multiplier tracker
+    //
     var INITIAL_MULTIPLIER = 1;
+
+    // maximum multiplier value of 3
+    //
     var MAX_MULTIPLIER = 3;
+
     var speedMultiplier = INITIAL_MULTIPLIER;
 
-    var INITIAL_MULTIPLIER_CHANGE = 1.10;
-    var MULTIPLIER_DAMPING = 0.995;
+    // initial value of the
+    var INITIAL_MULTIPLIER_INCREASE = 1.20;
+    var MULTIPLIER_DAMPING = 0.99;
     var MIN_MULTIPLIER_CHANGE = 1;
-    var multiplierChange = INITIAL_MULTIPLIER_CHANGE;
+    var multiplierIncrease = INITIAL_MULTIPLIER_INCREASE;
 
     // internal direction tracker
     // used to check if direction of the
@@ -20,37 +26,40 @@ var playerMovementManager = (function () {
 
     // holds the value of the start jumping speed
     //
-    var START_JUMPING_SPEED = 10;
+    var START_JUMPING_SPEED = 8;
 
     // holds the value of the variable that changes to simulate
     //
     var currentSpeed = START_JUMPING_SPEED;
     var JUMPING_DAMPING = 0.955;
 
-    var jumpCounter = 0;
-
+    /**
+     * TODO One day it shall be commented, but not today
+     * @param playerObject
+     */
     function runningRight(playerObject) {
         // damped speed increase with multiplier
         //
         playerObject.x += (playerObject.runningSpeed * speedMultiplier);
+
         if (direction == playerObject.navigation.right) {
             if (speedMultiplier > MAX_MULTIPLIER) {
                 speedMultiplier = MAX_MULTIPLIER;
             }
 
-            if (multiplierChange < MIN_MULTIPLIER_CHANGE) {
-                multiplierChange = MIN_MULTIPLIER_CHANGE;
+            if (multiplierIncrease < MIN_MULTIPLIER_CHANGE) {
+                multiplierIncrease = MIN_MULTIPLIER_CHANGE;
             }
 
-            speedMultiplier *= multiplierChange;
-            multiplierChange *= MULTIPLIER_DAMPING;
+            speedMultiplier *= multiplierIncrease;
+            multiplierIncrease *= MULTIPLIER_DAMPING;
 
 
         } else { // if we have not been going right
             direction = playerObject.navigation.right;
 
             speedMultiplier = INITIAL_MULTIPLIER;
-            multiplierChange = INITIAL_MULTIPLIER_CHANGE;
+            multiplierIncrease = INITIAL_MULTIPLIER_INCREASE;
         }
     }
 
@@ -67,14 +76,13 @@ var playerMovementManager = (function () {
                 // cap multiplier, to have maximum reachable speed
                 speedMultiplier = MAX_MULTIPLIER;
             }
-            if (multiplierChange < MIN_MULTIPLIER_CHANGE) {
-                multiplierChange = MIN_MULTIPLIER_CHANGE;
+            if (multiplierIncrease < MIN_MULTIPLIER_CHANGE) {
+                multiplierIncrease = MIN_MULTIPLIER_CHANGE;
             }
 
             // increase multiplier to accelerate
-            console.log('Speed -> ' + playerObject.runningSpeed * speedMultiplier);
-            speedMultiplier *= multiplierChange;
-            multiplierChange *= MULTIPLIER_DAMPING;
+            speedMultiplier *= multiplierIncrease;
+            multiplierIncrease *= MULTIPLIER_DAMPING;
 
         } else { // if we have not been going left
 
@@ -83,7 +91,7 @@ var playerMovementManager = (function () {
 
             // reset multiplier of speed, to remove any previous acceleration
             speedMultiplier = INITIAL_MULTIPLIER;
-            multiplierChange = INITIAL_MULTIPLIER_CHANGE;
+            multiplierIncrease = INITIAL_MULTIPLIER_INCREASE;
         }
     }
 
@@ -95,14 +103,11 @@ var playerMovementManager = (function () {
             if (currentSpeed > 0.8) {
                 playerObject.y -= currentSpeed;
                 currentSpeed = currentSpeed * JUMPING_DAMPING;
-                jumpCounter++;
             } else {
                 playerObject.currentState = player.states.falling;
-                jumpCounter = 0;
                 currentSpeed = START_JUMPING_SPEED;
             }
         } else {
-            jumpCounter = 0;
             currentSpeed = START_JUMPING_SPEED;
         }
     }
@@ -144,7 +149,7 @@ var playerMovementManager = (function () {
     function resetAcceleration() {
         // reset multiplier of speed, to remove any previous acceleration
         speedMultiplier = INITIAL_MULTIPLIER;
-        multiplierChange = INITIAL_MULTIPLIER_CHANGE;
+        multiplierIncrease = INITIAL_MULTIPLIER_INCREASE;
     }
 
     /**

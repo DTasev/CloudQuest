@@ -47,6 +47,7 @@ function update(canvasContext) {
      */
 }
 
+
 function gameLoop(canvas, canvasContext, renderArray) {
 
     // removes last frame
@@ -63,7 +64,7 @@ function gameLoop(canvas, canvasContext, renderArray) {
 
     // reset player state when clearing the canvas
     //
-    if(player.currentState == player.states.run)
+    if (player.currentState == player.states.run)
         player.currentState = player.states.idle;
 }
 
@@ -129,13 +130,15 @@ function KeyboardController(keys, repeat) {
     KeyboardController({
         37: function () {
             player.direction = player.navigation.left;
-            if(player.currentState != player.states.jump)
+            if (player.currentState != player.states.jump && player.currentState != player.states.falling) {
                 player.currentState = player.states.run;
+            }
         },
         39: function () {
             player.direction = player.navigation.right;
-            if(player.currentState != player.states.jump)
+            if (player.currentState != player.states.jump && player.currentState != player.states.falling) {
                 player.currentState = player.states.run;
+            }
         },
         38: function () {
             player.direction = player.navigation.up;
@@ -146,7 +149,7 @@ function KeyboardController(keys, repeat) {
         32: function () {
 
             // change the state to jumping only if on the ground
-            if (player.currentState != player.states.jump || player.currentState != player.states.falling) {
+            if (player.currentState == player.states.idle || player.currentState == player.states.run) {
                 player.currentState = player.states.jump;
             }
         }

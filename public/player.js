@@ -1,5 +1,11 @@
 var Player = (function () {
     /**
+     *  The constructed needs as parameters:
+     *      X position of the object,
+     *      Y position of the object,
+     *      WIDTH of the object,
+     *      HEIGHT of the object,
+     *      RUNNINGSPEED used for the movement of the player
      *
      * @param x
      * @param y

@@ -44,9 +44,12 @@ var collisionResolver = (function () {
                     applyGravity = false;
             }
         }
-        if(applyGravity)
+        if(applyGravity) {
             gravityManager.applyGravity(playerObject);
-
+        }
+        else{
+            playerObject.currentState = player.states.idle;
+        }
 
 
         // not colliding with anything, apply gravity
