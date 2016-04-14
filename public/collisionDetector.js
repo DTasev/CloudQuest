@@ -72,17 +72,18 @@ var collisionDetector = (function () {
         }
         ;
 
-        this.outOfBoundsDetector = function (canvasContext, object) {
+        //FIXME canvasContext doesnt have width and height info
+        this.outOfBoundsDetector = function (object) {
             if (object.x < 0 ||
                 object.y < 0 ||
-                object.x + object.width > canvasContext.x + canvasContext.width ||
-                object.y + object.height > canvasContext.y + canvasContext.height) {
+                object.width > canvas.width ||
+                object.height > canvas.height) {
 
                 return [
                     object.x < 0,
                     object.y < 0,
-                    object.x + object.width > canvasContext.x + canvasContext.width,
-                    object.y + object.height > canvasContext.y + canvasContext.height
+                    object.width > canvas.width,
+                    object.height > canvas.height
                 ];
 
             } else {

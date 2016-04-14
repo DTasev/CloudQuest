@@ -11,7 +11,7 @@
  */
 var collisionResolver = (function () {
 
-    function createCollisionArray(canvasContext, playerObject, gameObjects){
+    function createCollisionArray(playerObject, gameObjects){
         // var i = 1 in order to skip checking the player collision with itself
         // because the player is in the gameObjects array as gameObject[0]
         var collisionResultsArray = [];
@@ -23,15 +23,15 @@ var collisionResolver = (function () {
         }
         return collisionResultsArray;
     }
-    this.checkCollision = function (canvasContext, playerObject, gameObjects){
+    this.checkCollision = function (playerObject, gameObjects){
 
         // handle player collision with context bounds
-        var outOfBoundsResult = collisionDetector.outOfBoundsDetector(canvasContext, playerObject);
+        var outOfBoundsResult = collisionDetector.outOfBoundsDetector(playerObject);
         if(outOfBoundsResult){
             console.log("player out of bounds" + outOfBoundsResult);
         }
 
-        var collisionResultsArray = createCollisionArray(canvasContext, playerObject, gameObjects);
+        var collisionResultsArray = createCollisionArray(playerObject, gameObjects);
 
         var applyGravity = true;
         if (collisionResultsArray.length > 0) {

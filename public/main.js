@@ -1,5 +1,6 @@
 // todo move to parameters
 var player;
+var canvas;
 var gameObjects = [];
 
 function clear(canvas, canvasContext) {
@@ -17,19 +18,26 @@ function render(canvasContext, renderArray) {
 
 
 function handleInput() {
-    //debugger;
     playerMovementManager.handleMovement(player);
 }
 
 function platformDeflation(platform) {
     platform.width -= platform.deflateSpeed;
 }
+function platformGenerator() {
+    // TODO tomorrow (15/04/2016)
+    // platform x, y, width, height random, but capped
+    // platform deflateSpeed random
+    // color?, maybe give different colours for different speed
+    // x+width cannot be > canvas.width
+    // y+height cannot be > canvas.height
+}
 /**
  * Handles the collisions between the gameObjects
  */
-function update(canvasContext) {
+function update() {
     // collision first, apply gravity if applicable, i.e isn't colliding with ground etc
-    collisionResolver.checkCollision(canvasContext, player, gameObjects);
+    collisionResolver.checkCollision(player, gameObjects);
 
     for (var i = 1; i < gameObjects.length; i++) {
         if (gameObjects[i].width <= 0) {
@@ -38,6 +46,8 @@ function update(canvasContext) {
         // apply animation effects, i.e. deflation of platforms, changing of sprite picture
         platformDeflation(gameObjects[i]);
     }
+
+    platformGenerator();
 
 
     /*
@@ -121,7 +131,7 @@ function KeyboardController(keys, repeat) {
 (function main() {
 
     var FRAMES = 60;
-    var canvas = document.getElementById("gameCanvas");
+    canvas = document.getElementById("gameCanvas");
 
     var canvasContext = canvas.getContext('2d');
 
@@ -170,12 +180,12 @@ function KeyboardController(keys, repeat) {
     gameObjects.push(basePlatform);
     renderArray.push(basePlatform);
 
-    var speed = 0.0;
+    var speed = 0.2;
     for (var i = 50; i < 500; i += 150) {
 
         var platform = new Platform(i, i + 50, 150, 40, speed, 'rgb(0,0,0)');
 
-        //speed-=0.08;
+        speed-=0.08;
 
         gameObjects.push(platform);
         renderArray.push(platform);
