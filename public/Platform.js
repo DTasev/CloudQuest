@@ -48,7 +48,7 @@ var Platform = (function () {
      * @returns {number} the center of the object, calculated from it's horizontal (X) position
      */
     Platform.prototype.getHorizontalCenter = function () {
-        return (this.width + this.x + this.x) / 2;
+        return (this.width + this.x) / 2;
     };
 
     /**
@@ -60,15 +60,15 @@ var Platform = (function () {
      * @returns {number} the center of the object, calculated from it's horizontal (X) position
      */
     Platform.prototype.getVerticalCenter = function () {
-        return (this.height + this.y + this.y) / 2;
+        return (this.height + this.y) / 2;
     };
 
     Platform.prototype.toString = function () {
         return "x->" + this.x + " y->" + this.y + " width->" + this.width + " height->" + this.height;
     };
 
-    Platform.prototype.render = function (ctx) {
-        renderManager.renderRectangle(ctx, this);
+    Platform.prototype.render = function (canvasContext) {
+        renderManager.renderRectangle(canvasContext, this);
     };
 
     return Platform;

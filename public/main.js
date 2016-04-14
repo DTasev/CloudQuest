@@ -146,7 +146,7 @@ function KeyboardController(keys, repeat) {
         32: function () {
 
             // change the state to jumping only if on the ground
-            if (player.currentState != player.states.jump) {
+            if (player.currentState != player.states.jump || player.currentState != player.states.falling) {
                 player.currentState = player.states.jump;
             }
         }

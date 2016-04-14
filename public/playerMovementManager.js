@@ -13,11 +13,14 @@ var playerMovementManager = (function () {
     var multiplierChange = INITIAL_MULTIPLIER_CHANGE;
 
     // internal direction tracker
+    // used to check if direction of the
+    // player object has changed
+    //
     var direction;
 
     // holds the value of the start jumping speed
     //
-    var START_JUMPING_SPEED = 5;
+    var START_JUMPING_SPEED = 10;
 
     // holds the value of the variable that changes to simulate
     //
@@ -26,13 +29,68 @@ var playerMovementManager = (function () {
 
     var jumpCounter = 0;
 
-    /**
-     * Todo explain running state
-     * acceleration
-     * @param playerObject
-     */
-    function runningState(playerObject) {
+    function runningRight(playerObject) {
+        // damped speed increase with multiplier
+        //
+        playerObject.x += (playerObject.runningSpeed * speedMultiplier);
+        if (direction == playerObject.navigation.right) {
+            if (speedMultiplier > MAX_MULTIPLIER) {
+                speedMultiplier = MAX_MULTIPLIER;
+            }
 
+            if (multiplierChange < MIN_MULTIPLIER_CHANGE) {
+                multiplierChange = MIN_MULTIPLIER_CHANGE;
+            }
+
+            speedMultiplier *= multiplierChange;
+            multiplierChange *= MULTIPLIER_DAMPING;
+
+
+        } else { // if we have not been going right
+            direction = playerObject.navigation.right;
+
+            speedMultiplier = INITIAL_MULTIPLIER;
+            multiplierChange = INITIAL_MULTIPLIER_CHANGE;
+        }
+    }
+
+    function runningLeft(playerObject) {
+
+        // dampen speed increase with multiplier
+        //
+        playerObject.x -= (playerObject.runningSpeed * speedMultiplier);
+
+        // if direction stays the same, increase multiplier to accelerate speed
+        if (direction == playerObject.navigation.left) {
+
+            if (speedMultiplier > MAX_MULTIPLIER) {
+                // cap multiplier, to have maximum reachable speed
+                speedMultiplier = MAX_MULTIPLIER;
+            }
+            if (multiplierChange < MIN_MULTIPLIER_CHANGE) {
+                multiplierChange = MIN_MULTIPLIER_CHANGE;
+            }
+
+            // increase multiplier to accelerate
+            console.log('Speed -> ' + playerObject.runningSpeed * speedMultiplier);
+            speedMultiplier *= multiplierChange;
+            multiplierChange *= MULTIPLIER_DAMPING;
+
+        } else { // if we have not been going left
+
+            // change direction to current
+            direction = playerObject.navigation.left;
+
+            // reset multiplier of speed, to remove any previous acceleration
+            speedMultiplier = INITIAL_MULTIPLIER;
+            multiplierChange = INITIAL_MULTIPLIER_CHANGE;
+        }
+    }
+
+    function handleJumping(playerObject) {
+
+        // checking if the player object is currently in a jump state
+        //
         if (playerObject.currentState == player.states.jump) {
             if (currentSpeed > 0.8) {
                 playerObject.y -= currentSpeed;
@@ -43,68 +101,37 @@ var playerMovementManager = (function () {
                 jumpCounter = 0;
                 currentSpeed = START_JUMPING_SPEED;
             }
+        } else {
+            jumpCounter = 0;
+            currentSpeed = START_JUMPING_SPEED;
         }
+    }
+
+    /**
+     * Todo explain running state
+     * acceleration
+     * @param playerObject
+     */
+    function movingState(playerObject) {
+
+        handleJumping(playerObject);
 
         switch (playerObject.direction) {
+
+            // case going LEFT
+            //
             case playerObject.navigation.left:
 
-                // dampen speed increase with multiplier
-                playerObject.x -= (playerObject.runningSpeed * speedMultiplier);
-
-                // if direction stays the same, increase multiplier to accelerate speed
-                if (direction == playerObject.navigation.left) {
-
-                    if (speedMultiplier > MAX_MULTIPLIER) {
-                        // cap multiplier, to have maximum reachable speed
-                        speedMultiplier = MAX_MULTIPLIER;
-                    }
-                    if (multiplierChange < MIN_MULTIPLIER_CHANGE) {
-                        multiplierChange = MIN_MULTIPLIER_CHANGE;
-                    }
-
-                    // increase multiplier to accelerate
-                    console.log('Speed -> ' + playerObject.runningSpeed * speedMultiplier);
-                    speedMultiplier *= multiplierChange;
-                    multiplierChange *= MULTIPLIER_DAMPING;
-
-                } else { // if we have not been going left
-
-                    // change direction to current
-                    direction = playerObject.navigation.left;
-
-                    // reset multiplier of speed, to remove any previous acceleration
-                    speedMultiplier = INITIAL_MULTIPLIER;
-                    multiplierChange = INITIAL_MULTIPLIER_CHANGE;
-                }
-
+                runningLeft(playerObject);
                 break;
 
-            case playerObject.navigation.right: // right
+            // case going RIGHT
+            //
+            case playerObject.navigation.right:
 
-                // damped speed increase with multiplier
-                playerObject.x += (playerObject.runningSpeed * speedMultiplier);
-                if (direction == playerObject.navigation.right) {
-                    if (speedMultiplier > MAX_MULTIPLIER) {
-                        speedMultiplier = MAX_MULTIPLIER;
-                    }
-
-                    if (multiplierChange < MIN_MULTIPLIER_CHANGE) {
-                        multiplierChange = MIN_MULTIPLIER_CHANGE;
-                    }
-
-                    console.log('Speed -> ' + playerObject.runningSpeed * speedMultiplier);
-                    speedMultiplier *= multiplierChange;
-                    multiplierChange *= MULTIPLIER_DAMPING;
-
-
-                } else { // if we have not been going right
-                    direction = playerObject.navigation.right;
-
-                    speedMultiplier = INITIAL_MULTIPLIER;
-                    multiplierChange = INITIAL_MULTIPLIER_CHANGE;
-                }
-
+                runningRight(playerObject);
                 break;
+
             default:
                 break;
         }
@@ -127,7 +154,7 @@ var playerMovementManager = (function () {
     this.handleMovement = function (playerObject) {
         console.log('State -> ' + playerObject.currentState);
         if (player.currentState != player.states.idle) {
-            runningState(playerObject);
+            movingState(playerObject);
         } else {
             resetAcceleration();
         }

@@ -7,26 +7,27 @@
  */
 var renderManager = (function () {
 
-    this.renderImage = function (ctx, renderObject) {
+
+    this.renderImage = function (canvasContext, rectangleObject) {
         var currentFrame = 0; // might have to be global or move to animation?
 
-        switch(renderObject.currentState){
+        switch(rectangleObject.currentState){
             case 'idle':
                 var spriteImage = assetLoader.hero.idle[currentFrame];
         }
 
-        ctx.drawImage(spriteImage, 0, 0, spriteImage.width, spriteImage.height, renderObject.x, renderObject.y, renderObject.width, renderObject.height);
+        canvasContext.drawImage(spriteImage, 0, 0, spriteImage.width, spriteImage.height, rectangleObject.x, rectangleObject.y, rectangleObject.width, rectangleObject.height);
     };
-    this.renderRectangle = function (ctx, renderObject) {
-        ctx.fillStyle = renderObject.fillColour;
-        ctx.fillRect(renderObject.x, renderObject.y, renderObject.width, renderObject.height);
+    this.renderRectangle = function (canvasContext, rectangleObject) {
+        canvasContext.fillStyle = rectangleObject.fillColour;
+        canvasContext.fillRect(rectangleObject.x, rectangleObject.y, rectangleObject.width, rectangleObject.height);
     };
-    this.renderCircle = function (ctx, renderObject) {
-        ctx.beginPath();
-        ctx.arc(renderObject.x, renderObject.y, renderObject.radius, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.fillStyle = "rgb(0,0,0)";
-        ctx.fill();
+    this.renderCircle = function (canvasContext, circleObject) {
+        canvasContext.beginPath();
+        canvasContext.arc(circleObject.x, circleObject.y, circleObject.radius, 0, Math.PI * 2, true);
+        canvasContext.closePath();
+        canvasContext.fillStyle = "rgb(0,0,0)";
+        canvasContext.fill();
     };
     return this;
 })();
