@@ -22,7 +22,23 @@ function handleInput() {
 }
 
 function platformDeflation(platform) {
-    platform.width -= platform.deflateSpeed;
+
+    // TODO move to platform class
+
+    switch(platform.deflateType){
+        case platform.availableDeflateTypes.left:
+            platform.x += platform.deflateSpeed;
+            platform.width -= platform.deflateSpeed;
+            break;
+        case platform.availableDeflateTypes.right:
+
+            platform.width -= platform.deflateSpeed;
+            break;
+        case platform.availableDeflateTypes.both:
+            platform.x += platform.deflateSpeed;
+            platform.width -= platform.deflateSpeed * 2;
+            break;
+    }
 }
 function platformGenerator() {
     // TODO tomorrow (15/04/2016)
@@ -31,20 +47,25 @@ function platformGenerator() {
     // color?, maybe give different colours for different speed
     // x+width cannot be > canvas.width
     // y+height cannot be > canvas.height
+
+
 }
 /**
  * Handles the collisions between the gameObjects
  */
-function update() {
+function update(renderArray) {
     // collision first, apply gravity if applicable, i.e isn't colliding with ground etc
     collisionResolver.checkCollision(player, gameObjects);
 
-    for (var i = 1; i < gameObjects.length; i++) {
-        if (gameObjects[i].width <= 0) {
-            gameObjects.splice(i, 1);
+    if (gameObjects.length > 0) {
+        for (var i = 1; i < gameObjects.length; i++) {
+            if (gameObjects[i].width <= 0) {
+                gameObjects.splice(i, 1);
+                renderArray.splice(i, 1);
+            }
+            // apply animation effects, i.e. deflation of platforms, changing of sprite picture
+            platformDeflation(gameObjects[i]);
         }
-        // apply animation effects, i.e. deflation of platforms, changing of sprite picture
-        platformDeflation(gameObjects[i]);
     }
 
     platformGenerator();
@@ -67,7 +88,7 @@ function gameLoop(canvas, canvasContext, renderArray) {
     handleInput(canvasContext);
 
     // update the object for the frame
-    update(canvasContext);
+    update(renderArray);
 
     // render objects for the frame on screen
     render(canvasContext, renderArray);
@@ -181,11 +202,12 @@ function KeyboardController(keys, repeat) {
     renderArray.push(basePlatform);
 
     var speed = 0.2;
+    var deflateType = 1;
     for (var i = 50; i < 500; i += 150) {
 
-        var platform = new Platform(i, i + 50, 150, 40, speed, 'rgb(0,0,0)');
+        var platform = new Platform(i, i + 50, 150, 40, speed, deflateType++, 'rgb(0,0,0)');
 
-        speed-=0.08;
+        speed += 0.08;
 
         gameObjects.push(platform);
         renderArray.push(platform);

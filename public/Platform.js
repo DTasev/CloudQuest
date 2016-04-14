@@ -6,15 +6,16 @@ var Platform = (function () {
 
     /**
      * TODO
-     * @param x
-     * @param y
-     * @param width
-     * @param height
-     * @param deflateSpeed
-     * @param fillColour
+     * @param x Horizontal position of the platform on the canvas
+     * @param y Vertical position of the platform on the canvas
+     * @param width Width of the platform
+     * @param height Height of the platform
+     * @param deflateSpeed Speed at which the size of the platform will be reduced
+     * @param deflateType Type of deflation, can be left right or both
+ *   * @param fillColour Defines the colour of the platform on the canvas
      * @constructor
      */
-    function Platform(x, y, width, height, deflateSpeed, fillColour) {
+    function Platform(x, y, width, height, deflateSpeed, deflateType, fillColour) {
         // x is the right-most point on screen
         this.x = x;
         this.y = y;
@@ -22,6 +23,14 @@ var Platform = (function () {
         this.height = height;
         this.deflateSpeed = deflateSpeed;
         this.fillColour = fillColour;
+        this.deflateType = deflateType;
+
+        this.availableDeflateTypes = {
+            'left'  : 1,
+            'right' : 2,
+            'both'  : 3
+        }
+
     }
 
     /**
