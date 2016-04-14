@@ -1,4 +1,14 @@
 var Player = (function () {
+    /**
+     *
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param runningSpeed
+     * @param gravityWeight
+     * @constructor
+     */
     function Player(x, y, width, height, runningSpeed, gravityWeight) {
         this.x = x;
         this.y = y;
@@ -6,31 +16,29 @@ var Player = (function () {
         this.height = height;
         this.runningSpeed = runningSpeed;
         this.gravityWeight = gravityWeight;
+        this.currentState = 'idle';
     }
 
     /**
-     * Moves the player vertically the specified distance
-     * @param distance
-     */
-    Player.prototype.moveVer = function (distance) {
-        this.y += distance;
-    };
-    /**
-     * Moves the player horizontally the specified distance
-     * @param distance
-     */
-    Player.prototype.moveHor = function (distance) {
-        this.x += distance;
-    };
-
-    /**
-     * Returns the center of the player's rectangle.
-     * @returns {number}
+     * Returns the horizontal center of this object's rectangle.
+     * This is referred to as horizontal center, because
+     * it is calculated by using the horizontal (X) position of the
+     * object and the width.
+     *
+     * @returns {number} the center of the object, calculated from it's horizontal (X) position
      */
     Player.prototype.getHorizontalCenter = function () {
         return (this.width + this.x + this.x) / 2;
     };
 
+    /**
+     * Returns the vertical center of this object's rectangle.
+     * This is referred to as vertical center, because
+     * it is calculated by using the vertical (Y) position of the
+     * object and the height
+     *
+     * @returns {number} the center of the object, calculated from it's horizontal (X) position
+     */
     Player.prototype.getVerticalCenter = function () {
         return (this.height + this.y + this.y) / 2;
     };
@@ -40,7 +48,8 @@ var Player = (function () {
     };
 
     Player.prototype.render = function (ctx) {
-        renderManager.renderImage(ctx, this);
+        //renderManager.renderImage(ctx, this);
+        renderManager.renderRectangle(ctx, this);
     };
 
     return Player;

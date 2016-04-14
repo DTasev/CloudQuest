@@ -1,22 +1,23 @@
+var player;
 var gameObjects = [];
 var playerDirection;
 var LEFT = 1;
 var RIGHT = 2;
 
-function clear(canvas, ctx) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+function clear(canvas, canvasContext) {
+    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-function drawSquare(canvas, ctx) {
-    ctx.fillStyle = "rgb(0, 0, 0)";
-    ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
+function drawSquare(canvas, canvasContext) {
+    canvasContext.fillStyle = "rgb(0, 0, 0)";
+    canvasContext.fillRect(0, canvas.height - 50, canvas.width, 50);
 }
 
-function drawCircle(ctx) {
+function drawCircle(canvasContext) {
 
 }
 
-function drawPlayer(canvas, ctx) {
+function drawPlayer(canvas, canvasContext) {
 
 
 
@@ -29,33 +30,44 @@ function drawPlayer(canvas, ctx) {
      if (f == 6) {
      f = 0;
      }
-     ctx.drawImage(playerSprite, 809, 577, 60, 56, 50, 60, 30, 40);*/
+     canvasContext.drawImage(playerSprite, 809, 577, 60, 56, 50, 60, 30, 40);*/
 }
 
 
-function render(ctx) {
+function render(canvasContext) {
     for (var i = 0; i < gameObjects.length; i++) {
-        gameObjects[i].render(ctx);
+        gameObjects[i].render(canvasContext);
     }
 }
 
 
 function handleInput() {
     playerMovementManager.handleMovement(playerDirection, gameObjects[0]);
+
+    // reset direction after handling the input for the current frame
     playerDirection = 0;
 
 }
 
+function platformDeflation(platform) {
+    platform.width -= platform.deflateSpeed;
+}
 /**
  * Handles the collisions between the gameObjects
  */
-function update() {
-    for(var i = 0; i < gameObjects.length; i++){
-        // collision first, apply gravity if applicable, i.e isn't colliding with ground etc
+function update(canvasContext) {
+    // collision first, apply gravity if applicable, i.e isn't colliding with ground etc
+    collisionResolver.checkCollision(canvasContext, player, gameObjects);
 
-        gravityManager.applyGravity(gameObjects[i]);
+    for (var i = 1; i < gameObjects.length; i++) {
+        if (gameObjects[i].width <= 0) {
+            gameObjects.splice(i, 1);
+        }
         // apply animation effects, i.e. deflation of platforms, changing of sprite picture
+        platformDeflation(gameObjects[i]);
     }
+
+
     /*
      update consists of
      -> handle the collision between objects
@@ -63,18 +75,18 @@ function update() {
      */
 }
 
-function gameLoop(canvas, ctx) {
+function gameLoop(canvas, canvasContext) {
     // removes last frame
-    clear(canvas, ctx);
+    clear(canvas, canvasContext);
 
     // handles user action
-    handleInput();
+    handleInput(canvasContext);
 
     // update the object for the frame
-    update();
+    update(canvasContext);
 
     // render objects for the frame on screen
-    render(ctx);
+    render(canvasContext);
 }
 /**
  * Source from http://stackoverflow.com/questions/3691461/remove-key-press-delay-in-javascript
@@ -130,7 +142,7 @@ function KeyboardController(keys, repeat) {
     var FRAMES = 60;
 
     var canvas = document.getElementById("gameCanvas");
-    var ctx = canvas.getContext('2d');
+    var canvasContext = canvas.getContext('2d');
 
     KeyboardController({
         37: function () {
@@ -139,6 +151,12 @@ function KeyboardController(keys, repeat) {
         39: function () {
             playerDirection = RIGHT;
         },
+        38: function () {
+            playerDirection = 3;
+        },
+        40: function () {
+            playerDirection = 4;
+        },
         32: function () {
             PLAYER_JUMPING = true;
         }
@@ -146,13 +164,23 @@ function KeyboardController(keys, repeat) {
 
     //TODO initialise player and obstacles
 
-    var player = new Player(40, 50, 50, 60, 5, 0.2);
-    var platform = new Platform(100, 110, 20, 1, 0.5);
+    player = new Player(40, 30, 50, 60, 3, 5);
+    var basePlatform = new Platform(0, canvas.height - 50, 1000, 50, 0.5, 'rgb(0,0,0)');
     gameObjects.push(player);
-    gameObjects.push(platform);
+    gameObjects.push(basePlatform);
+
+    var speed = 0.0;
+    for (var i = 50; i < 500; i += 100) {
+
+        var platform = new Platform(i, i + 50, 150, 30, speed, 'rgb(0,0,0)');
+
+        //speed-=0.08;
+
+        gameObjects.push(platform);
+    }
 
 
     return setInterval(function () {
-        gameLoop(canvas, ctx)
+        gameLoop(canvas, canvasContext)
     }, 1000 / FRAMES);
 })();

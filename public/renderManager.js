@@ -8,9 +8,18 @@
 var renderManager = (function () {
 
     this.renderImage = function (ctx, renderObject) {
-        var i = assetLoader.hero.dead[0];
+        var currentFrame = 0; // might have to be global or move to animation?
 
-        ctx.drawImage(i, 0, 0, i.width, i.height, renderObject.x, renderObject.y, renderObject.width, renderObject.height);
+        switch(renderObject.currentState){
+            case 'idle':
+                var spriteImage = assetLoader.hero.idle[currentFrame];
+        }
+
+        ctx.drawImage(spriteImage, 0, 0, spriteImage.width, spriteImage.height, renderObject.x, renderObject.y, renderObject.width, renderObject.height);
+    };
+    this.renderRectangle = function (ctx, renderObject) {
+        ctx.fillStyle = renderObject.fillColour;
+        ctx.fillRect(renderObject.x, renderObject.y, renderObject.width, renderObject.height);
     };
     this.renderCircle = function (ctx, renderObject) {
         ctx.beginPath();
