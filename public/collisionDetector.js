@@ -48,7 +48,7 @@ var collisionDetector = (function () {
             var checkLeft = rectangle1.getHorizontalCenter() > rectangle2.getHorizontalCenter(); // check if colliding on left
             var checkRight = rectangle1.getHorizontalCenter() < rectangle2.getHorizontalCenter(); // check if colliding on right
             //var checkBottom = rectangle1.getVerticalCenter() < rectangle2.getVerticalCenter(); // bottom vs top
-            var checkBottom = (((rectSides1[SIDE_TOP] > rectSides2[SIDE_BOTTOM] - 2) && rectSides2[SIDE_BOTTOM] < rectSides1[SIDE_TOP] + 20));
+            var checkBottom = (((rectSides1[SIDE_TOP] +10 > rectSides2[SIDE_BOTTOM] - 2) && rectSides2[SIDE_BOTTOM] < rectSides1[SIDE_TOP] + 10));
             var checkTop = rectangle1.getVerticalCenter() > rectangle2.getVerticalCenter(); // top vs bottom
 
             return [checkLeft, checkRight, checkBottom, checkTop];

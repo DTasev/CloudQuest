@@ -11,6 +11,18 @@
  */
 var collisionResolver = (function () {
 
+    function createCollisionArray(canvasContext, playerObject, gameObjects){
+        // var i = 1 in order to skip checking the player collision with itself
+        // because the player is in the gameObjects array as gameObject[0]
+        var collisionResultsArray = [];
+        for(var i = 1; i < gameObjects.length; i++){
+            var collisionResult = collisionDetector.rectangleCollision(playerObject, gameObjects[i]);
+            if (collisionResult) {
+                collisionResultsArray.push({'object': gameObjects[i], 'collisionResult' : collisionResult});
+            }
+        }
+        return collisionResultsArray;
+    }
     this.checkCollision = function (canvasContext, playerObject, gameObjects){
 
         // handle player collision with context bounds
@@ -18,23 +30,25 @@ var collisionResolver = (function () {
         if(outOfBoundsResult){
             console.log("player out of bounds" + outOfBoundsResult);
         }
-        // var i = 1 in order to skip checking the player collision with itself
-        // because the player is in the gameObjects array as gameObject[0]
-        for(var i = 1; i < gameObjects.length; i++){
-            var collisionResult = collisionDetector.rectangleCollision(playerObject, gameObjects[i]);
-            if (collisionResult) {
 
-                // if colliding handle player collision here
-                if(collisionResult[2] == false)
-                    gravityManager.applyGravity(playerObject);
+        var collisionResultsArray = createCollisionArray(canvasContext, playerObject, gameObjects);
 
-                console.log(collisionResult);
-                return collisionResult;
+        var applyGravity = true;
+        if (collisionResultsArray.length > 0) {
+            for (var i = 0; i < collisionResultsArray.length; i++) {
+                // if one of the collisions is a platform don't apply gravity
+                console.log(collisionResultsArray);
+                if (collisionResultsArray[i].collisionResult[2] == true)
+                    applyGravity = false;
             }
         }
+        if(applyGravity)
+            gravityManager.applyGravity(playerObject);
+
+
+
         // not colliding with anything, apply gravity
-        gravityManager.applyGravity(playerObject);
-        return [false, false, false, false];
+
     };
 
     return this;
