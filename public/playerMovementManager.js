@@ -2,21 +2,29 @@
  * Created by dimta on 13-Apr-16.
  */
 var playerMovementManager = (function () {
-    var INITIAL_MULTIPLIER = 1;
-    var INITIAL_MULTIPLIER_CHANGE = 1.10;
-    var MULTIPLIER_REDUCE = 0.001;
-    var MAX_MULTIPLIER = 2;
-    var MIN_MULTIPLIER_CHANGE = 1;
-
     // speed multiplier tracker
+    var INITIAL_MULTIPLIER = 1;
+    var MAX_MULTIPLIER = 3;
     var speedMultiplier = INITIAL_MULTIPLIER;
+
+    var INITIAL_MULTIPLIER_CHANGE = 1.10;
+    var MULTIPLIER_DAMPING = 0.995;
+    var MIN_MULTIPLIER_CHANGE = 1;
     var multiplierChange = INITIAL_MULTIPLIER_CHANGE;
 
     // internal direction tracker
     var direction;
-    var START_JUMPING_SPEED = 5; // holds the value of the start jumping speed
-    var CURRENT_SPEED = START_JUMPING_SPEED; // holds the value of the variable that changes to simulate
+
+    // holds the value of the start jumping speed
+    //
+    var START_JUMPING_SPEED = 5;
+
+    // holds the value of the variable that changes to simulate
+    //
+    var currentSpeed = START_JUMPING_SPEED;
     var JUMPING_DAMPING = 0.955;
+
+    var jumpCounter = 0;
 
     /**
      * Todo explain running state
@@ -24,6 +32,19 @@ var playerMovementManager = (function () {
      * @param playerObject
      */
     function runningState(playerObject) {
+
+        if (playerObject.currentState == player.states.jump) {
+            if (currentSpeed > 0.8) {
+                playerObject.y -= currentSpeed;
+                currentSpeed = currentSpeed * JUMPING_DAMPING;
+                jumpCounter++;
+            } else {
+                playerObject.currentState = player.states.idle;
+                jumpCounter = 0;
+                currentSpeed = START_JUMPING_SPEED;
+            }
+        }
+
         switch (playerObject.direction) {
             case playerObject.navigation.left:
 
@@ -44,7 +65,7 @@ var playerMovementManager = (function () {
                     // increase multiplier to accelerate
                     console.log('Speed -> ' + playerObject.runningSpeed * speedMultiplier);
                     speedMultiplier *= multiplierChange;
-                    multiplierChange -= multiplierChange * MULTIPLIER_REDUCE;
+                    multiplierChange *= MULTIPLIER_DAMPING;
 
                 } else { // if we have not been going left
 
@@ -57,6 +78,7 @@ var playerMovementManager = (function () {
                 }
 
                 break;
+
             case playerObject.navigation.right: // right
 
                 // damped speed increase with multiplier
@@ -70,9 +92,10 @@ var playerMovementManager = (function () {
                         multiplierChange = MIN_MULTIPLIER_CHANGE;
                     }
 
-
+                    console.log('Speed -> ' + playerObject.runningSpeed * speedMultiplier);
                     speedMultiplier *= multiplierChange;
-                    multiplierChange -= multiplierChange * MULTIPLIER_REDUCE;
+                    multiplierChange *= MULTIPLIER_DAMPING;
+
 
                 } else { // if we have not been going right
                     direction = playerObject.navigation.right;
@@ -89,28 +112,24 @@ var playerMovementManager = (function () {
     }
 
     /**
-     * todo explain jumping
-     * @param playerObject
+     *
      */
-    function jumpingState(playerObject) {
-        
+    function resetAcceleration() {
+        // reset multiplier of speed, to remove any previous acceleration
+        speedMultiplier = INITIAL_MULTIPLIER;
+        multiplierChange = INITIAL_MULTIPLIER_CHANGE;
     }
 
     /**
      * todo explain:
-     * @param playerDirection
      * @param playerObject
      */
     this.handleMovement = function (playerObject) {
-        switch(playerObject.currentState){
-            case player.states.run:
-                runningState(playerObject);
-                break;
-            case player.states.jump:
-                jumpingState(playerObject);
-                break;
-            default:
-                break;
+        console.log('State -> ' + playerObject.currentState);
+        if (player.currentState != player.states.idle) {
+            runningState(playerObject);
+        } else {
+            resetAcceleration();
         }
     };
     return this;

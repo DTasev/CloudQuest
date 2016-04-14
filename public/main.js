@@ -3,34 +3,11 @@ var player;
 var gameObjects = [];
 
 function clear(canvas, canvasContext) {
+
+    // clear the canvas on screen
+    //
     canvasContext.clearRect(0, 0, canvas.width, canvas.height);
 }
-
-function drawSquare(canvas, canvasContext) {
-    canvasContext.fillStyle = "rgb(0, 0, 0)";
-    canvasContext.fillRect(0, canvas.height - 50, canvas.width, 50);
-}
-
-function drawCircle(canvasContext) {
-
-}
-
-function drawPlayer(canvas, canvasContext) {
-
-
-
-    /* var f = 0;
-     f++;
-     // draw the car
-     if (f == 2) {
-     f = 4;
-     }
-     if (f == 6) {
-     f = 0;
-     }
-     canvasContext.drawImage(playerSprite, 809, 577, 60, 56, 50, 60, 30, 40);*/
-}
-
 
 function render(canvasContext, renderArray) {
     for (var i = 0; i < gameObjects.length; i++) {
@@ -40,10 +17,8 @@ function render(canvasContext, renderArray) {
 
 
 function handleInput() {
+    //debugger;
     playerMovementManager.handleMovement(player);
-
-    // reset direction after handling the input for the current frame
-
 }
 
 function platformDeflation(platform) {
@@ -73,6 +48,7 @@ function update(canvasContext) {
 }
 
 function gameLoop(canvas, canvasContext, renderArray) {
+
     // removes last frame
     clear(canvas, canvasContext);
 
@@ -84,7 +60,13 @@ function gameLoop(canvas, canvasContext, renderArray) {
 
     // render objects for the frame on screen
     render(canvasContext, renderArray);
+
+    // reset player state when clearing the canvas
+    //
+    if(player.currentState == player.states.run)
+        player.currentState = player.states.idle;
 }
+
 /**
  * Source from http://stackoverflow.com/questions/3691461/remove-key-press-delay-in-javascript
  * @author http://stackoverflow.com/users/18936/bobince
@@ -135,7 +117,6 @@ function KeyboardController(keys, repeat) {
     };
 }
 
-
 (function main() {
 
     var FRAMES = 60;
@@ -143,14 +124,18 @@ function KeyboardController(keys, repeat) {
 
     var canvasContext = canvas.getContext('2d');
 
-    player = new Player(40, 30, 50, 60, 4, 5);
+    player = new Player(40, 30, 50, 60, 3, 5);
 
     KeyboardController({
         37: function () {
             player.direction = player.navigation.left;
+            if(player.currentState != player.states.jump)
+                player.currentState = player.states.run;
         },
         39: function () {
             player.direction = player.navigation.right;
+            if(player.currentState != player.states.jump)
+                player.currentState = player.states.run;
         },
         38: function () {
             player.direction = player.navigation.up;
@@ -161,12 +146,17 @@ function KeyboardController(keys, repeat) {
         32: function () {
 
             // change the state to jumping only if on the ground
-            if (player.currentState != player.states.jump)
+            if (player.currentState != player.states.jump) {
                 player.currentState = player.states.jump;
+            }else{
+                player.currentState = player.states.idle;
+            }
         }
     }, 1000 / FRAMES);
+
     // array used to store all objects for rendering
     // this is used only for rendering, not collision handling
+    //
     var renderArray = [];
 
 
