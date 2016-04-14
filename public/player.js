@@ -16,7 +16,21 @@ var Player = (function () {
         this.height = height;
         this.runningSpeed = runningSpeed;
         this.gravityWeight = gravityWeight;
-        this.currentState = 'idle';
+        this.navigation = {
+            'up' : 3,
+            'down' : 4,
+            'left' : 1,
+            'right' : 2
+        };
+        this.states = {
+            'dead' : 0,   // 0
+            'idle' : 1,   // 1
+            'jump' : 2,   // 2
+            'run' : 3,    // 3
+            'slide' : 4   // 4 not used
+        };
+        this.currentState = 1;
+        this.direction = 0;
     }
 
     /**

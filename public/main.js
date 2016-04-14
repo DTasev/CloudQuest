@@ -146,19 +146,19 @@ function KeyboardController(keys, repeat) {
 
     KeyboardController({
         37: function () {
-            playerDirection = LEFT;
+            player.direction = player.navigation.left;
         },
         39: function () {
-            playerDirection = RIGHT;
+            player.direction = player.navigation.right;
         },
         38: function () {
-            playerDirection = 3;
+            player.direction = player.navigation.up;
         },
         40: function () {
-            playerDirection = 4;
+            player.direction = player.navigation.down;
         },
         32: function () {
-            PLAYER_JUMPING = true;
+            player.currentState = player.states.jump;
         }
     }, 1000 / FRAMES);
 
@@ -168,7 +168,7 @@ function KeyboardController(keys, repeat) {
     //TODO initialise player and obstacles
 
 
-    player = new Player(40, 30, 50, 60, 3, 5);
+    player = new Player(40, 30, 50, 60, 5, 5);
     var basePlatform = new Platform(0, canvas.height - 50, 1000, 50, 0, 'rgb(0,0,0)');
 
     gameObjects.push(player);
