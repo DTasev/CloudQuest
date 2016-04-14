@@ -1,8 +1,6 @@
+// todo move to parameters
 var player;
 var gameObjects = [];
-var playerDirection;
-var LEFT = 1;
-var RIGHT = 2;
 
 function clear(canvas, canvasContext) {
     canvasContext.clearRect(0, 0, canvas.width, canvas.height);
@@ -42,10 +40,9 @@ function render(canvasContext, renderArray) {
 
 
 function handleInput() {
-    playerMovementManager.handleMovement(playerDirection, gameObjects[0]);
+    playerMovementManager.handleMovement(player);
 
     // reset direction after handling the input for the current frame
-    playerDirection = 0;
 
 }
 
@@ -138,11 +135,15 @@ function KeyboardController(keys, repeat) {
     };
 }
 
-(function main() {
-    var FRAMES = 60;
 
+(function main() {
+
+    var FRAMES = 60;
     var canvas = document.getElementById("gameCanvas");
+
     var canvasContext = canvas.getContext('2d');
+
+    player = new Player(40, 30, 50, 60, 4, 5);
 
     KeyboardController({
         37: function () {
@@ -158,17 +159,18 @@ function KeyboardController(keys, repeat) {
             player.direction = player.navigation.down;
         },
         32: function () {
-            player.currentState = player.states.jump;
+
+            // change the state to jumping only if on the ground
+            if (player.currentState != player.states.jump)
+                player.currentState = player.states.jump;
         }
     }, 1000 / FRAMES);
-
     // array used to store all objects for rendering
     // this is used only for rendering, not collision handling
     var renderArray = [];
+
+
     //TODO initialise player and obstacles
-
-
-    player = new Player(40, 30, 50, 60, 5, 5);
     var basePlatform = new Platform(0, canvas.height - 50, 1000, 50, 0, 'rgb(0,0,0)');
 
     gameObjects.push(player);
