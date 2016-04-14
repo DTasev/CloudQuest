@@ -141,15 +141,13 @@ function KeyboardController(keys, repeat) {
             player.direction = player.navigation.up;
         },
         40: function () {
-            player.direction = player.navigation.down;
+            player.currentState = player.states.falling;
         },
         32: function () {
 
             // change the state to jumping only if on the ground
             if (player.currentState != player.states.jump) {
                 player.currentState = player.states.jump;
-            }else{
-                player.currentState = player.states.idle;
             }
         }
     }, 1000 / FRAMES);

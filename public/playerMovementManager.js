@@ -39,7 +39,7 @@ var playerMovementManager = (function () {
                 currentSpeed = currentSpeed * JUMPING_DAMPING;
                 jumpCounter++;
             } else {
-                playerObject.currentState = player.states.idle;
+                playerObject.currentState = player.states.falling;
                 jumpCounter = 0;
                 currentSpeed = START_JUMPING_SPEED;
             }
