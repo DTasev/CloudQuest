@@ -178,9 +178,9 @@ function KeyboardController(keys, repeat) {
     renderArray.push(basePlatform);
 
     var speed = 0.0;
-    for (var i = 50; i < 500; i += 100) {
+    for (var i = 50; i < 500; i += 150) {
 
-        var platform = new Platform(i, i + 50, 150, 30, speed, 'rgb(0,0,0)');
+        var platform = new Platform(i, i + 50, 150, 40, speed, 'rgb(0,0,0)');
 
         //speed-=0.08;
 

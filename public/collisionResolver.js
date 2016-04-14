@@ -37,7 +37,7 @@ var collisionResolver = (function () {
         if (collisionResultsArray.length > 0) {
             for (var i = 0; i < collisionResultsArray.length; i++) {
                 // if one of the collisions is a platform don't apply gravity
-                console.log(collisionResultsArray);
+                console.log('Colliding with #' + collisionResultsArray.length + ' of platforms');
                 if (collisionResultsArray[i].collisionResult[2] == true)
                     applyGravity = false;
             }
