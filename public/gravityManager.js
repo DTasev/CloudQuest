@@ -25,8 +25,11 @@ var gravityManager = (function (){
     // todo track separate objects
     // but for now implement just for player
     this.applyGravity = function (gameObject) {
-        if(applyGravity && gameObject.currentState != player.states.jump)
+        if(applyGravity && gameObject.currentState != player.states.jump){
+
             gameObject.y += GRAVITY_CONSTANT*gameObject.gravityWeight;
+            gameObject.currentState
+        }
 
         /*
          gravityMultiplier *= GRAVITY_MULTIPLIER_CHANGE;

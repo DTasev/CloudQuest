@@ -99,56 +99,6 @@ function gameLoop(canvas, canvasContext, renderArray) {
         player.currentState = player.states.idle;
 }
 
-/**
- * Source from http://stackoverflow.com/questions/3691461/remove-key-press-delay-in-javascript
- * @author http://stackoverflow.com/users/18936/bobince
- * @param keys
- * @param repeat
- * @constructor
- */
-// Keyboard input with customisable repeat (set to 0 for no key repeat)
-function KeyboardController(keys, repeat) {
-    // Lookup of key codes to timer ID, or null for no repeat
-    //
-    var timers = {};
-
-    // When key is pressed and we don't already think it's pressed, call the
-    // key action callback and set a timer to generate another one after a delay
-    document.onkeydown = function (event) {
-        var key = (event || window.event).keyCode;
-        if (!(key in keys))
-            return true;
-        if (!(key in timers)) {
-            timers[key] = null;
-            keys[key]();
-            if (repeat !== 0)
-                timers[key] = setInterval(keys[key], repeat);
-        }
-        return false;
-    };
-
-    // Cancel timeout and mark key as released on keyup
-    //
-    document.onkeyup = function (event) {
-        var key = (event || window.event).keyCode;
-        if (key in timers) {
-            if (timers[key] !== null)
-                clearInterval(timers[key]);
-            delete timers[key];
-        }
-    };
-
-    // When window is unfocused we may not get key events. To prevent this
-    // causing a key to 'get stuck down', cancel all held keys
-    //
-    window.onblur = function () {
-        for (key in timers)
-            if (timers[key] !== null)
-                clearInterval(timers[key]);
-        timers = {};
-    };
-}
-
 (function main() {
 
     var FRAMES = 60;
@@ -158,7 +108,17 @@ function KeyboardController(keys, repeat) {
 
     player = new Player(40, 30, 50, 60, 3, 5);
 
-    KeyboardController({
+    // The numbers are the keys' values
+    // 37 is left arrow
+    // 39 is right arrow
+    // 40 is down arrow
+    // 38 is up arrow
+    // 32 is pressing the space bar
+    //
+    // The controller event fires BEFORE the gameLoop
+    // function is executed
+    //
+    new KeyboardController({
         37: function () {
             player.direction = player.navigation.left;
             if (player.currentState != player.states.jump && player.currentState != player.states.falling) {
@@ -171,14 +131,10 @@ function KeyboardController(keys, repeat) {
                 player.currentState = player.states.run;
             }
         },
-        38: function () {
-            player.direction = player.navigation.up;
-        },
         40: function () {
             player.currentState = player.states.falling;
         },
         32: function () {
-
             // change the state to jumping only if on the ground
             if (player.currentState == player.states.idle || player.currentState == player.states.run) {
                 player.currentState = player.states.jump;
