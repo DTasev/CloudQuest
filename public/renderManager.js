@@ -6,7 +6,7 @@
  * @type {Function}
  */
 var renderManager = (function () {
-    
+
     this.renderImage = function (canvasContext, rectangleObject) {
         var currentFrame = 0; // might have to be global or move to animation?
 

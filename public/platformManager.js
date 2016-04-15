@@ -53,13 +53,28 @@ var platformManager = (function () {
                 //debugger;
 
                 var width = Math.floor((Math.random() * canvas.width / 2) + 20);
-                var height = Math.floor((Math.random() * 80) + 20);
+                var height = Math.floor((Math.random() * 30) + 10);
                 var x = Math.floor((Math.random() * canvas.width - width));
                 var y = Math.floor((Math.random() * canvas.height - 50 - height));
 
-                var deflateType = Math.floor((Math.random() * 6) + 1);
+                var deflateType;
+                try{
+                   deflateType = Math.floor((Math.random() * 6) + 1);
+               }catch (e) {
+                   debugger;
+                    console.log(e);
+               }
 
-                var deflateSpeed = Math.random()+0.3;
+                console.log((deflateType));
+
+                // Starting deflate speed for horizontal = 0.3
+                // Starting deflate speed for vertical = 0.3 if height > 20,
+                //                                           if height < 20, speed = 0.15
+                // Max for any vertical 0.5
+                // max for any horizontal 1
+                var deflateSpeed = 0.75;
+
+                //var deflateSpeed = Math.random()+0.03;
 
                 var R = Math.floor((Math.random() * 256));
                 var G = Math.floor((Math.random() * 256));
