@@ -78,7 +78,7 @@ function gameLoop(canvas, canvasContext, renderArray) {
 
     var canvasContext = canvas.getContext('2d');
 
-    player = new Player(40, 30, 50, 60, 3, 0.5);
+    player = new Player(40, 30, 50, 60, 3, 5);
 
     // The numbers are the keys' values
     // 37 is left arrow

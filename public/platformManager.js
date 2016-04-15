@@ -3,6 +3,7 @@
  */
 
 var platformManager = (function () {
+
     this.generatePlatforms = function (gameObjects, renderArray) {
         // TODO tomorrow (15/04/2016)
         // generate number of new platforms (might decrease with difficulty increase
@@ -31,27 +32,44 @@ var platformManager = (function () {
 
          */
 
-        var numberOfPlatforms = 1;
 
-        for (var i = 0; i < numberOfPlatforms; i++) {
+        //debugger;
+        if (gameObjects.length < 7) {
 
-            // Math.floor((Math.random() * 100) + 1);
-            // random number between 1 and 100
-debugger;
-            var width = Math.floor((Math.random() * canvas.width / 2) + 20);
-            var height = Math.floor((Math.random() * 100) + 40);
-            var x = Math.floor((Math.random() * canvas.width - width));
-            var y = Math.floor((Math.random() * canvas.height - 50 - height));
+            var numberOfPlatforms = Math.floor((Math.random() * 2) + 1);
 
-            var deflateType = Math.floor((Math.random() * 100) + 1);
 
-            var deflateSpeed = 0.1;
+            /**
+             * TODO stable deflate speed, dependant on deflate type and width/height for horizontal and vertical
+             *
+             * TODO generation can sometimes be outside of the canvas
+             *
+             */
+            for (var i = 0; i < numberOfPlatforms; i++) {
 
-            var color = 'rgb(0,0,0)';
+                // Math.floor((Math.random() * 100) + 1);
+                // random number between 1 and 100
 
-            var newPlatform = new Platform(x, y, width, height, deflateSpeed, deflateType, color);
-            gameObjects.push(newPlatform);
-            renderArray.push(newPlatform);
+                //debugger;
+
+                var width = Math.floor((Math.random() * canvas.width / 2) + 20);
+                var height = Math.floor((Math.random() * 80) + 20);
+                var x = Math.floor((Math.random() * canvas.width - width));
+                var y = Math.floor((Math.random() * canvas.height - 50 - height));
+
+                var deflateType = Math.floor((Math.random() * 6) + 1);
+
+                var deflateSpeed = Math.random()+0.3;
+
+                var R = Math.floor((Math.random() * 256));
+                var G = Math.floor((Math.random() * 256));
+                var B = Math.floor((Math.random() * 256));
+                var color = 'rgb(' + R + ',' + G +','+B+')';
+
+                var newPlatform = new Platform(x, y, width, height, deflateSpeed, deflateType, color);
+                gameObjects.push(newPlatform);
+                renderArray.push(newPlatform);
+            }
         }
 
     };

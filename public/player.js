@@ -22,6 +22,7 @@ var Player = (function () {
         this.y = y;
         this.width = width;
         this.height = height;
+        this.fillColour = 'rgb(0,0,0)';
 
         // Values for object updates
         // such as movement and gravity
