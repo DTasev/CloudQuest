@@ -1,4 +1,4 @@
-// todo move to parameters
+// TODO move to parameters
 var player;
 var canvas;
 var gameObjects = [];
@@ -21,35 +21,6 @@ function handleInput() {
     playerMovementManager.handleMovement(player);
 }
 
-function platformDeflation(platform) {
-
-    // TODO move to platform class
-
-    switch(platform.deflateType){
-        case platform.availableDeflateTypes.left:
-            platform.x += platform.deflateSpeed;
-            platform.width -= platform.deflateSpeed;
-            break;
-        case platform.availableDeflateTypes.right:
-
-            platform.width -= platform.deflateSpeed;
-            break;
-        case platform.availableDeflateTypes.both:
-            platform.x += platform.deflateSpeed;
-            platform.width -= platform.deflateSpeed * 2;
-            break;
-    }
-}
-function platformGenerator() {
-    // TODO tomorrow (15/04/2016)
-    // platform x, y, width, height random, but capped
-    // platform deflateSpeed random
-    // color?, maybe give different colours for different speed
-    // x+width cannot be > canvas.width
-    // y+height cannot be > canvas.height
-
-
-}
 /**
  * Handles the collisions between the gameObjects
  */
@@ -59,16 +30,17 @@ function update(renderArray) {
 
     if (gameObjects.length > 0) {
         for (var i = 1; i < gameObjects.length; i++) {
-            if (gameObjects[i].width <= 0) {
+            if (gameObjects[i].width <= 0 || gameObjects[i].height <= 0) {
                 gameObjects.splice(i, 1);
                 renderArray.splice(i, 1);
             }
+
             // apply animation effects, i.e. deflation of platforms, changing of sprite picture
-            platformDeflation(gameObjects[i]);
+            platformManager.handleDeflation(gameObjects[i]);
         }
     }
 
-    platformGenerator();
+    platformManager.generatePlatforms(gameObjects, renderArray);
 
 
     /*
@@ -106,7 +78,7 @@ function gameLoop(canvas, canvasContext, renderArray) {
 
     var canvasContext = canvas.getContext('2d');
 
-    player = new Player(40, 30, 50, 60, 3, 5);
+    player = new Player(40, 30, 50, 60, 3, 0.5);
 
     // The numbers are the keys' values
     // 37 is left arrow
@@ -149,7 +121,7 @@ function gameLoop(canvas, canvasContext, renderArray) {
 
 
     //TODO initialise player and obstacles
-    var basePlatform = new Platform(0, canvas.height - 50, 1000, 50, 0, 'rgb(0,0,0)');
+    var basePlatform = new Platform(0, canvas.height - 50, canvas.width, 50, 0, 'rgb(0,0,0)');
 
     gameObjects.push(player);
     renderArray.push(player);
@@ -158,7 +130,7 @@ function gameLoop(canvas, canvasContext, renderArray) {
     renderArray.push(basePlatform);
 
     var speed = 0.2;
-    var deflateType = 1;
+    var deflateType = 4;
     for (var i = 50; i < 500; i += 150) {
 
         var platform = new Platform(i, i + 50, 150, 40, speed, deflateType++, 'rgb(0,0,0)');

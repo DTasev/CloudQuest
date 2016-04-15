@@ -28,7 +28,10 @@ var gravityManager = (function (){
         if(applyGravity && gameObject.currentState != player.states.jump){
 
             gameObject.y += GRAVITY_CONSTANT*gameObject.gravityWeight;
-            gameObject.currentState
+
+            // to allow jumping once while falling remove this
+            // TODO create a timer to allow a small window for the jump after falling
+            gameObject.currentState = player.states.falling;
         }
 
         /*

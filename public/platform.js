@@ -26,9 +26,12 @@ var Platform = (function () {
         this.deflateType = deflateType;
 
         this.availableDeflateTypes = {
-            'left'  : 1,
-            'right' : 2,
-            'both'  : 3
+            'left'          : 1,    // platform deflated from the left
+            'right'         : 2,    // platform deflated from the right
+            'horizontal'    : 3,    // platform deflated from both left and right
+            "top"            : 4,    // platform deflated from the top
+            "bottom"          : 5,    // platform deflated from the bottom
+            'vertical'      : 6     // platform deflated from both top and bottom
         }
 
     }
