@@ -21,13 +21,6 @@ function handleInput() {
     playerMovementManager.handleMovement(player);
 }
 
-function platformDeflation(platform) {
-    platformManager.handleDeflation(platform);
-
-}
-function platformGenerator(renderArray) {
-    platformManager.generatePlatforms(gameObjects, renderArray);
-}
 /**
  * Handles the collisions between the gameObjects
  */
@@ -43,11 +36,11 @@ function update(renderArray) {
             }
 
             // apply animation effects, i.e. deflation of platforms, changing of sprite picture
-            platformDeflation(gameObjects[i]);
+            platformManager.handleDeflation(gameObjects[i]);
         }
     }
 
-    platformGenerator(renderArray);
+    platformManager.generatePlatforms(gameObjects, renderArray);
 
 
     /*
@@ -85,7 +78,7 @@ function gameLoop(canvas, canvasContext, renderArray) {
 
     var canvasContext = canvas.getContext('2d');
 
-    player = new Player(40, 30, 50, 60, 3, 5);
+    player = new Player(40, 30, 50, 60, 3, 0.5);
 
     // The numbers are the keys' values
     // 37 is left arrow
@@ -128,7 +121,7 @@ function gameLoop(canvas, canvasContext, renderArray) {
 
 
     //TODO initialise player and obstacles
-    var basePlatform = new Platform(0, canvas.height - 50, 1000, 50, 0, 'rgb(0,0,0)');
+    var basePlatform = new Platform(0, canvas.height - 50, canvas.width, 50, 0, 'rgb(0,0,0)');
 
     gameObjects.push(player);
     renderArray.push(player);

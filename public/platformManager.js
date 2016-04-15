@@ -6,13 +6,53 @@ var platformManager = (function () {
     this.generatePlatforms = function (gameObjects, renderArray) {
         // TODO tomorrow (15/04/2016)
         // generate number of new platforms (might decrease with difficulty increase
-        // platform x, y, width, height random, but capped
-        // platform deflateSpeed random
-        // color?, maybe give different colours for different speed
-        // x+width cannot be > canvas.width
-        // y+height cannot be > canvas.height
-        // after generating platform -> add to gameObjects, add to renderArray
+        /*
+         Platform x, y, width, height random, but capped:
+         - Width between 20 and canvas.width / 2
+         - Height between 40 and and 100
+         - X between 0  and canvas.width - platform.width
+         - Y between 0 and canvas.height - basePlatform.height (50) - platform.height
 
+
+         Platform deflateType
+         - Random between one of the 6 deflation types
+
+         Platform deflateSpeed dependent on width, height and deflateType
+         - Use dampener for deflateSpeed generation
+         - the smaller the width the slower the deflate speed
+         - same for the height
+         - deflate types horizontal and vertical need slower deflate speed
+
+         Platform color
+         - give different colours for different speed
+         - categorise deflateSpeed and give different colours
+
+         On completion generating platform -> add to gameObjects, add to renderArray
+
+         */
+
+        var numberOfPlatforms = 1;
+
+        for (var i = 0; i < numberOfPlatforms; i++) {
+
+            // Math.floor((Math.random() * 100) + 1);
+            // random number between 1 and 100
+debugger;
+            var width = Math.floor((Math.random() * canvas.width / 2) + 20);
+            var height = Math.floor((Math.random() * 100) + 40);
+            var x = Math.floor((Math.random() * canvas.width - width));
+            var y = Math.floor((Math.random() * canvas.height - 50 - height));
+
+            var deflateType = Math.floor((Math.random() * 100) + 1);
+
+            var deflateSpeed = 0.1;
+
+            var color = 'rgb(0,0,0)';
+
+            var newPlatform = new Platform(x, y, width, height, deflateSpeed, deflateType, color);
+            gameObjects.push(newPlatform);
+            renderArray.push(newPlatform);
+        }
 
     };
 
@@ -74,8 +114,8 @@ var platformManager = (function () {
             //
             case platform.availableDeflateTypes.top:
 
-                platform.y += platform.deflateSpeed/2;
-                platform.height -= platform.deflateSpeed/2;
+                platform.y += platform.deflateSpeed / 2;
+                platform.height -= platform.deflateSpeed / 2;
 
                 break;
 
@@ -84,7 +124,7 @@ var platformManager = (function () {
             //
             case platform.availableDeflateTypes.bottom:
 
-                platform.height -= platform.deflateSpeed/2;
+                platform.height -= platform.deflateSpeed / 2;
 
                 break;
 
@@ -95,7 +135,7 @@ var platformManager = (function () {
             //
             case platform.availableDeflateTypes.vertical:
 
-                platform.y += platform.deflateSpeed/2;
+                platform.y += platform.deflateSpeed / 2;
                 platform.height -= platform.deflateSpeed;
 
                 break;
