@@ -60,7 +60,7 @@ var collisionDetector = (function () {
                 //var checkBottom = rectangle1.getVerticalCenter() < rectangle2.getVerticalCenter(); // bottom vs top
 
                 // - 2 AND + 10 are padding to have an accurate calculation
-                var checkBottom = (((rectSides1[SIDE_BOTTOM] - 2  < rectSides2[SIDE_TOP] + 10)));
+                var checkBottom = (((rectSides1[SIDE_BOTTOM] - 5  < rectSides2[SIDE_TOP] + 5)));
 
                 var checkTop = rectangle1.getVerticalCenter() > rectangle2.getVerticalCenter(); // top vs bottom
 
