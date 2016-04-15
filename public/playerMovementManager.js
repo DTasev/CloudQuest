@@ -158,7 +158,7 @@ var playerMovementManager = (function () {
      */
     this.handleMovement = function (playerObject) {
         console.log('State -> ' + playerObject.currentState);
-        if (player.currentState != player.states.idle) {
+        if (playerObject.currentState != player.states.idle) {
             movingState(playerObject);
         } else {
             resetAcceleration();

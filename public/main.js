@@ -32,7 +32,7 @@ function update(renderArray) {
         for (var i = 1; i < gameObjects.length; i++) {
             // apply animation effects, i.e. deflation of platforms, changing of sprite picture
             platformManager.handleDeflation(gameObjects[i]);
-            
+
             if (gameObjects[i].width <= 0 || gameObjects[i].height <= 0) {
                 gameObjects.splice(i, 1);
                 renderArray.splice(i, 1);

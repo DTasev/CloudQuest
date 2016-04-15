@@ -33,7 +33,6 @@ var Platform = (function () {
             "bottom"          : 5,    // platform deflated from the bottom
             'vertical'      : 6     // platform deflated from both top and bottom
         }
-
     }
 
     /**

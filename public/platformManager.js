@@ -3,6 +3,9 @@
  */
 
 var platformManager = (function () {
+    var MAX_HORIZONTAL_SPEED = 1;
+    var MAX_VERTICAL_SPEED = 0.5;
+    this.difficultyModifier = 100;
 
     this.generatePlatforms = function (gameObjects, renderArray) {
         // TODO tomorrow (15/04/2016)
@@ -34,7 +37,7 @@ var platformManager = (function () {
 
 
         //debugger;
-        if (gameObjects.length < 7) {
+        if (gameObjects.length < 125) {
 
             var numberOfPlatforms = Math.floor((Math.random() * 2) + 1);
 
@@ -52,34 +55,46 @@ var platformManager = (function () {
 
                 //debugger;
 
-                var width = Math.floor((Math.random() * canvas.width / 2) + 20);
+                var width = Math.floor((Math.random() * canvas.width / 3) + 40);
                 var height = Math.floor((Math.random() * 30) + 10);
                 var x = Math.floor((Math.random() * canvas.width - width));
                 var y = Math.floor((Math.random() * canvas.height - 50 - height));
 
-                var deflateType;
-                try{
-                   deflateType = Math.floor((Math.random() * 6) + 1);
-               }catch (e) {
-                   debugger;
-                    console.log(e);
-               }
-
-                console.log((deflateType));
+                var deflateType = Math.floor((Math.random() * 6) + 1);
 
                 // Starting deflate speed for horizontal = 0.3
                 // Starting deflate speed for vertical = 0.3 if height > 20,
                 //                                           if height < 20, speed = 0.15
-                // Max for any vertical 0.5
+                // Max for height > 20 vertical 0.5, <20 0.25
                 // max for any horizontal 1
-                var deflateSpeed = 0.75;
+                //
+                var deflateSpeed = 0.3 * difficultyModifier;
+
+                if (deflateType === 1 || deflateType === 2 || deflateType === 3) {
+
+                    console.log(deflateType);
+
+                    if (deflateSpeed > MAX_HORIZONTAL_SPEED) {
+                        deflateSpeed = MAX_HORIZONTAL_SPEED;
+                    }
+
+                } else if (deflateType === 4 || deflateType === 5 || deflateType === 6) {
+
+                    if (deflateSpeed > MAX_VERTICAL_SPEED) {
+                        deflateSpeed = MAX_VERTICAL_SPEED;
+                    }
+
+                    if (height < 20) {
+                        deflateSpeed = deflateSpeed / 2;
+                    }
+                }
 
                 //var deflateSpeed = Math.random()+0.03;
 
                 var R = Math.floor((Math.random() * 256));
                 var G = Math.floor((Math.random() * 256));
                 var B = Math.floor((Math.random() * 256));
-                var color = 'rgb(' + R + ',' + G +','+B+')';
+                var color = 'rgb(' + R + ',' + G + ',' + B + ')';
 
                 var newPlatform = new Platform(x, y, width, height, deflateSpeed, deflateType, color);
                 gameObjects.push(newPlatform);
