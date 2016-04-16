@@ -59,10 +59,8 @@ var platformManager = (function () {
 
                 var deflateType = Math.floor((Math.random() * 6) + 1);
 
-                // Starting deflate speed for horizontal and vertical between 0.2 and 0.4
-                // if vertical -> if height < 20, speed = 0.15
-                // Max for height > 20 vertical 0.5, <20 0.25
-                // max for any horizontal 1
+                // Starting deflate speed for horizontal and vertical between 0.1 and 0.4
+                // if vertical -> if height < 20, speed in half
                 //
                 var deflateSpeed = (Math.random()*0.4 + 0.1 )*difficultyModifier;
 
@@ -74,6 +72,8 @@ var platformManager = (function () {
                         deflateSpeed = MAX_HORIZONTAL_SPEED;
                     }
 
+                    // Determining the colour dependent on the deflateSpeed
+                    //
                     // Math.floor is necessary because RGB wants whole numbers
                     //
                     colour = 'rgb(' + Math.floor(30 * (deflateSpeed * 10)) + ',0,0)';
@@ -88,15 +88,14 @@ var platformManager = (function () {
                         deflateSpeed = deflateSpeed / 2;
                     }
 
+                    // Determining the colour dependent on the deflateSpeed
+                    //
                     // Math.floor is necessary because RGB wants whole numbers
                     //
                     colour = 'rgb(0,' + Math.floor(30 * (deflateSpeed * 10)) + ',0)';
                 }
 
                 console.log('DeflateSpeed: ' + deflateSpeed + '\nDeflateType: ' + deflateType +'\nColour: ' + colour);
-
-                //var deflateSpeed = Math.random()+0.03;
-
 
                 var newPlatform = new Platform(x, y, width, height, deflateSpeed, deflateType, colour);
                 gameObjects.push(newPlatform);
@@ -108,7 +107,7 @@ var platformManager = (function () {
 
     /**
      * Handles deflation for the platform,
-     * dependant on deflationType.
+     * dependent on deflationType.
      *
      * There are multiple deflation types, defined
      * in the platform.js file as availableDeflateTypes.
