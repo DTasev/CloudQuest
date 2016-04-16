@@ -157,7 +157,6 @@ var playerMovementManager = (function () {
      * @param playerObject
      */
     this.handleMovement = function (playerObject) {
-        console.log('State -> ' + playerObject.currentState);
         if (playerObject.currentState != player.states.idle) {
             movingState(playerObject);
         } else {

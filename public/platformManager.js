@@ -3,9 +3,9 @@
  */
 
 var platformManager = (function () {
-    var MAX_HORIZONTAL_SPEED = 1;
-    var MAX_VERTICAL_SPEED = 0.5;
-    this.difficultyModifier = 100;
+    var MAX_HORIZONTAL_SPEED = 1.5;
+    var MAX_VERTICAL_SPEED = 0.6;
+    this.difficultyModifier = 1.0;
 
     this.generatePlatforms = function (gameObjects, renderArray) {
         // TODO tomorrow (15/04/2016)
@@ -37,14 +37,11 @@ var platformManager = (function () {
 
 
         //debugger;
-        if (gameObjects.length < 125) {
+        if (gameObjects.length < 7) {
 
-            var numberOfPlatforms = Math.floor((Math.random() * 2) + 1);
-
+            var numberOfPlatforms = Math.floor((Math.random() * 4) + 1);
 
             /**
-             * TODO stable deflate speed, dependant on deflate type and width/height for horizontal and vertical
-             *
              * TODO generation can sometimes be outside of the canvas
              *
              */
@@ -62,21 +59,24 @@ var platformManager = (function () {
 
                 var deflateType = Math.floor((Math.random() * 6) + 1);
 
-                // Starting deflate speed for horizontal = 0.3
-                // Starting deflate speed for vertical = 0.3 if height > 20,
-                //                                           if height < 20, speed = 0.15
+                // Starting deflate speed for horizontal and vertical between 0.2 and 0.4
+                // if vertical -> if height < 20, speed = 0.15
                 // Max for height > 20 vertical 0.5, <20 0.25
                 // max for any horizontal 1
                 //
-                var deflateSpeed = 0.3 * difficultyModifier;
+                var deflateSpeed = (Math.random()*0.4 + 0.1 )*difficultyModifier;
+
+                var colour;
 
                 if (deflateType === 1 || deflateType === 2 || deflateType === 3) {
-
-                    console.log(deflateType);
 
                     if (deflateSpeed > MAX_HORIZONTAL_SPEED) {
                         deflateSpeed = MAX_HORIZONTAL_SPEED;
                     }
+
+                    // Math.floor is necessary because RGB wants whole numbers
+                    //
+                    colour = 'rgb(' + Math.floor(30 * (deflateSpeed * 10)) + ',0,0)';
 
                 } else if (deflateType === 4 || deflateType === 5 || deflateType === 6) {
 
@@ -87,16 +87,18 @@ var platformManager = (function () {
                     if (height < 20) {
                         deflateSpeed = deflateSpeed / 2;
                     }
+
+                    // Math.floor is necessary because RGB wants whole numbers
+                    //
+                    colour = 'rgb(0,' + Math.floor(30 * (deflateSpeed * 10)) + ',0)';
                 }
+
+                console.log('DeflateSpeed: ' + deflateSpeed + '\nDeflateType: ' + deflateType +'\nColour: ' + colour);
 
                 //var deflateSpeed = Math.random()+0.03;
 
-                var R = Math.floor((Math.random() * 256));
-                var G = Math.floor((Math.random() * 256));
-                var B = Math.floor((Math.random() * 256));
-                var color = 'rgb(' + R + ',' + G + ',' + B + ')';
 
-                var newPlatform = new Platform(x, y, width, height, deflateSpeed, deflateType, color);
+                var newPlatform = new Platform(x, y, width, height, deflateSpeed, deflateType, colour);
                 gameObjects.push(newPlatform);
                 renderArray.push(newPlatform);
             }
