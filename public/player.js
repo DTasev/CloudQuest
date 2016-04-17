@@ -99,7 +99,7 @@ var Player = (function () {
      * @param canvasContext context of th
      */
     Player.prototype.render = function (canvasContext) {
-        renderManager.renderImage(canvasContext, this);
+        renderManager.renderPlayer(canvasContext, this);
         //renderManager.renderRectangle(canvasContext, this);
     };
 
