@@ -95,7 +95,7 @@ var platformManager = (function () {
                     colour = 'rgb(0,' + Math.floor(30 * (deflateSpeed * 10)) + ',0)';
                 }
 
-                console.log('DeflateSpeed: ' + deflateSpeed + '\nDeflateType: ' + deflateType +'\nColour: ' + colour);
+                //console.log('DeflateSpeed: ' + deflateSpeed + '\nDeflateType: ' + deflateType +'\nColour: ' + colour);
 
                 var newPlatform = new Platform(x, y, width, height, deflateSpeed, deflateType, colour);
                 gameObjects.push(newPlatform);

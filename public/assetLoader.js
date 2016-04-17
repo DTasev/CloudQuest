@@ -1,7 +1,8 @@
+
 var assetLoader = (function assetLoaderInit() {
-    var FRAMES_COUNT = 10,
-    	SEPARATOR = '__',
-    	PADDING = '000',
+	var FRAMES_COUNT = 20;
+	var SEPARATOR = '__',
+    	PADDING = '00',
     	BASE_URL = './heroSprites/',
     	EXTENSION = '.png',
     	s,
@@ -19,14 +20,14 @@ var assetLoader = (function assetLoaderInit() {
 		'Slide'
 	];
 
-	for (s = 0, len = states.length; s < len; s += 1) {
+	for (s = 0, len = states.length; s < len; s++) {
 		frames = [];
 
-		for (f = 0; f < FRAMES_COUNT; f += 1) {
+		for (f = 0; f < FRAMES_COUNT; f++ ) {
 			frames[f] = new Image();
 
 			// Pad left.
-			frameNumber = (PADDING + f).slice(-PADDING.length);
+			frameNumber = (PADDING + f);
 
 			frames[f].src = BASE_URL +  states[s] + SEPARATOR + frameNumber + EXTENSION;
 			//console.log(frames[f].src);

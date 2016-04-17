@@ -1,6 +1,13 @@
 // TODO move to parameters
 var player;
 var canvas;
+var gameState;
+var states = {
+    'menu'      : 0,
+    'playing'   : 1,
+    'gameOver'  : 2
+};
+
 var gameObjects = [];
 
 function clear(canvas, canvasContext) {
@@ -11,7 +18,7 @@ function clear(canvas, canvasContext) {
 }
 
 function render(canvasContext, renderArray) {
-    for (var i = 0; i < gameObjects.length; i++) {
+    for (var i = renderArray.length-1; i >= 0; i--) {
         renderArray[i].render(canvasContext);
     }
 }
@@ -68,8 +75,10 @@ function gameLoop(canvas, canvasContext, renderArray) {
 
     // reset player state when clearing the canvas
     //
-    if (player.currentState == player.states.run)
+    if (player.currentState == player.states.run){
         player.currentState = player.states.idle;
+        player.direction = 0;
+    }
 }
 
 (function main() {
@@ -79,7 +88,7 @@ function gameLoop(canvas, canvasContext, renderArray) {
 
     var canvasContext = canvas.getContext('2d');
 
-    player = new Player(40, 30, 50, 60, 3, 5);
+    player = new Player(40, 30, 35, 60, 1.5, 5);
 
     // The numbers are the keys' values
     // 37 is left arrow
@@ -97,6 +106,8 @@ function gameLoop(canvas, canvasContext, renderArray) {
             if (player.currentState != player.states.jump && player.currentState != player.states.falling) {
                 player.currentState = player.states.run;
             }
+
+
         },
         39: function () {
             player.direction = player.navigation.right;
@@ -108,7 +119,9 @@ function gameLoop(canvas, canvasContext, renderArray) {
             player.currentState = player.states.falling;
         },
         32: function () {
+
             // change the state to jumping only if on the ground
+            //
             if (player.currentState == player.states.idle || player.currentState == player.states.run) {
                 player.currentState = player.states.jump;
             }

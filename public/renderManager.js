@@ -6,16 +6,90 @@
  * @type {Function}
  */
 var renderManager = (function () {
+    var currentFrame = 0; // might have to be global or move to animation?
+    var animationWidthChange = 0;
+    var animationHeightChange = 0;
+
+    var ANIMATION_SPEED = 30;
+
+    var ANIMATION_DIVISOR = ANIMATION_SPEED / 9;
 
     this.renderImage = function (canvasContext, rectangleObject) {
-        var currentFrame = 0; // might have to be global or move to animation?
+        currentFrame++;
+
+
+        /*
+         count frames
+         on every 10? frames change player sprite,
+         or change it on a timer
+         */
+
+        var spriteImage;
 
         switch (rectangleObject.currentState) {
-            case 'idle':
-                var spriteImage = assetLoader.hero.idle[currentFrame];
+            case player.states.idle:
+
+                spriteImage = assetLoader.hero.idle[Math.floor(currentFrame / ANIMATION_DIVISOR)];
+
+                animationWidthChange = 0;
+                animationHeightChange = 0;
+
+                break;
+
+            case player.states.run:
+
+                if (rectangleObject.direction == 2) {
+                    console.log('Going right or idle -> ' + Math.floor(currentFrame / ANIMATION_DIVISOR));
+
+                    spriteImage = assetLoader.hero.run[Math.floor(currentFrame / ANIMATION_DIVISOR)];
+                } else if (rectangleObject.direction == 1) {
+                    console.log('Going left -> ' + Math.floor(currentFrame / ANIMATION_DIVISOR));
+
+                    spriteImage = assetLoader.hero.run[Math.floor(currentFrame / ANIMATION_DIVISOR)+10];
+                }
+
+                animationWidthChange = 20;
+                animationHeightChange = 0;
+
+
+                break;
+
+            case player.states.falling:
+
+            // FALL-THROUGH on purpose
+            // they use the same sprite animation
+
+            case player.states.jump:
+
+                if (rectangleObject.direction == 2) {
+
+                    spriteImage = assetLoader.hero.jump[Math.floor(currentFrame / ANIMATION_DIVISOR)];
+
+                } else if (rectangleObject.direction == 1) {
+
+                    spriteImage = assetLoader.hero.jump[Math.floor(currentFrame / ANIMATION_DIVISOR)+10];
+
+                }
+
+                animationWidthChange = 25;
+                animationHeightChange = 5;
+                break;
+
+            case player.states.dead:
+
+                spriteImage = assetLoader.hero.dead[Math.floor(currentFrame / ANIMATION_DIVISOR)];
+
+                animationWidthChange = 20;
+
+                break;
+
         }
 
-        canvasContext.drawImage(spriteImage, 0, 0, spriteImage.width, spriteImage.height, rectangleObject.x, rectangleObject.y, rectangleObject.width, rectangleObject.height);
+        if (currentFrame > ANIMATION_SPEED) {
+            currentFrame = 0;
+        }
+
+        canvasContext.drawImage(spriteImage, 0, 0, spriteImage.width, spriteImage.height, rectangleObject.x, rectangleObject.y, rectangleObject.width + animationWidthChange, rectangleObject.height + animationHeightChange);
     };
 
     this.renderRectangle = function (canvasContext, rectangleObject) {

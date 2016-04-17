@@ -140,7 +140,6 @@ var playerMovementManager = (function () {
             default:
                 break;
         }
-        playerObject.direction = 0;
     }
 
     /**
