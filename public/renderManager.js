@@ -10,26 +10,57 @@ var renderManager = (function () {
     var animationWidthChange = 0;
     var animationHeightChange = 0;
 
-    var ANIMATION_SPEED = 30;
-
+    var ANIMATION_SPEED = 60;
     var ANIMATION_DIVISOR = ANIMATION_SPEED / 9;
 
-    this.renderImage = function (canvasContext, rectangleObject) {
+    // Store the last direction the player was in
+    // to show appropriate sprite facing left or right
+    // even when player is not moving anymore
+    //
+    var lastDirection = 1;
+
+    this.renderImage = function (canvasContext, playerObject) {
+
+        // frame counter to track when we have to switch sprite images
+        //
         currentFrame++;
 
-
-        /*
-         count frames
-         on every 10? frames change player sprite,
-         or change it on a timer
-         */
-
+        // variable storing the sprite image, then used for showing it on screen
+        //
         var spriteImage;
 
-        switch (rectangleObject.currentState) {
+        // store the direction only if it's different from 0 (the player hasnt moved in the current frame yet)
+        // or if the direction is different that our current one
+        //
+        if(playerObject.direction != 0 && playerObject.direction != lastDirection){
+            lastDirection = playerObject.direction;
+        }
+
+        // render different animation depending on object state
+        //
+        switch (playerObject.currentState) {
+
+            // case the player is idle
+            //
             case player.states.idle:
 
-                spriteImage = assetLoader.hero.idle[Math.floor(currentFrame / ANIMATION_DIVISOR)];
+                //if the direction is right, load the sprites facing right
+                // which in the storage are from <StateName>___000 to <StateName>___009
+                //
+                if (lastDirection == player.navigation.right) {
+
+                    spriteImage = assetLoader.hero.idle[Math.floor(currentFrame / ANIMATION_DIVISOR)];
+
+                }
+
+                //if the direction is right, load the sprites facing right
+                // which in the storage are from <StateName>___0010 to <StateName>___0019
+                // that is the reason for the +10 at the end
+                //
+                else if (lastDirection == player.navigation.left) {
+
+                    spriteImage = assetLoader.hero.idle[Math.floor(currentFrame / ANIMATION_DIVISOR)+10];
+                }
 
                 animationWidthChange = 0;
                 animationHeightChange = 0;
@@ -38,12 +69,11 @@ var renderManager = (function () {
 
             case player.states.run:
 
-                if (rectangleObject.direction == 2) {
-                    console.log('Going right or idle -> ' + Math.floor(currentFrame / ANIMATION_DIVISOR));
+                if (lastDirection == player.navigation.right) {
 
                     spriteImage = assetLoader.hero.run[Math.floor(currentFrame / ANIMATION_DIVISOR)];
-                } else if (rectangleObject.direction == 1) {
-                    console.log('Going left -> ' + Math.floor(currentFrame / ANIMATION_DIVISOR));
+
+                } else if (lastDirection == player.navigation.left) {
 
                     spriteImage = assetLoader.hero.run[Math.floor(currentFrame / ANIMATION_DIVISOR)+10];
                 }
@@ -61,11 +91,11 @@ var renderManager = (function () {
 
             case player.states.jump:
 
-                if (rectangleObject.direction == 2) {
+                if (lastDirection == player.navigation.right) {
 
                     spriteImage = assetLoader.hero.jump[Math.floor(currentFrame / ANIMATION_DIVISOR)];
 
-                } else if (rectangleObject.direction == 1) {
+                } else if (lastDirection == player.navigation.left) {
 
                     spriteImage = assetLoader.hero.jump[Math.floor(currentFrame / ANIMATION_DIVISOR)+10];
 
@@ -89,7 +119,7 @@ var renderManager = (function () {
             currentFrame = 0;
         }
 
-        canvasContext.drawImage(spriteImage, 0, 0, spriteImage.width, spriteImage.height, rectangleObject.x, rectangleObject.y, rectangleObject.width + animationWidthChange, rectangleObject.height + animationHeightChange);
+        canvasContext.drawImage(spriteImage, 0, 0, spriteImage.width, spriteImage.height, playerObject.x, playerObject.y, playerObject.width + animationWidthChange, playerObject.height + animationHeightChange);
     };
 
     this.renderRectangle = function (canvasContext, rectangleObject) {
