@@ -1,27 +1,29 @@
 var Player = (function () {
+
     /**
-     *  The constructed needs as parameters:
+     *  The constructor needs as parameters:
      *      X position of the object,
      *      Y position of the object,
      *      WIDTH of the object,
      *      HEIGHT of the object,
      *      RUNNINGSPEED used for the movement of the player
+     *      gravityWeight used for the movement of the player
      *
-     * @param x
-     * @param y
-     * @param width
-     * @param height
-     * @param runningSpeed
-     * @param gravityWeight
+     * @param x X position of the object
+     * @param y Y position of the object
+     * @param width Width of the object
+     * @param height Height of the object
+     * @param runningSpeed Running speed used for the movement of the player
+     * @param gravityWeight Gravity weight used for applying gravity to the player
      * @constructor
      */
     function Player(x, y, width, height, runningSpeed, gravityWeight) {
         // Coordinate Values
         //
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+        this.x          = x;
+        this.y          = y;
+        this.width      = width;
+        this.height     = height;
         this.fillColour = 'rgb(0,0,0)';
 
         // Values for object updates

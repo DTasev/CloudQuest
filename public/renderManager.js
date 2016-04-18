@@ -7,6 +7,28 @@
  */
 var renderManager = (function () {
 
+    /**
+     * Renders the coin on screen.
+     * The image sprite is read using the spriteAnimator class
+     * and is then drawn on screen using the drawImage method
+     * of the canvas' context
+     *
+     * @param canvasContext The canvas that the object will be drawn on.
+     * @param coinObject The object that will be drawn on the canvas.
+     */
+    this.renderCoin = function (canvasContext, coinObject) {
+
+        var sprite = spriteAnimator.getCoinSprite(coinObject);
+
+        canvasContext.drawImage(
+            sprite.image,
+            0, 0,
+            sprite.image.width, sprite.image.height,
+            coinObject.x, coinObject.y,
+            coinObject.width, coinObject.height
+        );
+
+    };
 
     /**
      * Renders the player sprite on the screen.

@@ -147,5 +147,9 @@ var spriteAnimator = (function () {
         };
     };
 
+    this.getCoinSprite = function (coinObject) {
+        
+    };
+
     return this;
 })();

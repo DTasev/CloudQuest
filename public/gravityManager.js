@@ -12,26 +12,52 @@
  *
  * @type {Function}
  */
-var gravityManager = (function (){
+var gravityManager = (function () {
+
+    var fallingTimer = 0;
 
     // Gravity constant that will be applied to all objects
+    //
     var GRAVITY_CONSTANT = 1;
-    var applyGravity = true;
 
-    this.setGravity = function (gravityValue) {
-        applyGravity = gravityValue;
-    };
+    var INITIAL_GRAVITY_MULTIPLIER = 1;
+    var GRAVITY_MULTIPLIER_INCREASE = 1.05;
+    var GRAVITY_MAX_MULTIPLIER = 2;
 
+    var gravityMultiplier = INITIAL_GRAVITY_MULTIPLIER;
+
+
+    // TODO fix gravity while on platforms, cos keeps incrementing and falls through
+    
     // todo track separate objects
     // but for now implement just for player
     this.applyGravity = function (gameObject) {
-        if(applyGravity && gameObject.currentState != player.states.jump){
 
-            gameObject.y += GRAVITY_CONSTANT*gameObject.gravityWeight;
+        console.log(gravityMultiplier);
+        // Apply gravity if player is not jumping up
+        //
+        if (gameObject.currentState != player.states.jump) {
+
+            gameObject.y += GRAVITY_CONSTANT * gravityMultiplier * gameObject.gravityWeight;
+
+            gravityMultiplier *= GRAVITY_MULTIPLIER_INCREASE;
+
+            if(gravityMultiplier > GRAVITY_MAX_MULTIPLIER){
+                gravityMultiplier = GRAVITY_MAX_MULTIPLIER;
+            }
 
             // to allow jumping once while falling remove this
             // TODO create a timer to allow a small window for the jump after falling
-            gameObject.currentState = player.states.falling;
+            if (fallingTimer > 30) {
+                gameObject.currentState = player.states.falling;
+                gravityMultiplier = INITIAL_GRAVITY_MULTIPLIER;
+            }
+
+            fallingTimer++;
+
+        } else {
+            fallingTimer = 0;
+            gravityMultiplier = INITIAL_GRAVITY_MULTIPLIER;
         }
 
         /*

@@ -28,6 +28,10 @@ var playerMovementManager = (function () {
     //
     var START_JUMPING_SPEED = 8;
 
+    // If the player is jumping move slower
+    //
+    var JUMPING_DAMPENER = 0.5;
+
     // holds the value of the variable that changes to simulate
     //
     var currentSpeed = START_JUMPING_SPEED;

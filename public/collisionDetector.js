@@ -39,14 +39,6 @@ var collisionDetector = (function () {
         var rectSides1 = loadRectangleSides(rectangle1);
         var rectSides2 = loadRectangleSides(rectangle2);
 
-        // if intersecting return all intersections
-        /*
-         if (!(rectSides2[SIDE_LEFT] > rectSides1[SIDE_RIGHT] ||
-         rectSides2[SIDE_RIGHT] < rectSides1[SIDE_LEFT] ||
-         rectSides2[SIDE_TOP] > rectSides1[SIDE_BOTTOM] ||
-         rectSides2[SIDE_BOTTOM] < rectSides1[SIDE_TOP])) {
-
-         */
             if (!(rectSides1[SIDE_RIGHT] < rectSides2[SIDE_LEFT] ||
                 rectSides1[SIDE_LEFT] > rectSides2[SIDE_RIGHT] ||
                 rectSides1[SIDE_BOTTOM] < rectSides2[SIDE_TOP] ||
@@ -72,18 +64,17 @@ var collisionDetector = (function () {
         }
         ;
 
-        //FIXME canvasContext doesnt have width and height info
         this.outOfBoundsDetector = function (object) {
             if (object.x < 0 ||
                 object.y < 0 ||
-                object.width > canvas.width ||
-                object.height > canvas.height) {
+                object.x + object.width > canvas.width ||
+                object.y + object.height > canvas.height) {
 
                 return [
                     object.x < 0,
                     object.y < 0,
-                    object.width > canvas.width,
-                    object.height > canvas.height
+                    object.x + object.width > canvas.width,
+                    object.y + object.height > canvas.height
                 ];
 
             } else {
@@ -91,9 +82,10 @@ var collisionDetector = (function () {
             }
         };
 
-        this.rectangleAndArcCollision = function (rectangle, circle) {
-            //TODO
+        this.checkLowerBounds = function (object) {
+            return object.y + object.height > canvas.height;
         };
+
         return this;
     }
     )();
