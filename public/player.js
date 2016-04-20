@@ -1,14 +1,6 @@
 var Player = (function () {
 
     /**
-     *  The constructor needs as parameters:
-     *      X position of the object,
-     *      Y position of the object,
-     *      WIDTH of the object,
-     *      HEIGHT of the object,
-     *      RUNNINGSPEED used for the movement of the player
-     *      gravityWeight used for the movement of the player
-     *
      * @param x X position of the object
      * @param y Y position of the object
      * @param width Width of the object
@@ -46,17 +38,15 @@ var Player = (function () {
         // used in the movement class to determine if going
         // left or right on the screen and update
         //
-        this.direction = 0;
+        this.direction  = 0;
 
         // Player object states, used for jumping, movement
         // and sprite animations
         //
         this.states = {
-            'dead'      : 0,    // 0
             'idle'      : 1,    // 1
             'jump'      : 2,    // 2
             'run'       : 3,    // 3
-            'slide'     : 4,    // 4 not used
             'falling'   : 5     // 5
         };
 
@@ -64,6 +54,7 @@ var Player = (function () {
         //
         this.currentState = 1;
     }
+
 
     /**
      * Returns the horizontal center of this object's rectangle.
@@ -78,6 +69,7 @@ var Player = (function () {
         return (this.width + this.x) / 2;
     };
 
+
     /**
      * Returns the vertical center of this object's rectangle.
      * This is referred to as vertical center, because
@@ -90,9 +82,6 @@ var Player = (function () {
         return (this.height + this.y) / 2;
     };
 
-    Player.prototype.toString = function () {
-        return "x->" + this.x + " y->" + this.y + " width->" + this.width + " height->" + this.height;
-    };
 
     /**
      * Method available in every object class,
@@ -101,8 +90,9 @@ var Player = (function () {
      * @param canvasContext context of th
      */
     Player.prototype.render = function (canvasContext) {
+        // TODO remove, currently showing the hitbox tho
+        renderManager.renderRectangle(canvasContext, this);
         renderManager.renderPlayer(canvasContext, this);
-        //renderManager.renderRectangle(canvasContext, this);
     };
 
     return Player;

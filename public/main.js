@@ -41,7 +41,7 @@ function renderPlayingState(gameObjects, canvasContext) {
     }
 }
 function renderMenuState(canvasContext) {
-    canvasContext.fillText('What the fuck is this shit', canvas.width / 2, canvas.height / 2);
+    canvasContext.fillText('Click left mouse button to play', canvas.width / 2, canvas.height / 2);
 }
 /**
  * This function loops through all objects in the render array
@@ -114,6 +114,7 @@ function handleInput() {
  * After it all the collision has been processed and handled,
  * the method then proceeds to deflate
  */
+
 function updatePlayingState(canvas, gameObjects) {
 
     // Handle the collision and gravity of between the objects and player
@@ -132,7 +133,7 @@ function updatePlayingState(canvas, gameObjects) {
 
     gameScroller.scrollGame(gameObjects);
 
-    // todo update score on screen
+    scoreManager.updateScore();
 
     // Todo game over condition/state
     if (collisionDetector.checkLowerBounds(player)) {
@@ -215,7 +216,7 @@ function gameLoop(canvas, canvasContext, gameObjects) {
  * @param FRAMES how many times per second will the keyboard input be checked
  */
 function initialiseKeyboardControls(FRAMES, gameObjects) {
-    
+
     new KeyboardController({
 
         // Left Arrow
@@ -303,9 +304,16 @@ function initialiseKeyboardControls(FRAMES, gameObjects) {
                     break;
 
 
+                // Pressing down while playing will do:
+                // If the player is still jumping up, it will stop the jump
+                // it will also reset the player's direction, so the player
+                // will start going straight down
+                //
                 case gameStates.playing:
 
+
                     player.currentState = player.states.falling;
+                    player.direction = 0;
 
                     break;
 
@@ -366,11 +374,14 @@ function initialiseKeyboardControls(FRAMES, gameObjects) {
 function initialiseGameObjects() {
     gameObjects = []; // does this leave garbage?
 
-    player = new Player(140, 30, 35, 60, 1.5, 2.5);
+    player = new Player(140, 30, 35, 60, 1.5, 1);
     gameObjects.push(player);
 
     var basePlatform = new Platform(0, canvas.height - 50, canvas.width, 50, 0, 'rgb(0,0,0)');
     gameObjects.push(basePlatform);
+
+    var coin = new Coin(50, 50, 1);
+    gameObjects.push(coin);
 
     var speed = 0.2;
     var deflateType = 4;
@@ -415,7 +426,6 @@ function initialiseGameObjects() {
     // Initialise the game objects
     //
     initialiseGameObjects(gameObjects);
-
 
     return setInterval(function () {
         gameLoop(canvas, canvasContext, gameObjects)

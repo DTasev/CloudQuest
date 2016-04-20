@@ -25,12 +25,12 @@ var spriteAnimator = (function () {
     //
     var ANIMATION_SPEED = 50;
 
-    // Animation divisor calculates how often
+    // The animation timer calculates how often
     // the sprites have to change depending on
     // the animation speed. It is divided by 9 to
     // loop through <StateName>___000 to <StateName>___009
     //
-    var ANIMATION_DIVISOR = ANIMATION_SPEED / 9;
+    var HERO_ANIMATION_TIMER = ANIMATION_SPEED / 9;
 
     // Store the last direction the player was in
     // to show appropriate sprite facing left or right
@@ -39,7 +39,8 @@ var spriteAnimator = (function () {
     var lastDirection = 1;
 
     this.getPlayerSprite = function (playerObject) {
-        // frame counter to track when we have to switch sprite images
+
+        // class wide frame counter to track when we have to switch sprite images
         //
         currentFrame++;
 
@@ -67,7 +68,7 @@ var spriteAnimator = (function () {
                 //
                 if (lastDirection == player.navigation.right) {
 
-                    spriteImage = assetLoader.hero.idle[Math.floor(currentFrame / ANIMATION_DIVISOR)];
+                    spriteImage = assetLoader.hero.idle[Math.floor(currentFrame / HERO_ANIMATION_TIMER)];
 
                 }
 
@@ -77,7 +78,7 @@ var spriteAnimator = (function () {
                 //
                 else if (lastDirection == player.navigation.left) {
 
-                    spriteImage = assetLoader.hero.idle[Math.floor(currentFrame / ANIMATION_DIVISOR) + 10];
+                    spriteImage = assetLoader.hero.idle[Math.floor(currentFrame / HERO_ANIMATION_TIMER) + 10];
                 }
 
                 spriteImageWidthChange = 0;
@@ -90,11 +91,11 @@ var spriteAnimator = (function () {
 
                 if (lastDirection == player.navigation.right) {
 
-                    spriteImage = assetLoader.hero.run[Math.floor(currentFrame / ANIMATION_DIVISOR)];
+                    spriteImage = assetLoader.hero.run[Math.floor(currentFrame / HERO_ANIMATION_TIMER)];
 
                 } else if (lastDirection == player.navigation.left) {
 
-                    spriteImage = assetLoader.hero.run[Math.floor(currentFrame / ANIMATION_DIVISOR) + 10];
+                    spriteImage = assetLoader.hero.run[Math.floor(currentFrame / HERO_ANIMATION_TIMER) + 10];
                 }
 
                 spriteImageWidthChange = 20;
@@ -112,24 +113,16 @@ var spriteAnimator = (function () {
 
                 if (lastDirection == player.navigation.right) {
 
-                    spriteImage = assetLoader.hero.jump[Math.floor(currentFrame / ANIMATION_DIVISOR)];
+                    spriteImage = assetLoader.hero.jump[Math.floor(currentFrame / HERO_ANIMATION_TIMER)];
 
                 } else if (lastDirection == player.navigation.left) {
 
-                    spriteImage = assetLoader.hero.jump[Math.floor(currentFrame / ANIMATION_DIVISOR) + 10];
+                    spriteImage = assetLoader.hero.jump[Math.floor(currentFrame / HERO_ANIMATION_TIMER) + 10];
 
                 }
 
                 spriteImageWidthChange = 25;
                 spriteImageHeightChange = 5;
-                break;
-
-            case player.states.dead:
-
-                spriteImage = assetLoader.hero.dead[Math.floor(currentFrame / ANIMATION_DIVISOR)];
-
-                spriteImageWidthChange = 20;
-
                 break;
 
         }
@@ -147,8 +140,15 @@ var spriteAnimator = (function () {
         };
     };
 
+    var COIN_ANIMATION_TIMER = ANIMATION_SPEED / 5;
     this.getCoinSprite = function (coinObject) {
-        
+
+        var spriteImage;
+
+        spriteImage = assetLoader.coin[Math.floor(currentFrame/ COIN_ANIMATION_TIMER)];
+
+        return {'image' : spriteImage};
+
     };
 
     return this;

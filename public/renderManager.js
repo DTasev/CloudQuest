@@ -18,6 +18,7 @@ var renderManager = (function () {
      */
     this.renderCoin = function (canvasContext, coinObject) {
 
+
         var sprite = spriteAnimator.getCoinSprite(coinObject);
 
         canvasContext.drawImage(

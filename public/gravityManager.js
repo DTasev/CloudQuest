@@ -21,24 +21,25 @@ var gravityManager = (function () {
     var GRAVITY_CONSTANT = 1;
 
     var INITIAL_GRAVITY_MULTIPLIER = 1;
-    var GRAVITY_MULTIPLIER_INCREASE = 1.05;
-    var GRAVITY_MAX_MULTIPLIER = 2;
+    var GRAVITY_MULTIPLIER_INCREASE = 1.25;
+    var GRAVITY_MAX_MULTIPLIER = 4.5;
 
     var gravityMultiplier = INITIAL_GRAVITY_MULTIPLIER;
 
+    /**
+     * Applies gravity to the given game object.
+     *
+     * Currently the gravity is only applied to the player object.
+     *
+     * @param playerObject The player object to which gravity will be applied.
+     */
+    this.applyGravity = function (playerObject) {
 
-    // TODO fix gravity while on platforms, cos keeps incrementing and falls through
-    
-    // todo track separate objects
-    // but for now implement just for player
-    this.applyGravity = function (gameObject) {
-
-        console.log(gravityMultiplier);
         // Apply gravity if player is not jumping up
         //
-        if (gameObject.currentState != player.states.jump) {
+        if (playerObject.currentState != player.states.jump) {
 
-            gameObject.y += GRAVITY_CONSTANT * gravityMultiplier * gameObject.gravityWeight;
+            playerObject.y += GRAVITY_CONSTANT * gravityMultiplier * playerObject.gravityWeight;
 
             gravityMultiplier *= GRAVITY_MULTIPLIER_INCREASE;
 
@@ -46,33 +47,28 @@ var gravityManager = (function () {
                 gravityMultiplier = GRAVITY_MAX_MULTIPLIER;
             }
 
+
             // to allow jumping once while falling remove this
             // TODO create a timer to allow a small window for the jump after falling
             if (fallingTimer > 30) {
-                gameObject.currentState = player.states.falling;
-                gravityMultiplier = INITIAL_GRAVITY_MULTIPLIER;
+                playerObject.currentState = player.states.falling;
             }
 
             fallingTimer++;
 
         } else {
+
             fallingTimer = 0;
             gravityMultiplier = INITIAL_GRAVITY_MULTIPLIER;
         }
 
-        /*
-         gravityMultiplier *= GRAVITY_MULTIPLIER_CHANGE;
-         if (gravityMultiplier > GRAVITY_MAX_MULTIPLIER) {
-         gravityMultiplier = GRAVITY_MAX_MULTIPLIER;
-         }
-         player.y += GRAVITY_CONSTANT*gravityMultiplier;
-         }else{
-         gravityMultiplier = INITIAL_MULTIPLIER;
-         }
-         PLAYER_MOVING = 0;
-
-         */
     };
+
+    this.resetGravity = function () {
+        gravityMultiplier = INITIAL_GRAVITY_MULTIPLIER;
+    };
+
+
 
     return this;
 

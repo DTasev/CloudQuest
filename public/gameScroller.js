@@ -14,10 +14,10 @@ var gameScroller = (function () {
      */
     this.scrollGame = function (gameObjects) {
 
-        // Loop starts from one to avoid scrolling down
+        // Scrolls all game objects down, including
         // the player object
         //
-        for(var i = 1; i < gameObjects.length; i++){
+        for(var i = 0; i < gameObjects.length; i++){
             gameObjects[i].y += 0.5;
         }
     };

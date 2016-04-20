@@ -35,7 +35,6 @@ var collisionDetector = (function () {
      */
     this.rectangleCollision = function (rectangle1, rectangle2) {
 
-        // check Y axis 1st
         var rectSides1 = loadRectangleSides(rectangle1);
         var rectSides2 = loadRectangleSides(rectangle2);
 
@@ -51,8 +50,9 @@ var collisionDetector = (function () {
 
                 //var checkBottom = rectangle1.getVerticalCenter() < rectangle2.getVerticalCenter(); // bottom vs top
 
-                // - 2 AND + 10 are padding to have an accurate calculation
-                var checkBottom = (((rectSides1[SIDE_BOTTOM] - 1  < rectSides2[SIDE_TOP] + 4)));
+                // - 2 AND + 10 are added to have a calculation with a bigger margin
+                //
+                var checkBottom = (((rectSides1[SIDE_BOTTOM] - 5  < rectSides2[SIDE_TOP] + 5)));
 
                 var checkTop = rectangle1.getVerticalCenter() > rectangle2.getVerticalCenter(); // top vs bottom
 

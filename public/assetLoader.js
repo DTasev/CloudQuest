@@ -1,40 +1,73 @@
-
+/**
+ * Loads the sprites for the game into an array
+ *
+ * Sprite Sources:
+ *   - Coin Sprite Source: http://opengameart.org/content/spinning-coin-8-bit-sprite
+ * @type {{hero}}
+ */
 var assetLoader = (function assetLoaderInit() {
-	var FRAMES_COUNT = 20;
-	var SEPARATOR = '__',
-    	PADDING = '00',
-    	BASE_URL = './heroSprites/',
-    	EXTENSION = '.png',
-    	s,
-    	f,
-    	len,
-    	frames,
-    	frameNumber,
-    	hero = {};
 
-	var states = [
-		'Dead',
-		'Idle',
-		'Jump',
-		'Run',
-		'Slide'
-	];
+    var finishedLoading = false;
 
-	for (s = 0, len = states.length; s < len; s++) {
-		frames = [];
+    // The number of sprite images
+    //
+    var HERO_FRAMES_COUNT = 20;
+    var COIN_FRAMES_COUNT = 6;
 
-		for (f = 0; f < FRAMES_COUNT; f++ ) {
-			frames[f] = new Image();
+    // Variables for constructing the
+    // path to the sprite images
+    //
+    var SEPARATOR = '__',
+        PADDING = '00',
+        HERO_URL = './heroSprites/',
+        COIN_URL = './coinSprites/',
+        EXTENSION = '.png',
+        s,
+        f,
+        len,
+        frames,
+        frameNumber,
+        hero = {},
+        coin = {};
 
-			// Pad left.
-			frameNumber = (PADDING + f);
+    // Sprite image hero_states
+    //
+    var hero_states = [
+        'Idle',
+        'Jump',
+        'Run'
+    ];
 
-			frames[f].src = BASE_URL +  states[s] + SEPARATOR + frameNumber + EXTENSION;
-			//console.log(frames[f].src);
-		}
+    var coin_filename = 'Coin';
 
-		hero[states[s].toLowerCase()] = frames;
-	}
+    // Load the hero sprite images into an array
+    //
+    for (s = 0, len = hero_states.length; s < len; s++) {
+        frames = [];
 
-	return { hero }
+        for (f = 0; f < HERO_FRAMES_COUNT; f++) {
+            frames[f] = new Image();
+
+            // Adds the 00 padding of the filenames
+            //
+            frameNumber = (PADDING + f);
+
+            frames[f].src = HERO_URL + hero_states[s] + SEPARATOR + frameNumber + EXTENSION;
+        }
+
+        hero[hero_states[s].toLowerCase()] = frames;
+    }
+
+    frames = [];
+    for (f = 0; f < COIN_FRAMES_COUNT; f++) {
+        frames[f] = new Image();
+
+        frameNumber = (PADDING + f);
+
+        frames[f].src = COIN_URL + coin_filename + SEPARATOR + frameNumber + EXTENSION;
+    }
+
+    coin = frames;
+
+    return {hero, coin}
 })();
