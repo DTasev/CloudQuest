@@ -20,7 +20,7 @@ var collisionResolver = (function () {
         //
         for (var i = 1; i < gameObjects.length; i++) {
 
-            var collisionResult = collisionDetector.rectangleCollision(playerObject, gameObjects[i]);
+            var collisionResult = collisionDetector.preciseRectangleCollision(playerObject, gameObjects[i]);
 
             if (collisionResult) {
 
@@ -56,7 +56,7 @@ var collisionResolver = (function () {
 
                     // increase the score of the game
                     //
-                    scoreManager.increaseScore(collisionResultsArray[i]);
+                    scoreManager.increaseScore(collisionResultsArray[i].object);
 
                 }
 
@@ -97,6 +97,7 @@ var collisionResolver = (function () {
                 playerObject.direction = 0;
 
             }
+
             gravityManager.resetGravity();
 
         }

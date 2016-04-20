@@ -90,8 +90,11 @@ var Player = (function () {
      * @param canvasContext context of th
      */
     Player.prototype.render = function (canvasContext) {
-        // TODO remove, currently showing the hitbox tho
-        renderManager.renderRectangle(canvasContext, this);
+        // The renderRectangle can be uncommented so that the
+        // player's hit box can be seen on screen
+        // as it doesn't fit the sprite all of the time
+        //
+        // renderManager.renderRectangle(canvasContext, this);
         renderManager.renderPlayer(canvasContext, this);
     };
 

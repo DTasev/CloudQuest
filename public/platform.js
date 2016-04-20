@@ -79,7 +79,9 @@ var Platform = (function () {
     };
 
     Platform.prototype.render = function (canvasContext) {
-        renderManager.renderRectangle(canvasContext, this);
+        //renderManager.renderRectangle(canvasContext, this);
+
+        renderManager.renderPlatform(canvasContext, this);
     };
 
     return Platform;

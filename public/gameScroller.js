@@ -3,6 +3,7 @@
  */
 
 var gameScroller = (function () {
+
     this.scrollingSpeed = 0.5;
 
     /**
@@ -17,10 +18,11 @@ var gameScroller = (function () {
         // Scrolls all game objects down, including
         // the player object
         //
-        for(var i = 0; i < gameObjects.length; i++){
-            gameObjects[i].y += 0.5;
+        for (var i = 0; i < gameObjects.length; i++) {
+            gameObjects[i].y += scrollingSpeed;
         }
+
     };
-    
+
     return this;
 })();

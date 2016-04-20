@@ -3,6 +3,9 @@ var player;
 var canvas;
 var currentGameState;
 var gameObjects;
+
+var gameOver = false;
+
 var gameStates = {
     'menu': 0,
     'playing': 1,
@@ -40,8 +43,40 @@ function renderPlayingState(gameObjects, canvasContext) {
         gameObjects[i].render(canvasContext);
     }
 }
-function renderMenuState(canvasContext) {
-    canvasContext.fillText('Click left mouse button to play', canvas.width / 2, canvas.height / 2);
+function renderMenuState(canvasContext, mainMenu) {
+    mainMenu.render();
+}
+function renderGameOver(canvasContext) {
+
+    canvasContext.fillStyle = 'rgb(0,0,0)';
+    canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+
+    canvasContext.font = '30px Georgia';
+    canvasContext.fillStyle = "White";
+
+    var currentScore = scoreManager.getCurrentScoreAndTimeSurvived();
+    var savedScore = scoreManager.getSavedScoreAndTimeSurvived();
+
+    canvasContext.fillText('Game Over!', canvas.width / 2, canvas.height / 2);
+
+
+    // Do some checks to see if the scores are new high scores
+    //
+    if (currentScore.score > savedScore.score) {
+
+        canvasContext.fillText('New HIGH SCORE: ' + currentScore.score, canvas.width / 2, canvas.height / 2 + 30);
+        canvasContext.fillText('New HIGH SCORE for Time Survived: ' + currentScore.timeSurvived, canvas.width / 2, canvas.height / 2 + 60);
+
+
+    } else {
+
+        canvasContext.fillText('Current Score: ' + currentScore.score, canvas.width / 2, canvas.height / 2 + 30);
+        canvasContext.fillText('Time Survived: ' + currentScore.timeSurvived, canvas.width / 2, canvas.height / 2 + 60);
+
+
+    }
+
+
 }
 /**
  * This function loops through all objects in the render array
@@ -53,17 +88,19 @@ function renderMenuState(canvasContext) {
  * @param canvasContext The canvas' context object.
  * @param gameObjects
  */
-function render(canvasContext, gameObjects) {
+function render(canvasContext, gameObjects, mainMenu) {
     switch (currentGameState) {
 
         // Render game menu state
+        //
         case gameStates.menu:
 
-            renderMenuState(canvasContext);
+            renderMenuState(canvasContext, mainMenu);
 
             break;
 
         // Render game playing state
+        //
         case gameStates.playing:
 
             renderPlayingState(gameObjects, canvasContext);
@@ -74,7 +111,7 @@ function render(canvasContext, gameObjects) {
         //
         case gameStates.gameOver:
 
-            renderMenuState(canvasContext);
+            renderGameOver(canvasContext);
 
             break;
     }
@@ -107,6 +144,36 @@ function handleInput() {
     }
 }
 
+function removeOutOfBoundsObjects(gameObjects) {
+    for (var i = 1; i < gameObjects.length; i++) {
+
+        var platform = gameObjects[i];
+
+        // Check if the current platform's width or height are equal or below 0
+        // if they are then they must be deleted
+        //
+        if (platform.width <= 0
+            || platform.height <= 0
+            || platform.y > canvas.height) {
+
+            if (gameObjects[i].constructor == Coin) {
+
+                // remove the coin from the game objects array
+                //
+                coinManager.removeCoin(i, gameObjects);
+
+            }
+
+            // if the player is colliding with a platform object
+            if (gameObjects[i].constructor == Platform) {
+
+                platformManager.removePlatform(i, gameObjects);
+
+                // else not colliding with anything, apply gravity
+            }
+        }
+    }
+}
 /**
  * This method first handles the collision between objects using the
  * collisionResolver class.
@@ -116,6 +183,8 @@ function handleInput() {
  */
 
 function updatePlayingState(canvas, gameObjects) {
+
+    removeOutOfBoundsObjects(gameObjects);
 
     // Handle the collision and gravity of between the objects and player
     //
@@ -135,23 +204,30 @@ function updatePlayingState(canvas, gameObjects) {
 
     scoreManager.updateScore();
 
-    // Todo game over condition/state
+    coinManager.generateCoins(gameObjects);
+
     if (collisionDetector.checkLowerBounds(player)) {
 
-        //TODO activate turned off for debugging
-        //currentGameState = gameStates.gameOver;
+        currentGameState = gameStates.gameOver;
+        gameOver = true;
     }
+}
+
+function updateMenuState(canvas, mainMenu) {
+    mainMenu.update();
 }
 /**
  * Handles the collisions between the gameObjects
  */
-function update(canvas, gameObjects) {
+function update(canvas, gameObjects, mainMenu) {
 
     switch (currentGameState) {
 
         // Update menu state
         //
         case gameStates.menu:
+
+            updateMenuState(canvas, mainMenu);
 
             break;
 
@@ -166,14 +242,24 @@ function update(canvas, gameObjects) {
         // Update game over state
         //
         case gameStates.gameOver:
-            // after a few seconds go back to main menu or click for new game ( from keyboard controller)
 
+            if (gameOver) {
+                scoreManager.stopTimer();
+
+                scoreManager.saveScoreLocally();
+                setTimeout(function () {
+                    currentGameState = gameStates.menu;
+                }, 2000);
+                // after a few seconds go back to main menu or click for new game ( from keyboard controller)
+
+                gameOver = false;
+            }
             break;
     }
 }
 
 
-function gameLoop(canvas, canvasContext, gameObjects) {
+function gameLoop(canvas, canvasContext, gameObjects, mainMenu) {
 
     // removes last frame
     clear(canvas, canvasContext);
@@ -182,10 +268,10 @@ function gameLoop(canvas, canvasContext, gameObjects) {
     handleInput(canvasContext);
 
     // update the object for the frame
-    update(canvas, gameObjects);
+    update(canvas, gameObjects, mainMenu);
 
     // render objects for the frame on screen
-    render(canvasContext, gameObjects);
+    render(canvasContext, gameObjects, mainMenu);
 
     // Reset player to idle if he's running and has stopped.
     // If this is not cleared here, the player will never stop running
@@ -214,155 +300,37 @@ function gameLoop(canvas, canvasContext, gameObjects) {
  * render speed of the game.
  *
  * @param FRAMES how many times per second will the keyboard input be checked
+ * @param playerObject
+ * @param gameObjects
  */
-function initialiseKeyboardControls(FRAMES, gameObjects) {
+function initialiseKeyboardControls(FRAMES, playerObject, gameObjects) {
 
     new KeyboardController({
 
         // Left Arrow
         //
         37: function () {
-
-            switch (currentGameState) {
-
-                // Handle keys on menu state
-                //
-                case gameStates.menu:
-
-                    break;
-
-                // Handle keys on playing state
-                //
-                case gameStates.playing:
-
-                    player.direction = player.navigation.left;
-
-                    if (player.currentState != player.states.jump && player.currentState != player.states.falling) {
-                        player.currentState = player.states.run;
-                    }
-
-                    break;
-
-                // Handle keys on game over state
-                //
-                case gameStates.gameOver:
-
-                    break;
-
-
-            }
-            // Change the player's direction to reflect heading left
-            //
-
-
+            playerMovementManager.leftArrowControls(playerObject);
         },
 
         // Right Arrow
         //
         39: function () {
-
-            switch (currentGameState) {
-
-                case gameStates.menu:
-
-                    break;
-
-
-                case gameStates.playing:
-
-                    // Change the player's direction to reflect heading right
-                    //
-                    player.direction = player.navigation.right;
-
-                    // Change the player state to run if he is NOT falling or jumping
-                    //
-                    if (player.currentState != player.states.jump && player.currentState != player.states.falling) {
-                        player.currentState = player.states.run;
-                    }
-
-                    break;
-
-
-                case gameStates.gameOver:
-
-                    break;
-
-
-            }
-
+            playerMovementManager.rightArrowControls(playerObject);
         },
 
         // Down arrow
         //
         40: function () {
-
-
-            switch (currentGameState) {
-
-                case gameStates.menu:
-
-                    break;
-
-
-                // Pressing down while playing will do:
-                // If the player is still jumping up, it will stop the jump
-                // it will also reset the player's direction, so the player
-                // will start going straight down
-                //
-                case gameStates.playing:
-
-
-                    player.currentState = player.states.falling;
-                    player.direction = 0;
-
-                    break;
-
-
-                case gameStates.gameOver:
-
-                    break;
-
-
-            }
+            playerMovementManager.downArrowControls(playerObject);
         },
 
         // Space bar
         //
         32: function () {
-            switch (currentGameState) {
-
-                case gameStates.menu:
-
-                    currentGameState = gameStates.playing;
-
-                    break;
-
-
-                case gameStates.playing:
-
-                    // Change the state to jumping only
-                    // if the player is already on the ground
-                    // running or sitting idly
-                    //
-                    if (player.currentState == player.states.idle || player.currentState == player.states.run) {
-                        player.currentState = player.states.jump;
-                    }
-
-                    break;
-
-
-                case gameStates.gameOver:
-
-                    currentGameState = gameStates.menu;
-
-                    initialiseGameObjects(gameObjects);
-
-                    break;
-
-
-            }
-
+            playerMovementManager.jumpingControls(playerObject);
         }
+
     }, 1000 / FRAMES);
 }
 
@@ -372,16 +340,36 @@ function initialiseKeyboardControls(FRAMES, gameObjects) {
  *
  */
 function initialiseGameObjects() {
-    gameObjects = []; // does this leave garbage?
 
-    player = new Player(140, 30, 35, 60, 1.5, 1);
+    // Sets the frames per second of the game.
+    // Default value is 60, and the game is
+    // intended to be played at 60 FPS
+    //
+    var FRAMES = 60;
+
+
+    // Reset game objects array
+    //
+    gameObjects = [];
+
+    player = new Player(140, 25, 35, 60, 1.5, 1);
     gameObjects.push(player);
 
-    var basePlatform = new Platform(0, canvas.height - 50, canvas.width, 50, 0, 'rgb(0,0,0)');
+    var basePlatform = new Platform(0, canvas.height - 50, canvas.width, 50, 0, 1, 'rgb(0,0,0)');
     gameObjects.push(basePlatform);
 
     var coin = new Coin(50, 50, 1);
+    var coin1 = new Coin(70, 50, 1);
+    var coin2 = new Coin(80, 50, 1);
+    var coin3 = new Coin(90, 50, 1);
     gameObjects.push(coin);
+    gameObjects.push(coin1);
+    gameObjects.push(coin2);
+    gameObjects.push(coin3);
+
+    scoreManager.startTimer();
+    platformManager.resetPlatformGeneration();
+    coinManager.resetCoinGeneration();
 
     var speed = 0.2;
     var deflateType = 4;
@@ -393,18 +381,17 @@ function initialiseGameObjects() {
 
         gameObjects.push(platform);
     }
+
+
+    // Initialise all of the keyboard controls for all the states
+    //
+    initialiseKeyboardControls(FRAMES, player, gameObjects);
 }
 
 /**
  * Initialises the game variables and game state
  */
 (function main() {
-
-    // Sets the frames per second of the game.
-    // Default value is 60, and the game is
-    // intended to be played at 60 FPS
-    //
-    var FRAMES = 60;
 
     // Get the canvas element
     //
@@ -414,20 +401,14 @@ function initialiseGameObjects() {
     //
     var canvasContext = canvas.getContext('2d');
 
+    var mainMenu = new MainMenu('Title', canvasContext);
+
     // Set the initial state of the game
     //
-    currentGameState = gameStates.playing;
+    currentGameState = gameStates.menu;
 
-
-    // Initialise all of the keyboard controls for all the states
-    //
-    initialiseKeyboardControls(FRAMES, gameObjects);
-
-    // Initialise the game objects
-    //
-    initialiseGameObjects(gameObjects);
 
     return setInterval(function () {
-        gameLoop(canvas, canvasContext, gameObjects)
-    }, 1000 / FRAMES);
+        gameLoop(canvas, canvasContext, gameObjects, mainMenu)
+    }, 1000 / 60);
 })();

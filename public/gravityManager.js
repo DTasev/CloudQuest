@@ -48,8 +48,9 @@ var gravityManager = (function () {
             }
 
 
-            // to allow jumping once while falling remove this
-            // TODO create a timer to allow a small window for the jump after falling
+            // This allow a jumping window of around 30 frames
+            // in which the player is able to jump while falling
+            //
             if (fallingTimer > 30) {
                 playerObject.currentState = player.states.falling;
             }

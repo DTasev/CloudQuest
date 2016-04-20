@@ -2,10 +2,29 @@
  * Created by dimta on 15-Apr-16.
  */
 var platformManager = (function () {
+
+    // The maximum deflation speed
+    // for both horizontal and vertical
+    // Going below this makes the game
+    // very hard and at times unplayable
+    //
     var MAX_HORIZONTAL_SPEED = 1.5;
     var MAX_VERTICAL_SPEED = 0.6;
+
+    // Difficulty modifier for the game
+    // This should be reduced to make the game harder
+    // as it will increase the deflation speed of the platforms
+    //
     this.difficultyModifier = 1.0;
-    this.MAXIMUM_PLATFORMS = 7;
+
+
+    this.MAXIMUM_PLATFORMS = 5;
+    var currentPlatforms = 0;
+
+    this.removePlatform = function (positionInGameObjects, gameObjects) {
+        gameObjects.splice(positionInGameObjects, 1);
+        currentPlatforms -= 1;
+    };
 
     /**
      *  This function is used to generate new platforms for the game.
@@ -18,47 +37,20 @@ var platformManager = (function () {
      * @param gameObjects
      */
     this.generatePlatforms = function (gameObjects) {
-        /*
-         Platform x, y, width, height random, but capped:
-         - Width between 30 and canvas.width / 3
-         - Height between 10 and and 30
-         - X between 0  and canvas.width - platform.width
-         - Y between 0 and canvas.height - basePlatform.height (50) - platform.height
 
+        if (currentPlatforms < this.MAXIMUM_PLATFORMS) {
 
-         Platform deflateType
-         - Random between one of the 6 deflation types
-
-         Platform deflateSpeed dependent on width, height and deflateType
-         - Use dampener for deflateSpeed generation
-         - the smaller the width the slower the deflate speed
-         - same for the height
-         - deflate types horizontal and vertical need slower deflate speed
-
-         Platform color
-         - give different colours for different speed
-         - categorise deflateSpeed and give different colours
-
-         On completion generating platform -> add to gameObjects, add to renderArray
-
-         */
-
-
-        if (gameObjects.length < MAXIMUM_PLATFORMS) {
-
+            // Random number of new platforms
+            //
             var numberOfPlatforms = Math.floor((Math.random() * 4) + 1);
 
-            /**
-             * FIXME generation can sometimes be outside of the canvas
-             *
-             */
             for (var i = 0; i < numberOfPlatforms; i++) {
 
                 // Math.floor((Math.random() * 100) + 1);
                 // random number between 1 and 100
 
 
-                // TODO check if the platoform is colliding with any other platform
+                // TODO check if the platform is colliding with any other platform
                 //
                 var width = Math.floor((Math.random() * canvas.width / 3) + 30);
                 var height = Math.floor((Math.random() * 30) + 10);
@@ -115,6 +107,7 @@ var platformManager = (function () {
                 var newPlatform = new Platform(x, y, width, height, deflateSpeed, deflateType, colour);
 
                 gameObjects.push(newPlatform);
+                currentPlatforms += 1;
             }
         }
 
@@ -143,108 +136,96 @@ var platformManager = (function () {
             for (var i = 1; i < gameObjects.length; i++) {
 
                 var platform = gameObjects[i];
-
-                // Check if the current platform's width or height are equal or below 0
-                // if they are then they must be deleted
+                // try-catch if the platform that's checked is not an actual platform
+                // it will not have deflate type, and the loop will skip onto the
+                // next member of the array
                 //
-                if (platform.width <= 0
-                    || platform.height <= 0
-                    || platform.y > canvas.height
-                ) {
+                try {
+                    switch (platform.deflateType) {
 
-                    // Remove from both game objects arrays
-                    // and the rendering array
-                    //
-                    gameObjects.splice(i, 1);
+                        // Deflates the platform from the left
+                        // by moving the X point and also reducing
+                        // the width, otherwise the platform would
+                        // just move to the right.
+                        //
+                        case platform.availableDeflateTypes.left:
 
-                } else {
+                            platform.x += platform.deflateSpeed;
+                            platform.width -= platform.deflateSpeed;
 
-                    // try-catch if the platform that's checked is not an actual platform
-                    // it will not have deflate type, and the loop will skip onto the
-                    // next member of the array
-                    //
-                    try {
-                        switch (platform.deflateType) {
+                            break;
 
-                            // Deflates the platform from the left
-                            // by moving the X point and also reducing
-                            // the width, otherwise the platform would
-                            // just move to the right.
-                            //
-                            case platform.availableDeflateTypes.left:
+                        // Deflates the platform from the right
+                        // by just reducing the width.
+                        //
+                        case platform.availableDeflateTypes.right:
 
-                                platform.x += platform.deflateSpeed;
-                                platform.width -= platform.deflateSpeed;
+                            platform.width -= platform.deflateSpeed;
 
-                                break;
+                            break;
 
-                            // Deflates the platform from the right
-                            // by just reducing the width.
-                            //
-                            case platform.availableDeflateTypes.right:
+                        // Deflates the platform horizontally
+                        // by moving the X point and reducing the width.
+                        //
+                        // The deflateSpeed for the width has to be
+                        // multiplied by two, otherwise the platform
+                        // will just move to the right.
+                        //
+                        case platform.availableDeflateTypes.horizontal:
 
-                                platform.width -= platform.deflateSpeed;
+                            platform.x += platform.deflateSpeed;
+                            platform.width -= platform.deflateSpeed * 2;
 
-                                break;
+                            break;
 
-                            // Deflates the platform horizontally
-                            // by moving the X point and reducing the width.
-                            //
-                            // The deflateSpeed for the width has to be
-                            // multiplied by two, otherwise the platform
-                            // will just move to the right.
-                            //
-                            case platform.availableDeflateTypes.horizontal:
+                        // The deflateSpeed is reduced by half
+                        // because the platforms are wider that higher
+                        // and this makes them deflate nearly equally fast.
 
-                                platform.x += platform.deflateSpeed;
-                                platform.width -= platform.deflateSpeed * 2;
+                        // Deflates the platform from the top
+                        // by moving the Y point and also
+                        // reducing the height, otherwise the platform
+                        // would just move down.
+                        //
+                        case platform.availableDeflateTypes.top:
 
-                                break;
+                            platform.y += platform.deflateSpeed / 2;
+                            platform.height -= platform.deflateSpeed / 2;
 
-                            // The deflateSpeed is reduced by half
-                            // because the platforms are wider that higher
-                            // and this makes them deflate nearly equally fast.
+                            break;
 
-                            // Deflates the platform from the top
-                            // by moving the Y point and also
-                            // reducing the height, otherwise the platform
-                            // would just move down.
-                            //
-                            case platform.availableDeflateTypes.top:
+                        // Deflates the platform from the bottom
+                        // by decreasing the height.
+                        //
+                        case platform.availableDeflateTypes.bottom:
 
-                                platform.y += platform.deflateSpeed / 2;
-                                platform.height -= platform.deflateSpeed / 2;
+                            platform.height -= platform.deflateSpeed / 2;
 
-                                break;
+                            break;
 
-                            // Deflates the platform from the bottom
-                            // by decreasing the height.
-                            //
-                            case platform.availableDeflateTypes.bottom:
+                        // Deflates the platform from the top and bottom
+                        // by moving the Y point and decreasing
+                        // the height twice as faster otherwise
+                        // the platform just moves down.
+                        //
+                        case platform.availableDeflateTypes.vertical:
 
-                                platform.height -= platform.deflateSpeed / 2;
+                            platform.y += platform.deflateSpeed / 2;
+                            platform.height -= platform.deflateSpeed;
 
-                                break;
-
-                            // Deflates the platform from the top and bottom
-                            // by moving the Y point and decreasing
-                            // the height twice as faster otherwise
-                            // the platform just moves down.
-                            //
-                            case platform.availableDeflateTypes.vertical:
-
-                                platform.y += platform.deflateSpeed / 2;
-                                platform.height -= platform.deflateSpeed;
-
-                                break;
-                        }
-                    } catch (e) {
+                            break;
                     }
-
+                } catch (e) {
                 }
+
             }
         }
-    }
-    ;
+    };
+
+    this.resetPlatformGeneration = function () {
+        currentPlatforms = 0;
+    };
+
     return this;
-})();
+})
+();

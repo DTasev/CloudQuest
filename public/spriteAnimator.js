@@ -81,6 +81,9 @@ var spriteAnimator = (function () {
                     spriteImage = assetLoader.hero.idle[Math.floor(currentFrame / HERO_ANIMATION_TIMER) + 10];
                 }
 
+                // Image padding because the sprite image has
+                // different width than the hit box
+                //
                 spriteImageWidthChange = 0;
                 spriteImageHeightChange = 0;
 
@@ -98,6 +101,9 @@ var spriteAnimator = (function () {
                     spriteImage = assetLoader.hero.run[Math.floor(currentFrame / HERO_ANIMATION_TIMER) + 10];
                 }
 
+                // Image padding because the sprite image has
+                // different width than the hit box
+                //
                 spriteImageWidthChange = 20;
                 spriteImageHeightChange = 0;
 
@@ -121,8 +127,12 @@ var spriteAnimator = (function () {
 
                 }
 
+                // Image padding because the sprite image has
+                // different width than the hit box
+                //
                 spriteImageWidthChange = 25;
                 spriteImageHeightChange = 5;
+
                 break;
 
         }
@@ -140,15 +150,65 @@ var spriteAnimator = (function () {
         };
     };
 
+    // Calculates how often the sprites for the coin have to change
+    // this is different as the coin has less sprite images
+    //
     var COIN_ANIMATION_TIMER = ANIMATION_SPEED / 5;
+
     this.getCoinSprite = function (coinObject) {
 
         var spriteImage;
 
-        spriteImage = assetLoader.coin[Math.floor(currentFrame/ COIN_ANIMATION_TIMER)];
+        spriteImage = assetLoader.coin[Math.floor(currentFrame / COIN_ANIMATION_TIMER)];
 
-        return {'image' : spriteImage};
+        return {'image': spriteImage};
 
+    };
+
+    this.getPlatformSprite = function (platformObject) {
+        var spriteImage;
+
+        switch (platformObject.deflateType) {
+
+            case platformObject.availableDeflateTypes.left:
+
+                spriteImage = assetLoader.platforms[0];
+
+                break;
+
+            case platformObject.availableDeflateTypes.right:
+
+                spriteImage = assetLoader.platforms[0];
+
+                break;
+
+            case platformObject.availableDeflateTypes.horizontal:
+
+                spriteImage = assetLoader.platforms[0];
+
+                break;
+
+            case platformObject.availableDeflateTypes.top:
+
+                spriteImage = assetLoader.platforms[1];
+
+                break;
+
+            case platformObject.availableDeflateTypes.bottom:
+
+                spriteImage = assetLoader.platforms[1];
+
+                break;
+
+            case platformObject.availableDeflateTypes.vertical:
+
+                spriteImage = assetLoader.platforms[1];
+
+                break;
+
+        }
+
+        return {'image': spriteImage};
     };
 
     return this;

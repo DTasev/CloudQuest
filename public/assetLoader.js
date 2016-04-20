@@ -13,6 +13,7 @@ var assetLoader = (function assetLoaderInit() {
     //
     var HERO_FRAMES_COUNT = 20;
     var COIN_FRAMES_COUNT = 6;
+    var PLATFORM_FRAMES_COUNT = 2;
 
     // Variables for constructing the
     // path to the sprite images
@@ -21,6 +22,7 @@ var assetLoader = (function assetLoaderInit() {
         PADDING = '00',
         HERO_URL = './heroSprites/',
         COIN_URL = './coinSprites/',
+        PLATFORM_URL = './platformSprites/',
         EXTENSION = '.png',
         s,
         f,
@@ -28,7 +30,8 @@ var assetLoader = (function assetLoaderInit() {
         frames,
         frameNumber,
         hero = {},
-        coin = {};
+        coin = {},
+        platforms = {};
 
     // Sprite image hero_states
     //
@@ -37,8 +40,6 @@ var assetLoader = (function assetLoaderInit() {
         'Jump',
         'Run'
     ];
-
-    var coin_filename = 'Coin';
 
     // Load the hero sprite images into an array
     //
@@ -58,6 +59,11 @@ var assetLoader = (function assetLoaderInit() {
         hero[hero_states[s].toLowerCase()] = frames;
     }
 
+
+    var coin_filename = 'Coin';
+
+    // Load the coin sprite images into an array
+    //
     frames = [];
     for (f = 0; f < COIN_FRAMES_COUNT; f++) {
         frames[f] = new Image();
@@ -69,5 +75,21 @@ var assetLoader = (function assetLoaderInit() {
 
     coin = frames;
 
-    return {hero, coin}
+
+
+    var platform_filename = 'Platform';
+    // Load the platform sprites into an array
+    //
+    frames = [];
+    for(f = 0; f < PLATFORM_FRAMES_COUNT; f++){
+        frames[f] = new Image();
+
+        frameNumber = (PADDING + f);
+
+        frames[f].src = PLATFORM_URL + platform_filename + SEPARATOR + frameNumber + EXTENSION;
+    }
+
+    platforms = frames;
+
+    return {hero, coin, platforms}
 })();

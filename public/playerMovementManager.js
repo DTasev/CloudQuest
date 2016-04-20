@@ -9,7 +9,7 @@ var playerMovementManager = (function () {
 
     // The maximum multiplier value of the acceleration
     //
-    var MAX_ACCELERATION_MULTIPLIER = 3;
+    var MAX_ACCELERATION_MULTIPLIER = 4;
 
     var accelerationMultiplier = INITIAL_ACCELERATION_MULTIPLIER;
 
@@ -18,7 +18,7 @@ var playerMovementManager = (function () {
     // acceleration by slowly increasing the
     // multiplier's value
     //
-    var INITIAL_MULTIPLIER_INCREASE = 1.20;
+    var INITIAL_MULTIPLIER_INCREASE = 1.15;
 
     // Value that dampens the multiplier increase
     // so that it looks even smoother over time.
@@ -26,7 +26,7 @@ var playerMovementManager = (function () {
     // the slower the acceleration is, thus making
     // it look a bit more realistic
     //
-    var MULTIPLIER_DAMPING = 0.99;
+    var MULTIPLIER_DAMPING = 0.995;
 
     // The minimum value for the multiplier increase.
     // Going below 1 will start slowing the player down.
@@ -54,7 +54,12 @@ var playerMovementManager = (function () {
         // Here we subtract from the player's X value so that we move
         // to the left of the screen
         //
-        playerObject.x += (playerObject.runningSpeed * accelerationMultiplier);
+        // Check if player is touching the left wall of the canvas
+        // if so, don't move the player at all
+        //
+        if (!collisionDetector.checkRightBounds(playerObject)) {
+            playerObject.x += (playerObject.runningSpeed * accelerationMultiplier);
+        }
 
 
         // If we keep going in a direction
@@ -74,7 +79,7 @@ var playerMovementManager = (function () {
 
                 accelerationMultiplier = MAX_ACCELERATION_MULTIPLIER;
 
-            // if the multiplier isn't at it's maximum value
+                // if the multiplier isn't at it's maximum value
             } else {
 
                 accelerationMultiplier *= accelerationMultiplierIncrease;
@@ -86,21 +91,22 @@ var playerMovementManager = (function () {
 
                 accelerationMultiplierIncrease = MIN_MULTIPLIER_INCREASE;
 
-            // if multiplier is not at the minimum value
+                // if multiplier is not at the minimum value
             } else {
 
                 accelerationMultiplierIncrease *= MULTIPLIER_DAMPING;
             }
 
-        // If the player has not been going right previously
-        // set right as the new direction
-        //
-        // Reset any previous accelerations from moving
-        // in the other direction
-        //
+            // If the player has not been going right previously
+            // set right as the new direction
+            //
+            // Reset any previous accelerations from moving
+            // in the other direction
+            //
         } else {
 
             // update direction variable to hold the current direction
+            //
             direction = playerObject.navigation.right;
 
             accelerationMultiplier = INITIAL_ACCELERATION_MULTIPLIER;
@@ -121,7 +127,12 @@ var playerMovementManager = (function () {
         // Here we subtract from the player's X value so that we move
         // to the left of the screen
         //
-        playerObject.x -= (playerObject.runningSpeed * accelerationMultiplier);
+        // Check if player is touching the left wall of the canvas
+        // if so, don't move the player at all
+        //
+        if (!collisionDetector.checkLeftBounds(playerObject)) {
+            playerObject.x -= (playerObject.runningSpeed * accelerationMultiplier);
+        }
 
         // If we keep going in a direction
         // this block will be executed repeatedly
@@ -136,11 +147,11 @@ var playerMovementManager = (function () {
             // Capping the accelerator value with the MAX_ACCELERATION_MULTIPLIER,
             // otherwise it will keep on multiplying
             //
-            if (accelerationMultiplier > MAX_ACCELERATION_MULTIPLIER) {
+            if (accelerationMultiplier >= MAX_ACCELERATION_MULTIPLIER) {
 
                 accelerationMultiplier = MAX_ACCELERATION_MULTIPLIER;
 
-            // if the multiplier isn't at it's maximum value
+                // if the multiplier isn't at it's maximum value
             } else {
 
                 accelerationMultiplier *= accelerationMultiplierIncrease;
@@ -153,19 +164,19 @@ var playerMovementManager = (function () {
 
                 accelerationMultiplierIncrease = MIN_MULTIPLIER_INCREASE;
 
-            // if multiplier is not at the minimum value
-            }else{
+                // if multiplier is not at the minimum value
+            } else {
 
                 accelerationMultiplierIncrease *= MULTIPLIER_DAMPING;
 
             }
 
-        // If the player has not been going right previously
-        // set right as the new direction
-        //
-        // Reset any previous accelerations from moving
-        // in the other direction
-        //
+            // If the player has not been going right previously
+            // set right as the new direction
+            //
+            // Reset any previous accelerations from moving
+            // in the other direction
+            //
         } else {
 
             // update direction variable to hold the current direction
@@ -215,7 +226,7 @@ var playerMovementManager = (function () {
             // Increase the player's height until the
             // minimum jumping speed is reached
             //
-            if (currentJumpingSpeed > MIN_JUMPING_SPEED) {
+            if (currentJumpingSpeed > MIN_JUMPING_SPEED && !collisionResolver.checkUpperBounds(playerObject)) {
 
                 playerObject.y -= currentJumpingSpeed;
 
@@ -223,10 +234,10 @@ var playerMovementManager = (function () {
                 //
                 currentJumpingSpeed = currentJumpingSpeed * JUMPING_DAMPING;
 
-            // If the current jumping speed is the minimal one
-            // then the jump is over and the player is moved to
-            // the falling state, so that gravity can activate
-            //
+                // If the current jumping speed is the minimal one
+                // then the jump is over and the player is moved to
+                // the falling state, so that gravity can activate
+                //
             } else {
 
                 playerObject.currentState = player.states.falling;
@@ -311,14 +322,161 @@ var playerMovementManager = (function () {
         //
         if (playerObject.currentState != player.states.idle) {
 
+            console.log('Player Speed: ' + playerObject.runningSpeed + 'Acceleration Multiplier: ' + accelerationMultiplier);
             movingState(playerObject);
 
-        // If player is idle, reset all acceleration variables
-        // so that the next movement doesn't start with acceleration
-        //
+            // If player is idle, reset all acceleration variables
+            // so that the next movement doesn't start with acceleration
+            //
         } else {
 
             resetAcceleration();
+        }
+    };
+
+    this.rightArrowControls = function (playerObject) {
+
+        switch (currentGameState) {
+
+            // Handle keys on menu state
+            //
+            case gameStates.menu:
+
+                break;
+
+            // Handle keys on playing state
+            //
+            case gameStates.playing:
+
+                // Check if player is touching the right wall of the canvas
+                // if so, don't move the player at all
+                //
+                if (!collisionDetector.checkRightBounds(playerObject)) {
+
+                    // Change the playerObject's direction to reflect heading right
+                    //
+                    playerObject.direction = playerObject.navigation.right;
+
+                    // Change the playerObject state to run if he is NOT falling or jumping
+                    //
+                    if (playerObject.currentState != playerObject.states.jump && playerObject.currentState != playerObject.states.falling) {
+                        playerObject.currentState = playerObject.states.run;
+                    }
+                }
+
+                break;
+
+            // Handle keys on game over state
+            //
+            case gameStates.gameOver:
+
+                break;
+
+
+        }
+    };
+
+    this.leftArrowControls = function (playerObject) {
+
+        switch (currentGameState) {
+
+            // Handle keys on menu state
+            //
+            case gameStates.menu:
+
+                break;
+
+            // Handle keys on playing state
+            //
+            case gameStates.playing:
+
+                // Change the playerObject's direction to reflect heading right
+                //
+                playerObject.direction = playerObject.navigation.left;
+
+                // Change the playerObject state to run if he is NOT falling or jumping
+                //
+                if (playerObject.currentState != playerObject.states.jump && playerObject.currentState != playerObject.states.falling) {
+                    playerObject.currentState = playerObject.states.run;
+                }
+
+
+                break;
+
+            // Handle keys on game over state
+            //
+            case gameStates.gameOver:
+
+                break;
+
+
+        }
+    };
+
+    this.downArrowControls = function (playerObject) {
+
+        switch (currentGameState) {
+
+            case gameStates.menu:
+
+                break;
+
+
+            // Pressing down while playing will do:
+            // If the playerObject is still jumping up, it will stop the jump
+            // it will also reset the playerObject's direction, so the playerObject
+            // will start going straight down
+            //
+            case gameStates.playing:
+
+                if (playerObject.currentState == playerObject.states.falling) {
+
+                    playerObject.direction = 0;
+
+                }
+
+                playerObject.currentState = playerObject.states.falling;
+
+
+                break;
+
+
+            case gameStates.gameOver:
+
+                break;
+
+
+        }
+    };
+
+    this.jumpingControls = function (playerObject) {
+
+        switch (currentGameState) {
+
+            case gameStates.menu:
+
+                currentGameState = gameStates.playing;
+
+                break;
+
+
+            case gameStates.playing:
+
+                // Change the state to jumping only
+                // if the playerObject is already on the ground
+                // running or sitting idly
+                //
+                if (playerObject.currentState == playerObject.states.idle || playerObject.currentState == playerObject.states.run) {
+                    playerObject.currentState = playerObject.states.jump;
+                }
+
+                break;
+
+
+            case gameStates.gameOver:
+
+                break;
+
         }
     };
 
