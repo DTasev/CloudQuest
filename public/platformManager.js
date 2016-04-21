@@ -18,13 +18,18 @@ var platformManager = (function () {
     this.difficultyModifier = 1.0;
 
 
-    this.MAXIMUM_PLATFORMS = 5;
+    this.MAXIMUM_PLATFORMS = 10;
     var currentPlatforms = 0;
 
     this.removePlatform = function (positionInGameObjects, gameObjects) {
-        gameObjects.splice(positionInGameObjects, 1);
+        if (collisionDetector.checkLowerBounds(gameObjects[positionInGameObjects]) || ((gameObjects[positionInGameObjects].width < 0) || (gameObjects[positionInGameObjects].height < 0))) {
 
-        currentPlatforms -= 1;
+            gameObjects.splice(positionInGameObjects, 1);
+
+            currentPlatforms -= 1;
+
+        }
+
     };
 
     /**
@@ -112,7 +117,7 @@ var platformManager = (function () {
                 // variables generated above.
                 // This is done separately to reduce clustering
                 //
-                var newPlatform = new Platform(x, y, width, height, deflateSpeed, deflateType, colour);
+                var newPlatform = new Platform(x, y, width, height, deflateSpeed, deflateType);
 
 
                 // Add platform to game objects array

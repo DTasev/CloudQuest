@@ -250,7 +250,7 @@ var Game = (function () {
         gameOverScreenTimer++;
 
         // Delay the game over screen timer
-        if(gameOverScreenTimer >= GAME_OVER_SCREEN_TIMER_DELAY){
+        if (gameOverScreenTimer >= GAME_OVER_SCREEN_TIMER_DELAY) {
             this.currentGameState = this.gameStates.menu;
             gameOverScreenTimer = 0;
         }
@@ -267,16 +267,12 @@ var Game = (function () {
      */
     Game.prototype.removeOutOfBoundsObjects = function removeOutOfBoundsObjects(gameObjects) {
 
-        for (var i = 0; i < gameObjects.length; i++) {
-
-            var platform = gameObjects[i];
+        for (var i = 1; i < gameObjects.length; i++) {
 
             // Check if the current platform's width or height are equal or below 0
             // if they are then they must be deleted
             //
-            if (platform.width <= 0
-                || platform.height <= 0
-                || platform.y > canvas.height) {
+            if (collisionDetector.checkLowerBounds(gameObjects[i]) || ((gameObjects[i].width < 0) || (gameObjects[i].height < 0))) {
 
                 if (gameObjects[i].constructor == Coin) {
 
@@ -287,11 +283,18 @@ var Game = (function () {
                 }
 
                 // if the player is colliding with a platform object
-                if (gameObjects[i].constructor == Platform) {
+                //
+                try {
+                    if (gameObjects[i].constructor == Platform) {
 
-                    platformManager.removePlatform(i, gameObjects);
+                        platformManager.removePlatform(i, gameObjects);
 
-                    // else not colliding with anything, apply gravity
+                        // else not colliding with anything, apply gravity
+                    }
+                } catch (e) {
+                    debugger;
+
+
                 }
             }
         }
