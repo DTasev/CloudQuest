@@ -53,7 +53,7 @@ var collisionResolver = (function () {
                     // remove the coin from the game objects array
                     //
                     coinManager.removeCoin(collisionResultsArray[i].positionInGameObjects, gameObjects);
-
+                    
                     // increase the score of the game
                     //
                     scoreManager.increaseScore(collisionResultsArray[i].object);

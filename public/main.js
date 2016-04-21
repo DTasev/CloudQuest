@@ -5,6 +5,7 @@ var currentGameState;
 var gameObjects;
 
 var gameOver = false;
+var newHighScore = false;
 
 var gameStates = {
     'menu': 0,
@@ -43,9 +44,21 @@ function renderPlayingState(gameObjects, canvasContext) {
         gameObjects[i].render(canvasContext);
     }
 }
+
+/**
+ * Renders the menu on screen
+ *
+ * @param canvasContext
+ * @param mainMenu
+ */
 function renderMenuState(canvasContext, mainMenu) {
     mainMenu.render();
 }
+
+/**
+ * Renders the game over screen
+ * @param canvasContext
+ */
 function renderGameOver(canvasContext) {
 
     canvasContext.fillStyle = 'rgb(0,0,0)';
@@ -54,15 +67,13 @@ function renderGameOver(canvasContext) {
     canvasContext.font = '30px Georgia';
     canvasContext.fillStyle = "White";
 
-    var currentScore = scoreManager.getCurrentScoreAndTimeSurvived();
-    var savedScore = scoreManager.getSavedScoreAndTimeSurvived();
-
     canvasContext.fillText('Game Over!', canvas.width / 2, canvas.height / 2);
 
+    var currentScore = scoreManager.getCurrentScoreAndTimeSurvived();
 
     // Do some checks to see if the scores are new high scores
     //
-    if (currentScore.score > savedScore.score) {
+    if (newHighScore) {
 
         canvasContext.fillText('New HIGH SCORE: ' + currentScore.score, canvas.width / 2, canvas.height / 2 + 30);
         canvasContext.fillText('New HIGH SCORE for Time Survived: ' + currentScore.timeSurvived, canvas.width / 2, canvas.height / 2 + 60);
@@ -245,6 +256,11 @@ function update(canvas, gameObjects, mainMenu) {
 
             if (gameOver) {
                 scoreManager.stopTimer();
+
+                var currentScore = scoreManager.getCurrentScoreAndTimeSurvived();
+                var savedScore = scoreManager.getSavedScoreAndTimeSurvived();
+
+                newHighScore = currentScore.score > savedScore.score;
 
                 scoreManager.saveScoreLocally();
                 setTimeout(function () {

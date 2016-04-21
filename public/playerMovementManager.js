@@ -455,8 +455,6 @@ var playerMovementManager = (function () {
 
             case gameStates.menu:
 
-                currentGameState = gameStates.playing;
-
                 break;
 
 

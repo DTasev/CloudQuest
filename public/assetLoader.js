@@ -14,6 +14,7 @@ var assetLoader = (function assetLoaderInit() {
     var HERO_FRAMES_COUNT = 20;
     var COIN_FRAMES_COUNT = 6;
     var PLATFORM_FRAMES_COUNT = 2;
+    var SOUND_FILES_COUNT = 3;
 
     // Variables for constructing the
     // path to the sprite images
@@ -23,15 +24,18 @@ var assetLoader = (function assetLoaderInit() {
         HERO_URL = './heroSprites/',
         COIN_URL = './coinSprites/',
         PLATFORM_URL = './platformSprites/',
-        EXTENSION = '.png',
+        SOUNDS_URL = './platformSprites/',
+        SPRITE_EXTENSION = '.png',
+        SOUND_EXTENSION = '.wav',
         s,
         f,
         len,
         frames,
         frameNumber,
         hero = {},
-        coin = {},
-        platforms = {};
+        coin,
+        platforms,
+        sounds = {};
 
     // Sprite image hero_states
     //
@@ -53,7 +57,7 @@ var assetLoader = (function assetLoaderInit() {
             //
             frameNumber = (PADDING + f);
 
-            frames[f].src = HERO_URL + hero_states[s] + SEPARATOR + frameNumber + EXTENSION;
+            frames[f].src = HERO_URL + hero_states[s] + SEPARATOR + frameNumber + SPRITE_EXTENSION;
         }
 
         hero[hero_states[s].toLowerCase()] = frames;
@@ -70,7 +74,7 @@ var assetLoader = (function assetLoaderInit() {
 
         frameNumber = (PADDING + f);
 
-        frames[f].src = COIN_URL + coin_filename + SEPARATOR + frameNumber + EXTENSION;
+        frames[f].src = COIN_URL + coin_filename + SEPARATOR + frameNumber + SPRITE_EXTENSION;
     }
 
     coin = frames;
@@ -86,10 +90,32 @@ var assetLoader = (function assetLoaderInit() {
 
         frameNumber = (PADDING + f);
 
-        frames[f].src = PLATFORM_URL + platform_filename + SEPARATOR + frameNumber + EXTENSION;
+        frames[f].src = PLATFORM_URL + platform_filename + SEPARATOR + frameNumber + SPRITE_EXTENSION;
     }
 
     platforms = frames;
 
-    return {hero, coin, platforms}
+
+    // Load the sounds into the same frames array
+    // name not changed so that the code isn't
+    // cluttered with different variables
+    //
+    debugger;
+    for (s = 1, len = hero_states.length; s < len; s++) {
+        frames = [];
+
+        for (f = 0; f < SOUND_FILES_COUNT; f++) {
+            frames[f] = new Audio();
+
+            // Adds the 00 padding of the file names
+            //
+            frameNumber = (PADDING + f);
+
+            frames[f].src = SOUNDS_URL + hero_states[s] + SEPARATOR + frameNumber + SOUND_EXTENSION;
+        }
+
+        sounds[hero_states[s].toLowerCase()] = frames;
+    }
+
+    return {hero, coin, platforms, sounds}
 })();
