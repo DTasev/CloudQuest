@@ -19,7 +19,7 @@ var difficultyManager = (function () {
 
     var MAX_SCROLL_SPEED_DIFFICULTY = 2;
 
-    var MINIMUM_PLATFORM_COUNT_DIFFICULTY = 2;
+    var MINIMUM_PLATFORM_COUNT_DIFFICULTY = 6;
 
     var MAX_DEFLATE_SPEED_DIFFICULTY = 3;
 

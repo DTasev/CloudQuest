@@ -110,6 +110,8 @@ var Game = (function () {
      */
     Game.prototype.renderPlayingState = function renderPlayingState(gameObjects, canvasContext) {
 
+        parallaxBackground.renderBackground(canvasContext);
+
         for (var i = gameObjects.length - 1; i >= 0; i--) {
 
             gameObjects[i].render(canvasContext);
@@ -200,6 +202,7 @@ var Game = (function () {
         coinManager.resetCoinGeneration();
         gameScrollManager.resetScrollSpeed();
         difficultyManager.resetDifficultyTimers();
+        parallaxBackground.resetCloudPositions();
 
         var speed = 0.2;
         var deflateType = 4;

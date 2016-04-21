@@ -57,7 +57,7 @@ var platformManager = (function () {
                 var width = Math.floor((Math.random() * canvas.width / 3) + 30);
                 var height = Math.floor((Math.random() * 30) + 10);
                 var x = Math.floor((Math.random() * canvas.width - width) + 1);
-                var y = Math.floor((Math.random() * canvas.height - height) - 50);
+                var y = Math.floor((Math.random() * canvas.height - height - 50) + 1);
 
 
                 // Generate the platform's deflate type randomly.

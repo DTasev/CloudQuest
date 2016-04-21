@@ -11,6 +11,7 @@ var assetLoader = (function assetLoaderInit() {
     var COIN_FRAMES_COUNT = 6;
     var PLATFORM_FRAMES_COUNT = 2;
     var SOUND_FILES_COUNT = 1;
+    var IMAGE_FILES_COUNT = 1;
 
     // Variables for constructing the
     // path to the game assets
@@ -21,8 +22,10 @@ var assetLoader = (function assetLoaderInit() {
         COIN_URL = './coinSprites/',
         PLATFORM_URL = './platformSprites/',
         SOUNDS_URL = './sound/',
+        IMAGES_URL = './images/',
         SPRITE_EXTENSION = '.png',
         SOUND_EXTENSION = '.wav',
+        IMAGES_EXTENSION = '.png',
         s,
         f,
         len,
@@ -31,7 +34,8 @@ var assetLoader = (function assetLoaderInit() {
         hero = {},
         coin,
         platforms,
-        sounds = {};
+        sounds = {},
+        images = {};
 
     // The hero states, provides the names for the sprite images
     //
@@ -137,5 +141,43 @@ var assetLoader = (function assetLoaderInit() {
         sounds[sound_files[s].toLowerCase()] = frames;
     }
 
-    return {hero, coin, platforms, sounds}
+
+    // Array containing the different names for the sound files
+    //
+    var image_files = [
+        {
+            'name': 'Background',
+            'size': 1
+        },
+        {
+            'name' : 'Cloud',
+            'size': 3
+        }
+    ];
+
+    // Load the sounds into the same frames array
+    // name not changed so that the code isn't
+    // cluttered with different variables
+    //
+
+    for (s = 0, len = image_files.length; s < len; s++) {
+        frames = [];
+
+        for (f = 0; f < image_files[s].size; f++) {
+
+            frames[f] = new Image();
+
+            // Adds the 00 padding of the file names
+            //
+            frameNumber = (PADDING + f);
+
+            // Construct the file path
+            //
+            frames[f].src = IMAGES_URL + image_files[s].name + SEPARATOR + frameNumber + IMAGES_EXTENSION;
+        }
+
+        images[image_files[s].name.toLowerCase()] = frames;
+    }
+
+    return {hero, coin, platforms, sounds, images}
 })();

@@ -18,7 +18,7 @@ var coinManager = (function () {
                 // generate the coin within the canvas
 
                 var x = Math.floor((Math.random() * canvas.width - 30) + 30);
-                var y = Math.floor((Math.random() * canvas.height - 130) - 30);
+                var y = Math.floor((Math.random() * canvas.height - 160) + 1);
 
                 var difficulty = 1;
 
