@@ -1,15 +1,11 @@
 /**
- * Loads the sprites for the game into an array
+ * Loads the game assets into dictionaries that can
+ * be accessed from everywhere in the game
  *
- * Sprite Sources:
- *   - Coin Sprite Source: http://opengameart.org/content/spinning-coin-8-bit-sprite
- * @type {{hero}}
  */
 var assetLoader = (function assetLoaderInit() {
 
-    var finishedLoading = false;
-
-    // The number of sprite images
+    // The number of asset files
     //
     var HERO_FRAMES_COUNT = 20;
     var COIN_FRAMES_COUNT = 6;
@@ -17,7 +13,7 @@ var assetLoader = (function assetLoaderInit() {
     var SOUND_FILES_COUNT = 1;
 
     // Variables for constructing the
-    // path to the sprite images
+    // path to the game assets
     //
     var SEPARATOR = '__',
         PADDING = '00',
@@ -37,7 +33,7 @@ var assetLoader = (function assetLoaderInit() {
         platforms,
         sounds = {};
 
-    // Sprite image hero_states
+    // The hero states, provides the names for the sprite images
     //
     var hero_states = [
         'Idle',
@@ -53,17 +49,20 @@ var assetLoader = (function assetLoaderInit() {
         for (f = 0; f < HERO_FRAMES_COUNT; f++) {
             frames[f] = new Image();
 
-            // Adds the 00 padding of the filenames
+            // Adds the 00 padding of the file names
             //
             frameNumber = (PADDING + f);
 
+            // Construct the file path
+            //
             frames[f].src = HERO_URL + hero_states[s] + SEPARATOR + frameNumber + SPRITE_EXTENSION;
         }
 
         hero[hero_states[s].toLowerCase()] = frames;
     }
 
-
+    // Provides the name for the coin files
+    //
     var coin_filename = 'Coin';
 
     // Load the coin sprite images into an array
@@ -72,29 +71,41 @@ var assetLoader = (function assetLoaderInit() {
     for (f = 0; f < COIN_FRAMES_COUNT; f++) {
         frames[f] = new Image();
 
+        // Adds the 00 padding of the file names
+        //
         frameNumber = (PADDING + f);
 
+        // Construct the file path
+        //
         frames[f].src = COIN_URL + coin_filename + SEPARATOR + frameNumber + SPRITE_EXTENSION;
     }
 
     coin = frames;
 
-
+    // Provides the name for the platform files
+    //
     var platform_filename = 'Platform';
+
     // Load the platform sprites into an array
     //
     frames = [];
     for (f = 0; f < PLATFORM_FRAMES_COUNT; f++) {
         frames[f] = new Image();
 
+        // Adds the 00 padding of the file names
+        //
         frameNumber = (PADDING + f);
 
+        // Construct the file path
+        //
         frames[f].src = PLATFORM_URL + platform_filename + SEPARATOR + frameNumber + SPRITE_EXTENSION;
     }
 
     platforms = frames;
 
 
+    // Array containing the different names for the sound files
+    //
     var sound_files = [
         'Click',
         'Coin',
@@ -118,6 +129,8 @@ var assetLoader = (function assetLoaderInit() {
             //
             frameNumber = (PADDING + f);
 
+            // Construct the file path
+            //
             frames[f].src = SOUNDS_URL + sound_files[s] + SEPARATOR + frameNumber + SOUND_EXTENSION;
         }
 

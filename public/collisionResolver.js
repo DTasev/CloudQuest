@@ -11,6 +11,15 @@
  */
 var collisionResolver = (function () {
 
+    /**
+     * Creates an array that contains all the objects that the
+     * player is currently colliding with.
+     *
+     * @param playerObject The player object reference
+     * @param gameObjects All game objects
+     * @returns {Array} An array containing all of the objects that the player is currently colliding with
+     *
+     */
     function createCollisionArray(playerObject, gameObjects) {
 
         var collisionResultsArray = [];
@@ -35,63 +44,86 @@ var collisionResolver = (function () {
         return collisionResultsArray;
     }
 
+    /**
+     * Action performed when player is colliding with a coin
+     *
+     * @param collisionResultsArray
+     * @param i Position of the coin object in the game objects array
+     * @param gameObjects The game objects array reference
+     */
+    function collisionWithCoin(collisionResultsArray, i, gameObjects) {
+
+        // remove the coin from the game objects array
+        //
+        coinManager.removeCoin(collisionResultsArray[i].positionInGameObjects, gameObjects);
+
+        // increase the score of the game
+        //
+        scoreManager.increaseScore(collisionResultsArray[i].object);
+
+        // Play coin collect sound
+        //
+        soundManager.play(soundManager.sounds.coin);
+    }
+
+    /**
+     * Checks for collision between the player objects and the game objects.
+     *
+     * Depending on the type of the game objects the player is colliding with
+     * different branches of the code are executed.
+     *
+     * E.g. if the player is colliding with a coin, the coin is collected.
+     * If the player is colliding with a platform on the bottom, the player
+     * is not affected by gravity.
+     *
+     * @param playerObject The player object reference
+     * @param gameObjects All game objects
+     *
+     */
     this.checkCollision = function (playerObject, gameObjects) {
 
         var collisionResultsArray = createCollisionArray(playerObject, gameObjects);
 
-        var applyGravity = true;
+        // Assume that we have to apply gravity
+        //
+        var mustApplyGravity = true;
 
+        // Check if the player is currently colliding with anything
+        //
         if (collisionResultsArray.length > 0) {
 
             for (var i = 0; i < collisionResultsArray.length; i++) {
-
 
                 // if the player is colliding with a coin object
                 //
                 if (collisionResultsArray[i].object.constructor == Coin) {
 
-                    // remove the coin from the game objects array
-                    //
-                    coinManager.removeCoin(collisionResultsArray[i].positionInGameObjects, gameObjects);
-                    
-                    // increase the score of the game
-                    //
-                    scoreManager.increaseScore(collisionResultsArray[i].object);
-
-                    // Play coin collect sound
-                    //
-                    soundManager.play(soundManager.sounds.coin);
+                    collisionWithCoin(collisionResultsArray, i, gameObjects);
 
                 }
 
                 // if the player is colliding with a platform object
+                //
                 if (collisionResultsArray[i].object.constructor == Platform) {
 
+                    // if the collision is on the bottom, then do not apply gravity
+                    //
                     if (collisionResultsArray[i].collisionResult[2] == true) {
 
-                        applyGravity = false;
+                        mustApplyGravity = false;
 
                     }
-
-                    // else not colliding with anything, apply gravity
                 }
             }
         }
 
-        if (applyGravity) {
+        if (mustApplyGravity) {
 
-            gravityManager.applyGravity(playerObject);
+            gravityManager.applyGravityToPlayer(playerObject);
 
-        }
-        else {
+        } else {
 
-            // Change the player state to idle and reset his direction
-            // will only be changed if the previous state of the player
-            // was falling. This block will only be executed after
-            // gravity must no longer by applied.
-            //
-            // If the if statement is removed the player will always be assigned
-            // idle state while not jumping/falling
+            // Reset the player's state if gravity is not affecting him anymore.
             //
             if (playerObject.currentState == playerObject.states.falling) {
 
@@ -101,6 +133,9 @@ var collisionResolver = (function () {
 
             }
 
+            // Reset the gravity's acceleration method as it is no longer
+            // affecting the player object
+            //
             gravityManager.resetGravity();
 
         }

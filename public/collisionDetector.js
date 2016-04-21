@@ -4,9 +4,11 @@
 
 /**
  * Contains methods that check for collision between game objects.
- * It does not perform any updates on the game objects themselves
+ * There are different versions of some of the methods providing a
+ * slower, but more specific collision, or a fast collision.
  *
- * @type {Function}
+ * It does not perform any updates on the game objects themselves.
+ *
  */
 var collisionDetector = (function () {
 

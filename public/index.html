@@ -10,24 +10,49 @@
     </canvas>
 
     <div><p id="gameScore"></p></div>
+
+    <!-- Loads all the assets of the game - sound, sprites -->
     <script src="assetLoader.js"></script>
-    <script src="renderManager.js"></script>
+
+    <!-- Applies gravity to all objects affected by gravity on the screen -->
     <script src="gravityManager.js"></script>
-    <script src="keyboardController.js"></script>
-    <script src="platformManager.js"></script>
+
+    <!-- Has functions to detect if two objects are currently colliding -->
     <script src="collisionDetector.js"></script>
+
+    <!-- Has functions to resolve collisions between two objects -->
     <script src="collisionResolver.js"></script>
     <script src="gameScroller.js"></script>
+
+    <!-- Keyboard controller class, makes the keyboard controls more responsive -->
+    <script src="keyboardController.js"></script>
+
     <script src="playerMovementManager.js"></script>
-    <script src="platform.js"></script>
+
+    <script src="platformManager.js"></script>
+
+    <!-- Provides functions to render different objects on the screen -->
+    <script src="renderManager.js"></script>
+
     <script src="scoreManager.js"></script>
     <script src="soundManager.js"></script>
-    <script src="coin.js"></script>
-    <script src="mainMenu.js"></script>
     <script src="coinManager.js"></script>
     <script src="spriteAnimator.js"></script>
+
+    <!-- Game Objects -->
+    <script src="platform.js"></script>
     <script src="player.js"></script>
+    <script src="coin.js"></script>
+
+    <!-- Main Menu class file, containing the functions the main menu uses -->
+    <script src="mainMenu.js"></script>
+
+    <!-- Game Class file, containing all of the function the game uses -->
     <script src="gameClass.js"></script>
+
+    <!-- Main Game File, containing the Game Loop -->
     <script src="main.js"></script>
+
+
 </body>
 </html>

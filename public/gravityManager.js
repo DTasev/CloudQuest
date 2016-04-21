@@ -3,14 +3,9 @@
  */
 
 /**
- * This class will receive all game objects, loop through each
- * and apply gravity.
+ * This class applies gravity to all objects on the screen,
+ * if they are in a state to be affected by gravity.
  *
- * As all of the objects have x/y position on the screen,
- * so applying gravity would be moving their Y position
- * towards the bottom of the screen.
- *
- * @type {Function}
  */
 var gravityManager = (function () {
 
@@ -21,34 +16,44 @@ var gravityManager = (function () {
     var GRAVITY_CONSTANT = 1;
 
     var INITIAL_GRAVITY_MULTIPLIER = 1;
+
+    // Increases the multiplier over time to simulate ground acceleration over time
+    //
     var GRAVITY_MULTIPLIER_INCREASE = 1.25;
+
+    // The maximum value the multiplier can reach
     var GRAVITY_MAX_MULTIPLIER = 4.5;
 
     var gravityMultiplier = INITIAL_GRAVITY_MULTIPLIER;
 
     /**
-     * Applies gravity to the given game object.
-     *
-     * Currently the gravity is only applied to the player object.
+     * Applies gravity to the player object.
      *
      * @param playerObject The player object to which gravity will be applied.
      */
-    this.applyGravity = function (playerObject) {
+    this.applyGravityToPlayer = function (playerObject) {
 
         // Apply gravity if player is not jumping up
         //
         if (playerObject.currentState != playerObject.states.jump) {
 
+            // Increase the player's Y position to go down
+            //
             playerObject.y += GRAVITY_CONSTANT * gravityMultiplier * playerObject.gravityWeight;
 
+            // Increase the multiplier to simulate acceleration over time
+            //
             gravityMultiplier *= GRAVITY_MULTIPLIER_INCREASE;
 
+
+            // Capping the multiplier value so it doesn't become too big
+            //
             if(gravityMultiplier > GRAVITY_MAX_MULTIPLIER){
                 gravityMultiplier = GRAVITY_MAX_MULTIPLIER;
             }
 
 
-            // This allow a jumping window of around 30 frames
+            // This allow a jumping window of around 60 frames
             // in which the player is able to jump while falling
             //
             if (fallingTimer > 30) {
@@ -65,6 +70,9 @@ var gravityManager = (function () {
 
     };
 
+    /**
+     * Resets the gravity acceleration multiplier
+     */
     this.resetGravity = function () {
         gravityMultiplier = INITIAL_GRAVITY_MULTIPLIER;
     };
