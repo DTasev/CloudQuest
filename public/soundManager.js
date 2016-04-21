@@ -13,7 +13,7 @@ var soundManager = (function () {
     // Volume of the sounds that will be played
     // A 'master' volume for all sounds
     //
-    this.volume = 0.1;
+    this.volume = 0.2;
 
     this.sounds = {
         'click' : assetLoader.sounds.click[0],

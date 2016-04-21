@@ -212,6 +212,11 @@ var playerMovementManager = (function () {
     //
     var JUMPING_DAMPING = 0.955;
 
+
+    /**
+     * Plays the jumping sound
+     * @param playerObject
+     */
     function playJumpingSound(playerObject) {
         if(currentJumpingSpeed === INITIAL_JUMPING_SPEED){
             soundManager.play(soundManager.sounds.jump);

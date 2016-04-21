@@ -1,4 +1,8 @@
+// Global canvas variable, to avoid repeating
+//
+//
 var canvas;
+
 /**
  * This function clears the canvas on screen before
  * the next frame's objects are updated and then drawn.
@@ -12,6 +16,7 @@ function clear(canvas, canvasContext) {
     canvasContext.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+
 /**
  * This function loops through all objects in the render array
  * and invokes the render function they have.
@@ -20,9 +25,8 @@ function clear(canvas, canvasContext) {
  * thus rendering separate screen for each one.
  *
  * @param canvasContext The canvas' context object.
- * @param gameObjects
- * @param mainMenu The mainMenu object
- * @param game
+ * @param mainMenu The mainMenu object reference
+ * @param game The game object reference
  */
 function render(canvasContext, mainMenu, game) {
     switch (game.currentGameState) {
@@ -53,6 +57,7 @@ function render(canvasContext, mainMenu, game) {
     }
 }
 
+
 /**
  * Handles the player's input and updates the player accordingly
  *
@@ -70,6 +75,7 @@ function handleInput(game) {
 
     }
 }
+
 
 /**
  * Updates the game's canvas depending on the state of the game
@@ -104,41 +110,95 @@ function update(canvas, mainMenu, game) {
     }
 }
 
+
 /**
- * The main loop of the game.
- * It handles the input, updates, renders and clears the canvas.
- *
- * @param canvas The HTML5 Canvas Object
- * @param canvasContext The Canvas' context
- * @param mainMenu The main menu class that will be updated/rendered
- * @param game The game class object
+ * Request animation frame variable, it renders at 60 FPS
  */
-function gameLoop(canvas, canvasContext, mainMenu, game) {
-
-    // removes last frame
-    clear(canvas, canvasContext);
-
-    // handles user action
-    handleInput(game);
-
-    // update the object for the frame
-    update(canvas, mainMenu, game);
-
-    // render objects for the frame on screen
-    render(canvasContext, mainMenu, game);
-
-    // Reset player to idle if he's running and has stopped.
-    // If this is not cleared here, the player will never stop running
-    //
-    if (game.currentGameState == game.gameStates.playing && game.player.currentState == game.player.states.run) {
-        game.player.currentState = game.player.states.idle;
-        game.player.direction = 0;
-    }
-}
+var requestAnimFrame = (function () {
+    return window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        function (callback) {
+            window.setTimeout(callback, 1000 / 60);
+        };
+})();
 
 
 /**
- * Initialises the game variables and game state
+ * Starts the main loop of the game. Uses requestAnimationFrame
+ * to draw the new frames at 60 FPS.
+ *
+ * This is an object wrapper for the gameLoop,
+ * to provide local access to the variables, so
+ * that we can use requestAnimationFrame and still keep
+ * the references.
+ *
+ */
+var StartGameLoop = (function (){
+
+    var canvContext;
+    var gameRef;
+    var mainMenuRef;
+
+    /**
+     * Constructor for the game loop. It keeps local references
+     * of the variables so that they are always accessible to the
+     * game loop.
+     *
+     * @param canvasContext The Canvas' context
+     * @param mainMenu The main menu class that will be updated/rendered
+     * @param game The game class object
+     */
+    function StartGameLoop(canvasContext, game, mainMenu){
+        canvContext = canvasContext;
+        gameRef = game;
+        mainMenuRef = mainMenu;
+    }
+
+
+    /**
+     * Game Loop using the requestAnimationFrame, instead of the
+     * setInterval.
+     *
+     *  * It handles the input, updates, renders and clears the canvas.
+
+     */
+    StartGameLoop.prototype.gameLoop = function gameLoop() {
+        requestAnimFrame(gameLoop);
+
+        // removes last frame
+        clear(canvas, canvContext);
+
+        // handles user action
+        handleInput(gameRef);
+
+        // update the object for the frame
+        update(canvas, mainMenuRef, gameRef);
+
+        // render objects for the frame on screen
+        render(canvContext, mainMenuRef, gameRef);
+
+        // Reset player to idle if he's running and has stopped.
+        // If this is not cleared here, the player will never stop running
+        //
+        if (gameRef.currentGameState == gameRef.gameStates.playing && gameRef.player.currentState == gameRef.player.states.run) {
+            gameRef.player.currentState = gameRef.player.states.idle;
+            gameRef.player.direction = 0;
+        }
+    };
+
+    return StartGameLoop;
+
+})();
+
+
+/**
+ * Initialises the game variables and game state.
+ *
+ * Hides the canvas context, game and main menu
+ * variables from the global scope.
  */
 (function main() {
 
@@ -150,11 +210,15 @@ function gameLoop(canvas, canvasContext, mainMenu, game) {
     //
     var canvasContext = canvas.getContext('2d');
 
+    // Initialise the game object, providing the canvas ot it
     var game = new Game(canvasContext);
     var mainMenu = new MainMenu('Title', canvasContext, game);
 
+    var gameLoop = new StartGameLoop(canvasContext, game, mainMenu);
 
-    return setInterval(function () {
-        gameLoop(canvas, canvasContext, mainMenu, game)
-    }, 1000 / 60);
+    gameLoop.gameLoop();
+
+    /*return setInterval(function () {
+
+     }, 1000 / 60);*/
 })();
