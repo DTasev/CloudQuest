@@ -61,12 +61,12 @@ var spriteAnimator = (function () {
 
             // case the player is idle
             //
-            case player.states.idle:
+            case playerObject.states.idle:
 
                 // If the direction is right, load the sprites facing right
                 // which in the storage are from <StateName>___000 to <StateName>___009
                 //
-                if (lastDirection == player.navigation.right) {
+                if (lastDirection == playerObject.navigation.right) {
 
                     spriteImage = assetLoader.hero.idle[Math.floor(currentFrame / HERO_ANIMATION_TIMER)];
 
@@ -76,7 +76,7 @@ var spriteAnimator = (function () {
                 // which in the storage are from <StateName>___0010 to <StateName>___0019
                 // that is the reason for the +10 at the end
                 //
-                else if (lastDirection == player.navigation.left) {
+                else if (lastDirection == playerObject.navigation.left) {
 
                     spriteImage = assetLoader.hero.idle[Math.floor(currentFrame / HERO_ANIMATION_TIMER) + 10];
                 }
@@ -90,13 +90,13 @@ var spriteAnimator = (function () {
                 break;
 
             // case the player is running
-            case player.states.run:
+            case playerObject.states.run:
 
-                if (lastDirection == player.navigation.right) {
+                if (lastDirection == playerObject.navigation.right) {
 
                     spriteImage = assetLoader.hero.run[Math.floor(currentFrame / HERO_ANIMATION_TIMER)];
 
-                } else if (lastDirection == player.navigation.left) {
+                } else if (lastDirection == playerObject.navigation.left) {
 
                     spriteImage = assetLoader.hero.run[Math.floor(currentFrame / HERO_ANIMATION_TIMER) + 10];
                 }
@@ -110,18 +110,18 @@ var spriteAnimator = (function () {
 
                 break;
 
-            case player.states.falling:
+            case playerObject.states.falling:
 
             // FALL-THROUGH on purpose
             // they use the same sprite animation
 
-            case player.states.jump:
+            case playerObject.states.jump:
 
-                if (lastDirection == player.navigation.right) {
+                if (lastDirection == playerObject.navigation.right) {
 
                     spriteImage = assetLoader.hero.jump[Math.floor(currentFrame / HERO_ANIMATION_TIMER)];
 
-                } else if (lastDirection == player.navigation.left) {
+                } else if (lastDirection == playerObject.navigation.left) {
 
                     spriteImage = assetLoader.hero.jump[Math.floor(currentFrame / HERO_ANIMATION_TIMER) + 10];
 

@@ -3,6 +3,8 @@
  */
 var playerMovementManager = (function () {
 
+    var localGameReference;
+
     // Initial acceleration value
     //
     var INITIAL_ACCELERATION_MULTIPLIER = 1;
@@ -220,7 +222,7 @@ var playerMovementManager = (function () {
 
         // checking if the player object is currently in a jump state
         //
-        if (playerObject.currentState == player.states.jump) {
+        if (playerObject.currentState == playerObject.states.jump) {
 
 
             // Increase the player's height until the
@@ -240,7 +242,7 @@ var playerMovementManager = (function () {
                 //
             } else {
 
-                playerObject.currentState = player.states.falling;
+                playerObject.currentState = playerObject.states.falling;
 
                 // Reset the current jumping speed for consecutive jumps
                 //
@@ -320,7 +322,7 @@ var playerMovementManager = (function () {
 
         // If player is not idle, handle movement
         //
-        if (playerObject.currentState != player.states.idle) {
+        if (playerObject.currentState != playerObject.states.idle) {
 
             console.log('Player Speed: ' + playerObject.runningSpeed + 'Acceleration Multiplier: ' + accelerationMultiplier);
             movingState(playerObject);
@@ -336,17 +338,17 @@ var playerMovementManager = (function () {
 
     this.rightArrowControls = function (playerObject) {
 
-        switch (currentGameState) {
+        switch (localGameReference.currentGameState) {
 
             // Handle keys on menu state
             //
-            case gameStates.menu:
+            case localGameReference.gameStates.menu:
 
                 break;
 
             // Handle keys on playing state
             //
-            case gameStates.playing:
+            case localGameReference.gameStates.playing:
 
                 // Check if player is touching the right wall of the canvas
                 // if so, don't move the player at all
@@ -366,9 +368,9 @@ var playerMovementManager = (function () {
 
                 break;
 
-            // Handle keys on game over state
+            // Handle keys on localGameReference over state
             //
-            case gameStates.gameOver:
+            case localGameReference.gameStates.gameOver:
 
                 break;
 
@@ -378,17 +380,17 @@ var playerMovementManager = (function () {
 
     this.leftArrowControls = function (playerObject) {
 
-        switch (currentGameState) {
+        switch (localGameReference.currentGameState) {
 
             // Handle keys on menu state
             //
-            case gameStates.menu:
+            case localGameReference.gameStates.menu:
 
                 break;
 
             // Handle keys on playing state
             //
-            case gameStates.playing:
+            case localGameReference.gameStates.playing:
 
                 // Change the playerObject's direction to reflect heading right
                 //
@@ -403,9 +405,9 @@ var playerMovementManager = (function () {
 
                 break;
 
-            // Handle keys on game over state
+            // Handle keys on localGameReference over state
             //
-            case gameStates.gameOver:
+            case localGameReference.gameStates.gameOver:
 
                 break;
 
@@ -415,9 +417,9 @@ var playerMovementManager = (function () {
 
     this.downArrowControls = function (playerObject) {
 
-        switch (currentGameState) {
+        switch (localGameReference.currentGameState) {
 
-            case gameStates.menu:
+            case localGameReference.gameStates.menu:
 
                 break;
 
@@ -427,7 +429,7 @@ var playerMovementManager = (function () {
             // it will also reset the playerObject's direction, so the playerObject
             // will start going straight down
             //
-            case gameStates.playing:
+            case localGameReference.gameStates.playing:
 
                 if (playerObject.currentState == playerObject.states.falling) {
 
@@ -441,7 +443,7 @@ var playerMovementManager = (function () {
                 break;
 
 
-            case gameStates.gameOver:
+            case localGameReference.gameStates.gameOver:
 
                 break;
 
@@ -451,14 +453,14 @@ var playerMovementManager = (function () {
 
     this.jumpingControls = function (playerObject) {
 
-        switch (currentGameState) {
+        switch (localGameReference.currentGameState) {
 
-            case gameStates.menu:
+            case localGameReference.gameStates.menu:
 
                 break;
 
 
-            case gameStates.playing:
+            case localGameReference.gameStates.playing:
 
                 // Change the state to jumping only
                 // if the playerObject is already on the ground
@@ -471,11 +473,15 @@ var playerMovementManager = (function () {
                 break;
 
 
-            case gameStates.gameOver:
+            case localGameReference.gameStates.gameOver:
 
                 break;
 
         }
+    };
+
+    this.setGameObject = function (game) {
+        localGameReference = game;
     };
 
     return this;

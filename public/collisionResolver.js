@@ -67,7 +67,6 @@ var collisionResolver = (function () {
 
                         applyGravity = false;
 
-
                     }
 
                     // else not colliding with anything, apply gravity
@@ -90,9 +89,9 @@ var collisionResolver = (function () {
             // If the if statement is removed the player will always be assigned
             // idle state while not jumping/falling
             //
-            if (playerObject.currentState == player.states.falling) {
+            if (playerObject.currentState == playerObject.states.falling) {
 
-                playerObject.currentState = player.states.idle;
+                playerObject.currentState = playerObject.states.idle;
 
                 playerObject.direction = 0;
 

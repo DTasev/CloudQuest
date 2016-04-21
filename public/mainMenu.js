@@ -4,10 +4,11 @@
 
 var MainMenu = (function () {
     var selectedItem = -1;
-
-    function MainMenu(title, canvasContext) {
+    var localGameReference;
+    function MainMenu(title, canvasContext, game) {
         this.title = title;
         this.ctx = canvasContext;
+        localGameReference = game;
     }
 
     MainMenu.prototype.render = function () {
@@ -91,18 +92,15 @@ var MainMenu = (function () {
 
             }
 
-            if (oldSelectedItem !== selectedItem && currentGameState === gameStates.menu) {
+            if (oldSelectedItem !== selectedItem && localGameReference.currentGameState === localGameReference.gameStates.menu) {
                 soundManager.play(soundManager.sounds.menu);
             }
-
-
-            console.log('MouseX: ' + mousePos.x + '\nMouseY: ' + mousePos.y);
 
         }
 
         function mainMenuButtonClickAction() {
 
-            if (currentGameState === gameStates.menu) {
+            if (localGameReference.currentGameState === localGameReference.gameStates.menu) {
                 soundManager.play(soundManager.sounds.click);
 
                 switch (selectedItem) {
@@ -113,13 +111,13 @@ var MainMenu = (function () {
                         // or reset any left over objects
                         // from the last one
                         //
-                        initialiseGameObjects();
+                        localGameReference.initialiseGameObjects();
 
                         // change the game state to playing
                         // so that the game switches the screen and starts
                         // the playing game mode
                         //
-                        currentGameState = gameStates.playing;
+                        localGameReference.currentGameState = localGameReference.gameStates.playing;
 
                         break;
 
@@ -143,7 +141,7 @@ var MainMenu = (function () {
             var rect = canvas.getBoundingClientRect();
             return {
                 x: Math.floor((event.clientX - rect.left) / (rect.right - rect.left) * canvas.width),
-                y: Math.round((event.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height)
+                y: Math.floor((event.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height)
             };
         }
     };

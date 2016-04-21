@@ -37,7 +37,7 @@ var gravityManager = (function () {
 
         // Apply gravity if player is not jumping up
         //
-        if (playerObject.currentState != player.states.jump) {
+        if (playerObject.currentState != playerObject.states.jump) {
 
             playerObject.y += GRAVITY_CONSTANT * gravityMultiplier * playerObject.gravityWeight;
 
@@ -52,7 +52,7 @@ var gravityManager = (function () {
             // in which the player is able to jump while falling
             //
             if (fallingTimer > 30) {
-                playerObject.currentState = player.states.falling;
+                playerObject.currentState = playerObject.states.falling;
             }
 
             fallingTimer++;

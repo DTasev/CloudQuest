@@ -18,7 +18,7 @@ var platformManager = (function () {
     this.difficultyModifier = 1.0;
 
 
-    this.MAXIMUM_PLATFORMS = 5;
+    this.MAXIMUM_PLATFORMS = 1;
     var currentPlatforms = 0;
 
     this.removePlatform = function (positionInGameObjects, gameObjects) {
