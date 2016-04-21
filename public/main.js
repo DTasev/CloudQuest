@@ -81,7 +81,6 @@ function handleInput(game) {
  * Updates the game's canvas depending on the state of the game
  */
 function update(canvas, mainMenu, game) {
-
     switch (game.currentGameState) {
 
         // Update menu state
@@ -95,6 +94,7 @@ function update(canvas, mainMenu, game) {
         // Update playing state
         //
         case game.gameStates.playing:
+            debugger;
 
             game.updatePlayingState(canvas, game.player, game.gameObjects);
 
@@ -166,6 +166,7 @@ var StartGameLoop = (function (){
 
      */
     StartGameLoop.prototype.gameLoop = function gameLoop() {
+
         requestAnimFrame(gameLoop);
 
         // removes last frame
@@ -201,7 +202,6 @@ var StartGameLoop = (function (){
  * variables from the global scope.
  */
 (function main() {
-
     // Get the canvas element
     //
     canvas = document.getElementById("gameCanvas");

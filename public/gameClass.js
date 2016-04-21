@@ -14,10 +14,11 @@ var Game = (function () {
 
     var newHighScore = false;
 
+    var canvasCtx;
 
     function Game(canvasContext) {
 
-        this.canvasContext = canvasContext;
+        canvasCtx = canvasContext;
         this.player = null;
 
         this.gameStates = {
@@ -190,12 +191,8 @@ var Game = (function () {
 
         var coin = new Coin(50, 50, 1);
         var coin1 = new Coin(70, 50, 1);
-        var coin2 = new Coin(80, 50, 1);
-        var coin3 = new Coin(90, 50, 1);
         this.gameObjects.push(coin);
         this.gameObjects.push(coin1);
-        this.gameObjects.push(coin2);
-        this.gameObjects.push(coin3);
 
         scoreManager.startTimer();
         platformManager.resetPlatformGeneration();
@@ -203,7 +200,7 @@ var Game = (function () {
 
         var speed = 0.2;
         var deflateType = 4;
-        for (var i = 50; i < 500; i += 150) {
+        for (var i = 50; i < 100; i += 150) {
 
             var platform = new Platform(i, i + 50, 150, 40, speed, deflateType++, 'rgb(0,0,0)');
 
@@ -247,7 +244,6 @@ var Game = (function () {
 
         }
 
-        console.log(gameOverScreenTimer);
         gameOverScreenTimer++;
 
         // Delay the game over screen timer
@@ -268,8 +264,7 @@ var Game = (function () {
      */
     Game.prototype.removeOutOfBoundsObjects = function removeOutOfBoundsObjects(gameObjects) {
 
-        // TODO change to 0
-        for (var i = 1; i < gameObjects.length; i++) {
+        for (var i = 0; i < gameObjects.length; i++) {
 
             var platform = gameObjects[i];
 
@@ -345,13 +340,13 @@ var Game = (function () {
         //
         platformManager.generatePlatforms(gameObjects);
 
-        gameScroller.scrollGame(gameObjects);
+        gameScrollManager.scrollGame(gameObjects);
 
-        scoreManager.updateScore();
+        scoreManager.update(canvasCtx);
 
         coinManager.generateCoins(gameObjects);
 
-
+        difficultyManager.update();
     };
 
     return Game;

@@ -1,13 +1,14 @@
 /**
- * Created by dimta on 18-Apr-16.
+ * This class scrolls all of the objects, with an adjustable speed
+ *
+ * @author Dimitar Tasev
  */
-
-var gameScroller = (function () {
+var gameScrollManager = (function () {
 
     this.scrollingSpeed = 0.5;
 
     /**
-     * Scrolls aff of the game objects the specified speed.
+     * Scrolls all of the game objects with the specified speed.
      *
      * The speed can be increased to increase difficulty.
      *
@@ -19,7 +20,7 @@ var gameScroller = (function () {
         // the player object
         //
         for (var i = 0; i < gameObjects.length; i++) {
-            gameObjects[i].y += scrollingSpeed;
+            gameObjects[i].y += this.scrollingSpeed;
         }
 
     };

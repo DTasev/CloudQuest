@@ -1,8 +1,13 @@
 /**
- * Created by dimta on 13-Apr-16.
+ * Contains the code executed when the player has to move.
+ * It has function for moving left, right and jumping.
+ *
+ * @author Dimitar Tasev
  */
 var playerMovementManager = (function () {
 
+    // Local variable reference to the game object
+    //
     var localGameReference;
 
     // Initial acceleration value
@@ -127,10 +132,10 @@ var playerMovementManager = (function () {
         // to simulate acceleration.
         //
         // Here we subtract from the player's X value so that we move
-        // to the left of the screen
+        // to the left of the screen.
         //
         // Check if player is touching the left wall of the canvas
-        // if so, don't move the player at all
+        // if so, don't move the player at all.
         //
         if (!collisionDetector.checkLeftBounds(playerObject)) {
             playerObject.x -= (playerObject.runningSpeed * accelerationMultiplier);
@@ -142,7 +147,7 @@ var playerMovementManager = (function () {
         //
         // The acceleration multiplier value is also
         // dampened, so that at a higher speed
-        // the player speeds up less that he would at the start
+        // the player speeds up less that he would at the start.
         //
         if (direction == playerObject.navigation.left) {
 
@@ -214,10 +219,9 @@ var playerMovementManager = (function () {
 
 
     /**
-     * Plays the jumping sound
-     * @param playerObject
+     * Plays the jumping sound if the player has just started the jump
      */
-    function playJumpingSound(playerObject) {
+    function playJumpingSound() {
         if(currentJumpingSpeed === INITIAL_JUMPING_SPEED){
             soundManager.play(soundManager.sounds.jump);
         }
@@ -236,7 +240,7 @@ var playerMovementManager = (function () {
         //
         if (playerObject.currentState == playerObject.states.jump) {
 
-            playJumpingSound(playerObject);
+            playJumpingSound();
 
             // Increase the player's height until the
             // minimum jumping speed is reached

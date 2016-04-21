@@ -155,7 +155,7 @@ var spriteAnimator = (function () {
     //
     var COIN_ANIMATION_TIMER = ANIMATION_SPEED / 5;
 
-    this.getCoinSprite = function (coinObject) {
+    this.getCoinSprite = function () {
 
         var spriteImage;
 

@@ -1,11 +1,8 @@
 /**
- * Created by dimta on 13-Apr-16.
- */
-
-/**
  * This class applies gravity to all objects on the screen,
  * if they are in a state to be affected by gravity.
  *
+ * @author Dimitar Tasev
  */
 var gravityManager = (function () {
 

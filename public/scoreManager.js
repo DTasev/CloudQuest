@@ -64,12 +64,26 @@ var scoreManager = (function () {
         return {'score' : localStorage.getItem('score'), 'timeSurvived' : localStorage.getItem('timeSurvived')}
     };
 
+    function drawCoinNextToScore(canvasContext) {
+        var coinSprite = spriteAnimator.getCoinSprite();
+        canvasContext.drawImage(coinSprite.image, 0, 0, coinSprite.image.width, coinSprite.image.height, canvas.width - 50, 15, 20, 20);
+    }
+
     /**
-     *
+     * Updates the score on the screen, also draws a coin
      */
-    this.updateScore = function () {
-        // show on screen
-        document.getElementById('gameScore').innerHTML = 'Score: ' + score + '<br/>Time Survived: ' + timeSurvived;
+    this.update = function (canvasContext) {
+
+        // document.getElementById('gameScore').innerHTML = 'Score: ' + score + '<br/>Time Survived: ' + timeSurvived;
+
+        canvasContext.font = "20px Georgia";
+        canvasContext.fillStyle = "Black";
+        canvasContext.fillText('Score: ' + score, canvas.width - 100, 30);
+
+        drawCoinNextToScore(canvasContext);
+
+        canvasContext.fillText('Time Survived: ' + timeSurvived, canvas.width - 140, 60);
+
     };
 
 
@@ -103,6 +117,10 @@ var scoreManager = (function () {
         localStorage.setItem('score', 0);
         localStorage.setItem('timeSurvived', 0);
 
+    };
+
+    this.getScore = function () {
+        return score;
     };
 
     return this;

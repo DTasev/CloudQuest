@@ -93,7 +93,6 @@ var MainMenu = (function () {
         }
 
         function mainMenuButtonClickAction() {
-
             if (localGameReference.currentGameState === localGameReference.gameStates.menu) {
                 soundManager.play(soundManager.sounds.click);
 
