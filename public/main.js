@@ -292,7 +292,7 @@ function gameLoop(canvas, canvasContext, gameObjects, mainMenu) {
     // Reset player to idle if he's running and has stopped.
     // If this is not cleared here, the player will never stop running
     //
-    if (player.currentState == player.states.run) {
+    if (currentGameStateplayer.currentState == player.states.run) {
         player.currentState = player.states.idle;
         player.direction = 0;
     }

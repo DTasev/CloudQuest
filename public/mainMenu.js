@@ -35,6 +35,18 @@ var MainMenu = (function () {
 
         this.ctx.fillText('Reset High Score', canvas.width / 2, 350);
 
+        checkIfSelectedItem(3, this.ctx);
+
+        if (soundManager.soundMuted == true) {
+
+            this.ctx.fillText('Unmute Sounds', canvas.width / 2, 400);
+
+        } else {
+
+            this.ctx.fillText('Mute Sounds', canvas.width / 2, 400);
+
+        }
+
 
     };
 
@@ -53,25 +65,34 @@ var MainMenu = (function () {
 
     MainMenu.prototype.update = function () {
 
-        document.onclick = changeGameState;
+        document.onclick = mainMenuButtonClickAction;
         document.onmousemove = handleMouseMovement;
 
         function handleMouseMovement(event) {
             var dot, eventDoc, doc, body, pageX, pageY;
 
             var mousePos = getMousePos(canvas, event);
+            var oldSelectedItem = selectedItem;
 
-            if (mousePos.y > 310) {
+            if (mousePos.y > 360) {
 
+                selectedItem = 3;
+
+            } else if (mousePos.y > 310) {
                 selectedItem = 2;
-
-            } else if (mousePos.y > 260) {
+            }
+            else if (mousePos.y > 260) {
 
                 selectedItem = 1;
+
 
             } else {
                 selectedItem = 0;
 
+            }
+
+            if (oldSelectedItem !== selectedItem && currentGameState === gameStates.menu) {
+                soundManager.play(soundManager.sounds.menu);
             }
 
 
@@ -79,13 +100,25 @@ var MainMenu = (function () {
 
         }
 
-        function changeGameState() {
+        function mainMenuButtonClickAction() {
 
             if (currentGameState === gameStates.menu) {
+                soundManager.play(soundManager.sounds.click);
+
                 switch (selectedItem) {
                     case 0:
 
+                        // initialise all of the game objects
+                        // so that we can start a new game
+                        // or reset any left over objects
+                        // from the last one
+                        //
                         initialiseGameObjects();
+
+                        // change the game state to playing
+                        // so that the game switches the screen and starts
+                        // the playing game mode
+                        //
                         currentGameState = gameStates.playing;
 
                         break;
@@ -93,6 +126,12 @@ var MainMenu = (function () {
                     case 2:
 
                         scoreManager.resetLocalScores();
+
+                        break;
+
+                    case 3:
+
+                        soundManager.soundMuted = soundManager.soundMuted != true;
 
                         break;
 
@@ -110,4 +149,5 @@ var MainMenu = (function () {
     };
 
     return MainMenu;
-})();
+})
+();

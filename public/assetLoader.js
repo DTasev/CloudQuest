@@ -14,7 +14,7 @@ var assetLoader = (function assetLoaderInit() {
     var HERO_FRAMES_COUNT = 20;
     var COIN_FRAMES_COUNT = 6;
     var PLATFORM_FRAMES_COUNT = 2;
-    var SOUND_FILES_COUNT = 3;
+    var SOUND_FILES_COUNT = 1;
 
     // Variables for constructing the
     // path to the sprite images
@@ -24,7 +24,7 @@ var assetLoader = (function assetLoaderInit() {
         HERO_URL = './heroSprites/',
         COIN_URL = './coinSprites/',
         PLATFORM_URL = './platformSprites/',
-        SOUNDS_URL = './platformSprites/',
+        SOUNDS_URL = './sound/',
         SPRITE_EXTENSION = '.png',
         SOUND_EXTENSION = '.wav',
         s,
@@ -80,12 +80,11 @@ var assetLoader = (function assetLoaderInit() {
     coin = frames;
 
 
-
     var platform_filename = 'Platform';
     // Load the platform sprites into an array
     //
     frames = [];
-    for(f = 0; f < PLATFORM_FRAMES_COUNT; f++){
+    for (f = 0; f < PLATFORM_FRAMES_COUNT; f++) {
         frames[f] = new Image();
 
         frameNumber = (PADDING + f);
@@ -96,12 +95,19 @@ var assetLoader = (function assetLoaderInit() {
     platforms = frames;
 
 
+    var sound_files = [
+        'Click',
+        'Coin',
+        'Menu',
+        'Run'
+    ];
+
     // Load the sounds into the same frames array
     // name not changed so that the code isn't
     // cluttered with different variables
     //
-    debugger;
-    for (s = 1, len = hero_states.length; s < len; s++) {
+
+    for (s = 0, len = sound_files.length; s < len; s++) {
         frames = [];
 
         for (f = 0; f < SOUND_FILES_COUNT; f++) {
@@ -111,10 +117,10 @@ var assetLoader = (function assetLoaderInit() {
             //
             frameNumber = (PADDING + f);
 
-            frames[f].src = SOUNDS_URL + hero_states[s] + SEPARATOR + frameNumber + SOUND_EXTENSION;
+            frames[f].src = SOUNDS_URL + sound_files[s] + SEPARATOR + frameNumber + SOUND_EXTENSION;
         }
 
-        sounds[hero_states[s].toLowerCase()] = frames;
+        sounds[sound_files[s].toLowerCase()] = frames;
     }
 
     return {hero, coin, platforms, sounds}
