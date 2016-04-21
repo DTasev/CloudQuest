@@ -53,7 +53,11 @@ function render(canvasContext, mainMenu, game) {
     }
 }
 
-
+/**
+ * Handles the player's input and updates the player accordingly
+ *
+ * @param game
+ */
 function handleInput(game) {
 
     switch (game.currentGameState) {

@@ -326,7 +326,7 @@ var Game = (function () {
             this.currentGameState = this.gameStates.gameOver;
             gameOver = true;
 
-            //TODO add return?
+            return;
         }
 
         this.removeOutOfBoundsObjects(gameObjects);

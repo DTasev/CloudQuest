@@ -58,6 +58,10 @@ var collisionResolver = (function () {
                     //
                     scoreManager.increaseScore(collisionResultsArray[i].object);
 
+                    // Play coin collect sound
+                    //
+                    soundManager.play(soundManager.sounds.coin);
+
                 }
 
                 // if the player is colliding with a platform object

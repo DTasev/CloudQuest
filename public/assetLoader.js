@@ -99,7 +99,8 @@ var assetLoader = (function assetLoaderInit() {
         'Click',
         'Coin',
         'Menu',
-        'Run'
+        'Run',
+        'Jump'
     ];
 
     // Load the sounds into the same frames array

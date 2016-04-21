@@ -193,7 +193,7 @@ var playerMovementManager = (function () {
 
     // The start jumping speed
     //
-    var START_JUMPING_SPEED = 10;
+    var INITIAL_JUMPING_SPEED = 10;
 
     // The minimum jumping speed
     // when this speed is reached the jump is over
@@ -201,7 +201,7 @@ var playerMovementManager = (function () {
     //
     var MIN_JUMPING_SPEED = 1;
 
-    var currentJumpingSpeed = START_JUMPING_SPEED;
+    var currentJumpingSpeed = INITIAL_JUMPING_SPEED;
 
     // The current jumping speed is dampened
     // down to the value of MIN_JUMPING_SPEED.
@@ -211,6 +211,13 @@ var playerMovementManager = (function () {
     //
     //
     var JUMPING_DAMPING = 0.955;
+
+    function playJumpingSound(playerObject) {
+        if(currentJumpingSpeed === INITIAL_JUMPING_SPEED){
+            soundManager.play(soundManager.sounds.jump);
+        }
+    }
+
 
     /**
      * This function is acts upon the player only of he is
@@ -224,6 +231,7 @@ var playerMovementManager = (function () {
         //
         if (playerObject.currentState == playerObject.states.jump) {
 
+            playJumpingSound(playerObject);
 
             // Increase the player's height until the
             // minimum jumping speed is reached
@@ -246,7 +254,7 @@ var playerMovementManager = (function () {
 
                 // Reset the current jumping speed for consecutive jumps
                 //
-                currentJumpingSpeed = START_JUMPING_SPEED;
+                currentJumpingSpeed = INITIAL_JUMPING_SPEED;
             }
         } else {
 
@@ -255,10 +263,11 @@ var playerMovementManager = (function () {
             // and then jumps again without moving the current
             // jumping speed is not reset
             //
-            currentJumpingSpeed = START_JUMPING_SPEED;
+            currentJumpingSpeed = INITIAL_JUMPING_SPEED;
         }
 
     }
+
 
     /**
      * Handles the player's movement depending on his current state
@@ -272,6 +281,8 @@ var playerMovementManager = (function () {
     function movingState(playerObject) {
 
         handleJumping(playerObject);
+
+        playRunningSound(playerObject);
 
         switch (playerObject.direction) {
 
@@ -307,6 +318,7 @@ var playerMovementManager = (function () {
         accelerationMultiplierIncrease = INITIAL_MULTIPLIER_INCREASE;
     }
 
+
     /**
      * Handles the player's movement depending on his current state
      * and the direction that he is going.
@@ -318,13 +330,12 @@ var playerMovementManager = (function () {
      *
      * @param playerObject
      */
-    this.handleMovement = function (playerObject) {
+    this.handleMovement = function handleMovement(playerObject) {
 
         // If player is not idle, handle movement
         //
         if (playerObject.currentState != playerObject.states.idle) {
 
-            console.log('Player Speed: ' + playerObject.runningSpeed + 'Acceleration Multiplier: ' + accelerationMultiplier);
             movingState(playerObject);
 
             // If player is idle, reset all acceleration variables
@@ -336,15 +347,17 @@ var playerMovementManager = (function () {
         }
     };
 
+
+    /**
+     * Controls for the right arrow of the keyboard.
+     *
+     * It is active only during the playing state of the game.
+     *
+     * @param playerObject
+     */
     this.rightArrowControls = function (playerObject) {
 
         switch (localGameReference.currentGameState) {
-
-            // Handle keys on menu state
-            //
-            case localGameReference.gameStates.menu:
-
-                break;
 
             // Handle keys on playing state
             //
@@ -378,6 +391,14 @@ var playerMovementManager = (function () {
         }
     };
 
+
+    /**
+     * Controls for the left arrow of the keyboard.
+     *
+     * It is active only during the playing state of the game.
+     *
+     * @param playerObject
+     */
     this.leftArrowControls = function (playerObject) {
 
         switch (localGameReference.currentGameState) {
@@ -415,20 +436,23 @@ var playerMovementManager = (function () {
         }
     };
 
+
+    /**
+     * Controls for the down arrow of the keyboard.
+     *
+     * It is active only during the playing state of the game.
+     *
+     *  Pressing down while playing will do:
+     *  If the playerObject is still jumping up, it will stop the jump
+     *  it will also reset the playerObject's direction, so the playerObject
+     *  will start going straight down
+     *
+     * @param playerObject
+     */
     this.downArrowControls = function (playerObject) {
 
         switch (localGameReference.currentGameState) {
 
-            case localGameReference.gameStates.menu:
-
-                break;
-
-
-            // Pressing down while playing will do:
-            // If the playerObject is still jumping up, it will stop the jump
-            // it will also reset the playerObject's direction, so the playerObject
-            // will start going straight down
-            //
             case localGameReference.gameStates.playing:
 
                 if (playerObject.currentState == playerObject.states.falling) {
@@ -441,24 +465,20 @@ var playerMovementManager = (function () {
 
 
                 break;
-
-
-            case localGameReference.gameStates.gameOver:
-
-                break;
-
-
         }
     };
 
+    /**
+     * Handles the jumping controls for the player.
+     *
+     * That is the space bar and is only active during the
+     * playing state of the game.
+     *
+     * @param playerObject
+     */
     this.jumpingControls = function (playerObject) {
 
         switch (localGameReference.currentGameState) {
-
-            case localGameReference.gameStates.menu:
-
-                break;
-
 
             case localGameReference.gameStates.playing:
 
@@ -471,18 +491,28 @@ var playerMovementManager = (function () {
                 }
 
                 break;
-
-
-            case localGameReference.gameStates.gameOver:
-
-                break;
-
         }
     };
 
+    /**
+     * Setter for the local game object reference
+     *
+     * @param game Value of the game object
+     */
     this.setGameObject = function (game) {
         localGameReference = game;
     };
+
+    /**
+     * Plays the running sound if the player is currently in the running state
+     *
+     * @param playerObject
+     */
+    function playRunningSound(playerObject) {
+        if (playerObject.currentState === playerObject.states.run)
+            soundManager.play(soundManager.sounds.run);
+
+    }
 
     return this;
 

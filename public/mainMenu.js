@@ -5,6 +5,7 @@
 var MainMenu = (function () {
     var selectedItem = -1;
     var localGameReference;
+
     function MainMenu(title, canvasContext, game) {
         this.title = title;
         this.ctx = canvasContext;
@@ -30,21 +31,17 @@ var MainMenu = (function () {
 
         checkIfSelectedItem(1, this.ctx);
 
-        this.ctx.fillText('Controls', canvas.width / 2, 300);
+        this.ctx.fillText('Reset High Score', canvas.width / 2, 300);
 
         checkIfSelectedItem(2, this.ctx);
 
-        this.ctx.fillText('Reset High Score', canvas.width / 2, 350);
+        if (soundManager.soundMuted) {
 
-        checkIfSelectedItem(3, this.ctx);
-
-        if (soundManager.soundMuted == true) {
-
-            this.ctx.fillText('Unmute Sounds', canvas.width / 2, 400);
+            this.ctx.fillText('Unmute Sounds', canvas.width / 2, 350);
 
         } else {
 
-            this.ctx.fillText('Mute Sounds', canvas.width / 2, 400);
+            this.ctx.fillText('Mute Sounds', canvas.width / 2, 350);
 
         }
 
@@ -75,19 +72,16 @@ var MainMenu = (function () {
             var mousePos = getMousePos(canvas, event);
             var oldSelectedItem = selectedItem;
 
-            if (mousePos.y > 360) {
+            if (mousePos.y > 310) {
 
-                selectedItem = 3;
-
-            } else if (mousePos.y > 310) {
                 selectedItem = 2;
-            }
-            else if (mousePos.y > 260) {
+
+            } else if (mousePos.y > 260) {
 
                 selectedItem = 1;
 
-
             } else {
+
                 selectedItem = 0;
 
             }
@@ -121,13 +115,13 @@ var MainMenu = (function () {
 
                         break;
 
-                    case 2:
+                    case 1:
 
                         scoreManager.resetLocalScores();
 
                         break;
 
-                    case 3:
+                    case 2:
 
                         soundManager.soundMuted = soundManager.soundMuted != true;
 
