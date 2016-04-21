@@ -9,6 +9,7 @@ var scoreManager = (function () {
 
     var timerInterval;
 
+
     /**
      * Starts the timer and initialises the score and
      * time survived to 0.
@@ -27,6 +28,7 @@ var scoreManager = (function () {
         }, 1000);
     };
 
+
     /**
      * Stop the timer.
      * This must be executed when the game is over in order
@@ -35,6 +37,7 @@ var scoreManager = (function () {
     this.stopTimer = function () {
         clearInterval(timerInterval);
     };
+
 
     /**
      * Increases the game score dependent on the coin's difficulty value
@@ -47,6 +50,7 @@ var scoreManager = (function () {
 
     };
 
+
     /**
      * Returns the current score and time time survived in seconds.
      *
@@ -56,6 +60,7 @@ var scoreManager = (function () {
         return {'score': score, 'timeSurvived': timeSurvived};
     };
 
+
     /**
      * Returns the score and time saved in the local storage
      * @returns {{score, timeSurvived}}
@@ -64,15 +69,17 @@ var scoreManager = (function () {
         return {'score' : localStorage.getItem('score'), 'timeSurvived' : localStorage.getItem('timeSurvived')}
     };
 
+
     function drawCoinNextToScore(canvasContext) {
         var coinSprite = spriteAnimator.getCoinSprite();
         canvasContext.drawImage(coinSprite.image, 0, 0, coinSprite.image.width, coinSprite.image.height, canvas.width - 50, 15, 20, 20);
     }
 
+
     /**
-     * Updates the score on the screen, also draws a coin
+     * Renders the score on the screen, also renders a coin
      */
-    this.updateScore = function (canvasContext) {
+    this.renderScore = function (canvasContext) {
 
         // document.getElementById('gameScore').innerHTML = 'Score: ' + score + '<br/>Time Survived: ' + timeSurvived;
 
@@ -119,13 +126,16 @@ var scoreManager = (function () {
 
     };
 
+
     this.getScore = function () {
         return score;
     };
 
+
     this.getTimer = function () {
         return timeSurvived;
     };
+
 
     return this;
 })();

@@ -23,6 +23,7 @@ var gravityManager = (function () {
 
     var gravityMultiplier = INITIAL_GRAVITY_MULTIPLIER;
 
+
     /**
      * Applies gravity to the player object.
      *
@@ -67,13 +68,13 @@ var gravityManager = (function () {
 
     };
 
+
     /**
      * Resets the gravity acceleration multiplier
      */
     this.resetGravity = function () {
         gravityMultiplier = INITIAL_GRAVITY_MULTIPLIER;
     };
-
 
 
     return this;

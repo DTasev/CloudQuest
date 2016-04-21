@@ -1,10 +1,7 @@
 /**
- * Created by dimta on 19-Apr-16.
+ * The Game class, it contains all methods used by the main.js file
+ * to update and render the game.
  */
-
-var canvas;
-
-
 var Game = (function () {
 
     var GAME_OVER_SCREEN_TIMER_DELAY = 100;
@@ -104,6 +101,7 @@ var Game = (function () {
      * the first object in the array, so in order to be rendered
      * on top he has to be the last object rendered on the screen.
      *
+     * It also renders the parallax background and the in-game score
      *
      * @param gameObjects The game's object that have to be rendered on screen.
      * @param canvasContext The canvas' context on which the object will be drawn
@@ -111,6 +109,8 @@ var Game = (function () {
     Game.prototype.renderPlayingState = function renderPlayingState(gameObjects, canvasContext) {
 
         parallaxBackground.renderBackground(canvasContext);
+
+        scoreManager.renderScore(this.canvasContext);
 
         for (var i = gameObjects.length - 1; i >= 0; i--) {
 
@@ -147,7 +147,7 @@ var Game = (function () {
 
         var currentScore = scoreManager.getCurrentScoreAndTimeSurvived();
 
-        // Do some checks to see if the scores are new high scores
+        // If a new high score has been achieved, show appropriate message on screen
         //
         if (newHighScore) {
 
@@ -163,9 +163,6 @@ var Game = (function () {
 
     };
 
-    Game.prototype.changeState = function () {
-        this.currentGameState = this.gameStates.menu;
-    };
 
     /**
      *  Deletes the objects array and
@@ -204,44 +201,58 @@ var Game = (function () {
         difficultyManager.resetDifficultyTimers();
         parallaxBackground.resetCloudPositions();
 
-        var speed = 0.2;
-        var deflateType = 4;
-        for (var i = 50; i < 100; i += 150) {
 
-            var platform = new Platform(i, i + 50, 150, 40, speed, deflateType++, 'rgb(0,0,0)');
+        // Add starting platform for player to ensure there's something he can fall on
+        //
+        var platform = new Platform(50, 140, 150, 40, 0.2, 4);
 
-            speed += 0.08;
-
-            this.gameObjects.push(platform);
-        }
+        this.gameObjects.push(platform);
 
 
         // Initialise all of the keyboard controls for all the states
         //
         this.initialiseKeyboardControls(FRAMES, this.player);
+
+        // Set the game object in the player movement manager
+        // can be used to have different keyboard controls
+        // for the different states, this is implemented,
+        // but only the playing state controls are used
+        //
         playerMovementManager.setGameObject(this);
 
     };
+
 
     Game.prototype.updateMenuState = function updateMenuState(canvas, mainMenu) {
         mainMenu.update();
     };
 
+
     /**
-     * Updates the game over screen. Also times it out after 2000millis
-     * and switches back to the main menu state
+     * Updates the game over screen.
+     *
+     * The game over screen is timed out after 2000millis
+     * and switched back to the main menu state
      */
     Game.prototype.updateGameOverState = function updateGameOverState() {
 
+        // boolean to make sure this is executed only ONCE
+        //
         if (gameOver) {
 
+            // Stop the timer and score counting
+            //
             scoreManager.stopTimer();
 
             var currentScore = scoreManager.getCurrentScoreAndTimeSurvived();
             var savedScore = scoreManager.getSavedScoreAndTimeSurvived();
 
+            // Check if the current score is a high score
+            //
             newHighScore = currentScore.score > savedScore.score;
 
+            // If a new high score has been achieved save locally
+            //
             if (newHighScore) {
                 scoreManager.saveScoreLocally();
             }
@@ -353,14 +364,19 @@ var Game = (function () {
         platformManager.generatePlatforms(gameObjects);
 
 
+        // Scrolls all of the game objects down
+        //
         gameScrollManager.scrollGame(gameObjects);
 
-        scoreManager.updateScore(this.canvasContext);
-
+        // Generating new coins in the game
+        //
         coinManager.generateCoins(gameObjects);
 
+        // Updates difficulty, increasing it over time
+        //
         difficultyManager.updateDifficulty();
     };
+
 
     return Game;
 })();

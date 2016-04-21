@@ -5,14 +5,12 @@
 var Platform = (function () {
 
     /**
-     * TODO
      * @param x Horizontal position of the platform on the canvas
      * @param y Vertical position of the platform on the canvas
      * @param width Width of the platform
      * @param height Height of the platform
      * @param deflateSpeed Speed at which the size of the platform will be reduced
      * @param deflateType Type of deflation, can be left right or both
- *   * @param fillColour Defines the colour of the platform on the canvas
      * @constructor
      */
     function Platform(x, y, width, height, deflateSpeed, deflateType) {
@@ -34,6 +32,7 @@ var Platform = (function () {
         }
     }
 
+
     /**
      * Moves the player vertically the specified distance
      * @param distance
@@ -41,6 +40,8 @@ var Platform = (function () {
     Platform.prototype.moveVer = function (distance) {
         this.y += distance;
     };
+
+
     /**
      * Moves the player horizontally the specified distance
      * @param distance
@@ -48,6 +49,7 @@ var Platform = (function () {
     Platform.prototype.moveHor = function (distance) {
         this.x += distance;
     };
+
 
     /**
      * Returns the horizontal center of this object's rectangle.
@@ -61,6 +63,7 @@ var Platform = (function () {
         return (this.width + this.x) / 2;
     };
 
+
     /**
      * Returns the vertical center of this object's rectangle.
      * This is referred to as vertical center, because
@@ -73,15 +76,18 @@ var Platform = (function () {
         return (this.height + this.y) / 2;
     };
 
+
     Platform.prototype.toString = function () {
         return "x->" + this.x + " y->" + this.y + " width->" + this.width + " height->" + this.height;
     };
+
 
     Platform.prototype.render = function (canvasContext) {
         //renderManager.renderRectangle(canvasContext, this);
 
         renderManager.renderPlatform(canvasContext, this);
     };
+
 
     return Platform;
 })();

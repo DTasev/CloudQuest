@@ -9,8 +9,6 @@
     please update it.
     </canvas>
 
-    <div><p id="gameScore"></p></div>
-
     <!-- Loads all the assets of the game - sound, sprites -->
     <script src="assetLoader.js"></script>
 
@@ -22,6 +20,8 @@
 
     <!-- Has functions to resolve collisions between two objects -->
     <script src="collisionResolver.js"></script>
+
+    <!-- Scrolls all the game objects on the screen -->
     <script src="gameScrollManager.js"></script>
 
     <!-- Keyboard controller class, makes the keyboard controls more responsive -->
@@ -33,15 +33,25 @@
     <!-- Provides functions to render different objects on the screen -->
     <script src="renderManager.js"></script>
 
-    <!--  -->
+    <!-- Handles the platforms, includes generation, deflation, removing and resetting -->
     <script src="platformManager.js"></script>
 
-
+    <!-- Handles the score of the game, including the coin and timer score, also renders it-->
     <script src="scoreManager.js"></script>
+
+    <!-- Handles the sound of the game, includes sound library, playing, volume and mute -->
     <script src="soundManager.js"></script>
+
+    <!-- Handles the coins in the game, includes generating new coins, removing coins -->
     <script src="coinManager.js"></script>
+
+    <!-- Handles the sprite frame animations for the player, platforms and coins -->
     <script src="spriteAnimator.js"></script>
+
+    <!-- Handles the parallax background and the clouds in the background -->
     <script src="parallaxBackground.js"></script>
+
+    <!-- Handles the game's difficulty, making the game harder over time -->
     <script src="difficultyManager.js"></script>
 1
     <!-- Game Objects -->

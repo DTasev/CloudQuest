@@ -26,6 +26,7 @@ function KeyboardController(keys, repeat) {
         return false;
     };
 
+
     // Cancel timeout and mark key as released on keyup
     //
     document.onkeyup = function (event) {
@@ -36,6 +37,7 @@ function KeyboardController(keys, repeat) {
             delete timers[key];
         }
     };
+
 
     // When window is unfocused we may not get key events. To prevent this
     // causing a key to 'get stuck down', cancel all held keys

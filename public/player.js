@@ -98,5 +98,6 @@ var Player = (function () {
         renderManager.renderPlayer(canvasContext, this);
     };
 
+
     return Player;
 })();

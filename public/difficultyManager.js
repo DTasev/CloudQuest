@@ -13,6 +13,7 @@ var difficultyManager = (function () {
     //
     var scrollSpeedUpTimer = 0;
 
+
     // Used to reduce the amount of platforms available on the screen
     //
     var platformScoreCounter = 0;
@@ -76,6 +77,7 @@ var difficultyManager = (function () {
         platformScoreCounter = 0;
         scrollSpeedUpTimer = 0;
     };
+
 
     return this;
 })();

@@ -30,6 +30,7 @@ var renderManager = (function () {
         );
     };
 
+
     /**
      * Renders the coin sprite on screen.
      * The image sprite is read using the spriteAnimator class
@@ -51,6 +52,7 @@ var renderManager = (function () {
         );
 
     };
+
 
     /**
      * Renders the player sprite on the screen.
@@ -75,6 +77,7 @@ var renderManager = (function () {
 
     };
 
+
     /**
      * Renders a rectangle on the screen.
      * The colour has to be specified in the object that's
@@ -91,6 +94,7 @@ var renderManager = (function () {
         canvasContext.fillRect(rectangleObject.x, rectangleObject.y, rectangleObject.width, rectangleObject.height);
 
     };
+
 
     /**
      * Render a circle on the screen. It uses the canvas' path to draw a

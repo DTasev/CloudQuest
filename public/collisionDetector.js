@@ -12,6 +12,7 @@
  */
 var collisionDetector = (function () {
 
+
     /**
      * Calculates the rectangle's sides
      * @param rectangle
@@ -24,6 +25,7 @@ var collisionDetector = (function () {
             'bottom': rectangle.y + rectangle.height // also bottom as 3rd member
         };
     };
+
 
     /**
      * A precise rectangle collision detection.
@@ -111,21 +113,26 @@ var collisionDetector = (function () {
         }
     };
 
+
     this.checkUpperBounds = function (object) {
         return object.y <= 0;
     };
+
 
     this.checkLeftBounds = function (object) {
         return object.x <= 0;
     };
 
+
     this.checkRightBounds = function (object) {
         return object.x + object.width >= canvas.width;
     };
 
+
     this.checkLowerBounds = function (object) {
         return object.y >= canvas.height;
     };
+
 
     return this;
 })();

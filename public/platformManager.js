@@ -11,6 +11,7 @@ var platformManager = (function () {
     var MAX_HORIZONTAL_SPEED = 1.5;
     var MAX_VERTICAL_SPEED = 0.6;
 
+
     // Difficulty modifier for the game
     // This should be reduced to make the game harder
     // as it will increase the deflation speed of the platforms
@@ -21,6 +22,13 @@ var platformManager = (function () {
     this.MAXIMUM_PLATFORMS = 10;
     var currentPlatforms = 0;
 
+    /**
+     * Removes a platform from the game objects arrays and counts
+     * down on the platform counter
+     *
+     * @param positionInGameObjects
+     * @param gameObjects
+     */
     this.removePlatform = function (positionInGameObjects, gameObjects) {
         if (collisionDetector.checkLowerBounds(gameObjects[positionInGameObjects]) || ((gameObjects[positionInGameObjects].width < 0) || (gameObjects[positionInGameObjects].height < 0))) {
 
@@ -31,6 +39,7 @@ var platformManager = (function () {
         }
 
     };
+
 
     /**
      *  This function is used to generate new platforms for the game.
@@ -133,6 +142,7 @@ var platformManager = (function () {
         }
 
     };
+
 
     /**
      * Handles deflation for the platform,
@@ -246,6 +256,7 @@ var platformManager = (function () {
         }
     };
 
+
     /**
      * Resets the platform's generation counter
      *
@@ -254,6 +265,7 @@ var platformManager = (function () {
 
         currentPlatforms = 0;
     };
+
 
     return this;
 })

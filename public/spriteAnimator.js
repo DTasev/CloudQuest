@@ -1,9 +1,8 @@
 /**
- * Created by dimta on 17-Apr-16.
- */
-
-/**
- * This class is used to animate the sprites for the game
+ * This class is used to count the frames and
+ * animate the sprites for the game
+ *
+ * @author Dimitar Tasev
  */
 var spriteAnimator = (function () {
 
@@ -38,6 +37,13 @@ var spriteAnimator = (function () {
     //
     var lastDirection = 1;
 
+
+    /**
+     * Controls the player's sprite animation
+     *
+     * @param playerObject
+     * @returns {{image: *, widthChange: number, heightChange: number}}
+     */
     this.getPlayerSprite = function (playerObject) {
 
         // class wide frame counter to track when we have to switch sprite images
@@ -150,11 +156,18 @@ var spriteAnimator = (function () {
         };
     };
 
+
     // Calculates how often the sprites for the coin have to change
     // this is different as the coin has less sprite images
     //
     var COIN_ANIMATION_TIMER = ANIMATION_SPEED / 5;
 
+
+    /**
+     * Controls the coin's sprite animation
+     *
+     * @returns {{image: *}}
+     */
     this.getCoinSprite = function () {
 
         var spriteImage;
@@ -165,6 +178,12 @@ var spriteAnimator = (function () {
 
     };
 
+
+    /**
+     * Returns the platform's sprites
+     * @param platformObject
+     * @returns {{image: *}}
+     */
     this.getPlatformSprite = function (platformObject) {
         var spriteImage;
 
@@ -210,6 +229,7 @@ var spriteAnimator = (function () {
 
         return {'image': spriteImage};
     };
+
 
     return this;
 })();

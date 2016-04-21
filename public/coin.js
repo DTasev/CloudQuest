@@ -1,7 +1,8 @@
 /**
- * Created by dimta on 18-Apr-16.
+ * The coin object class
+ *
+ * @author Dimitar Tasev
  */
-
 var Coin = (function () {
 
     /**
@@ -54,6 +55,13 @@ var Coin = (function () {
         return (this.height + this.y) / 2;
     };
 
+
+    /**
+     * Renders the coin object on screen
+     * Uses the sprite animator class to get the appropriate sprite image
+     *
+     * @param canvasContext
+     */
     Coin.prototype.render = function (canvasContext) {
         //renderManager.renderRectangle(canvasContext, this);
         renderManager.renderCoin(canvasContext, this);

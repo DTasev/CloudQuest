@@ -26,9 +26,14 @@ var gameScrollManager = (function () {
 
     };
 
+
+    /**
+     * Reset's the game's scrolls speed upon death
+     */
     this.resetScrollSpeed = function () {
         this.scrollingSpeed = INITIAL_SCROLLING_SPEED;
     };
+
 
     return this;
 })();

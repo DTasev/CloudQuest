@@ -40,6 +40,7 @@ var collisionResolver = (function () {
         return collisionResultsArray;
     }
 
+
     /**
      * Action performed when player is colliding with a coin
      *
@@ -61,6 +62,7 @@ var collisionResolver = (function () {
         //
         soundManager.play(soundManager.sounds.coin);
     }
+
 
     /**
      * Checks for collision between the player objects and the game objects.
@@ -137,6 +139,7 @@ var collisionResolver = (function () {
         }
 
     };
+
 
     return this;
 

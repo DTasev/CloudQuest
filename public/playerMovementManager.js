@@ -48,6 +48,7 @@ var playerMovementManager = (function () {
     //
     var direction;
 
+
     /**
      * This method handles the player's movement to the right.
      *
@@ -120,6 +121,7 @@ var playerMovementManager = (function () {
             accelerationMultiplierIncrease = INITIAL_MULTIPLIER_INCREASE;
         }
     }
+
 
     /**
      * This method handles the player's movement to the left.
@@ -222,7 +224,7 @@ var playerMovementManager = (function () {
      * Plays the jumping sound if the player has just started the jump
      */
     function playJumpingSound() {
-        if(currentJumpingSpeed === INITIAL_JUMPING_SPEED){
+        if (currentJumpingSpeed === INITIAL_JUMPING_SPEED) {
             soundManager.play(soundManager.sounds.jump);
         }
     }
@@ -477,6 +479,7 @@ var playerMovementManager = (function () {
         }
     };
 
+
     /**
      * Handles the jumping controls for the player.
      *
@@ -503,6 +506,7 @@ var playerMovementManager = (function () {
         }
     };
 
+
     /**
      * Setter for the local game object reference
      *
@@ -511,6 +515,7 @@ var playerMovementManager = (function () {
     this.setGameObject = function (game) {
         localGameReference = game;
     };
+
 
     /**
      * Plays the running sound if the player is currently in the running state
@@ -523,6 +528,6 @@ var playerMovementManager = (function () {
 
     }
 
-    return this;
 
+    return this;
 })();

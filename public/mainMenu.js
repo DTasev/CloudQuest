@@ -1,7 +1,11 @@
 /**
- * Created by dimta on 20-Apr-16.
+ * The Main Menu class of the game.
+ * It renders, updates and tracks any mouse actions on it
+ * including mouse movement for menu selection and clicking
+ * for menu activation.
+ *
+ * @author Dimitar Tasev
  */
-
 var MainMenu = (function () {
     var selectedItem = -1;
     var localGameReference;
@@ -12,6 +16,10 @@ var MainMenu = (function () {
         localGameReference = game;
     }
 
+
+    /**
+     * Renders the main menu text on the screen
+     */
     MainMenu.prototype.render = function () {
         this.ctx.fillStyle = "Black";
         this.ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -48,6 +56,13 @@ var MainMenu = (function () {
 
     };
 
+
+    /**
+     * Colours the selected item in yellow and increases the font size
+     *
+     * @param itemNumber
+     * @param ctx
+     */
     function checkIfSelectedItem(itemNumber, ctx) {
         if (selectedItem == itemNumber) {
             ctx.fillStyle = "Yellow";
@@ -61,6 +76,12 @@ var MainMenu = (function () {
         }
     }
 
+
+    /**
+     * Updates the menu to show which item is currently selected
+     *
+     * On click it activates the effect and plays a sound.
+     */
     MainMenu.prototype.update = function () {
 
         document.onclick = mainMenuButtonClickAction;
@@ -92,6 +113,12 @@ var MainMenu = (function () {
 
         }
 
+
+        /**
+         * If the left mouse button is clicked it does a different
+         * action depending on the selected menu member.
+         *
+         */
         function mainMenuButtonClickAction() {
             if (localGameReference.currentGameState === localGameReference.gameStates.menu) {
                 soundManager.play(soundManager.sounds.click);
@@ -130,6 +157,14 @@ var MainMenu = (function () {
             }
         }
 
+
+        /**
+         * Returns the mouse position relative to the canvas, not the page
+         *
+         * @param canvas
+         * @param event
+         * @returns {{x: number, y: number}}
+         */
         function getMousePos(canvas, event) {
             var rect = canvas.getBoundingClientRect();
             return {
@@ -140,5 +175,4 @@ var MainMenu = (function () {
     };
 
     return MainMenu;
-})
-();
+})();
