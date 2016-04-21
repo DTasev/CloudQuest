@@ -17,7 +17,7 @@ var MainMenu = (function () {
     }
 
 
-    /**
+        /**
      * Renders the main menu text on the screen
      */
     MainMenu.prototype.render = function () {
@@ -25,11 +25,12 @@ var MainMenu = (function () {
         this.ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         this.ctx.textAlign = "center";
-        this.ctx.fillStyle = "White";
-
+        this.ctx.fillStyle = "rgb(135,206,250)";
         this.ctx.font = "60px Georgia";
 
         this.ctx.fillText(this.title, canvas.width / 2, 150);
+
+        this.ctx.fillStyle = "White";
 
         this.ctx.font = "30px Georgia";
 

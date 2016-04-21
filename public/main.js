@@ -212,7 +212,7 @@ var StartGameLoop = (function () {
 
     // Initialise the game object, providing the canvas ot it
     var game = new Game(canvasContext);
-    var mainMenu = new MainMenu('Title', canvasContext, game);
+    var mainMenu = new MainMenu('Cloud Quest', canvasContext, game);
 
     var gameLoop = new StartGameLoop(canvasContext, game, mainMenu);
 
