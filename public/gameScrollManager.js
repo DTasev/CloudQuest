@@ -5,10 +5,11 @@
  */
 var gameScrollManager = (function () {
 
-    this.scrollingSpeed = 0.5;
+    var INITIAL_SCROLLING_SPEED = 0.5;
+    this.scrollingSpeed = INITIAL_SCROLLING_SPEED;
 
     /**
-     * Scrolls all of the game objects with the specified speed.
+     * Scrolls aff of the game objects the specified speed.
      *
      * The speed can be increased to increase difficulty.
      *
@@ -20,9 +21,13 @@ var gameScrollManager = (function () {
         // the player object
         //
         for (var i = 0; i < gameObjects.length; i++) {
-            gameObjects[i].y += this.scrollingSpeed;
+            gameObjects[i].y += scrollingSpeed;
         }
 
+    };
+
+    this.resetScrollSpeed = function () {
+        this.scrollingSpeed = INITIAL_SCROLLING_SPEED;
     };
 
     return this;

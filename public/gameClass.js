@@ -14,11 +14,10 @@ var Game = (function () {
 
     var newHighScore = false;
 
-    var canvasCtx;
 
     function Game(canvasContext) {
 
-        canvasCtx = canvasContext;
+        this.canvasContext = canvasContext;
         this.player = null;
 
         this.gameStates = {
@@ -194,9 +193,13 @@ var Game = (function () {
         this.gameObjects.push(coin);
         this.gameObjects.push(coin1);
 
+        // Reset all game settings
+        //
         scoreManager.startTimer();
         platformManager.resetPlatformGeneration();
         coinManager.resetCoinGeneration();
+        gameScrollManager.resetScrollSpeed();
+        difficultyManager.resetDifficultyTimers();
 
         var speed = 0.2;
         var deflateType = 4;
@@ -326,27 +329,31 @@ var Game = (function () {
 
         this.removeOutOfBoundsObjects(gameObjects);
 
-        // Handle the collision and gravity of between the objects and player
+
+        // Handle the collision and gravity between the objects and player
         //
         collisionResolver.checkCollision(playerObject, gameObjects);
+
 
         // Handles the deflation and removal of platforms from
         // the gameObjects and renderArray arrays
         //
         platformManager.handleDeflation(canvas, gameObjects);
 
+
         // Generates platforms and adds them to the gameObjects
         // and renderArray arrays
         //
         platformManager.generatePlatforms(gameObjects);
 
+
         gameScrollManager.scrollGame(gameObjects);
 
-        scoreManager.update(canvasCtx);
+        scoreManager.updateScore(this.canvasContext);
 
         coinManager.generateCoins(gameObjects);
 
-        difficultyManager.update();
+        difficultyManager.updateDifficulty();
     };
 
     return Game;

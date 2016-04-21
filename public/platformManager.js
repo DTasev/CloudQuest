@@ -47,19 +47,25 @@ var platformManager = (function () {
 
             for (var i = 0; i < numberOfPlatforms; i++) {
 
-                // Math.floor((Math.random() * 100) + 1);
-                // random number between 1 and 100
-
-
-                // TODO check if the platform is colliding with any other platform
+                // Generate the platform's location (X,Y) and parameters (width, height)
                 //
                 var width = Math.floor((Math.random() * canvas.width / 3) + 30);
                 var height = Math.floor((Math.random() * 30) + 10);
                 var x = Math.floor((Math.random() * canvas.width - width) + 1);
                 var y = Math.floor((Math.random() * canvas.height - height) - 50);
 
+
+                // Generate the platform's deflate type randomly.
+                // As each platform has 6 different types, the number
+                // can be between 1 and 6
+                //
                 var deflateType = Math.floor((Math.random() * 6) + 1);
 
+
+                // Generate the deflating speed for the platform randomly
+                //
+                // Affected by a difficulty modifier, which is controlled by the difficultyManager
+                //
                 // Starting deflate speed for horizontal and vertical between 0.1 and 0.4
                 // if vertical -> if height < 20, speed in half
                 //
@@ -67,20 +73,28 @@ var platformManager = (function () {
 
                 var colour;
 
+
+                // 1, 2 and 3 are the horizontal deflation types.
+                // They can be a little bit faster than the vertical ones.
+                //
                 if (deflateType === 1 || deflateType === 2 || deflateType === 3) {
 
+                    // Cap the deflate speed, otherwise it may be
+                    // unfair because the platform will disappear too fast
+                    //
                     if (deflateSpeed > MAX_HORIZONTAL_SPEED) {
                         deflateSpeed = MAX_HORIZONTAL_SPEED;
                     }
 
-                    // Determining the colour dependent on the deflateSpeed
+                    // 4, 5 and 6 are the vertical deflation types
+                    // They need to be slower to give the player the opportunity
+                    // to jump on them
                     //
-                    // Math.floor is necessary because RGB wants whole numbers
-                    //
-                    colour = 'rgb(' + Math.floor(30 * (deflateSpeed * 10)) + ',0,0)';
-
                 } else if (deflateType === 4 || deflateType === 5 || deflateType === 6) {
 
+                    // Cap the deflate speed, otherwise it may be
+                    // unfair because the platform will disappear too fast
+                    //
                     if (deflateSpeed > MAX_VERTICAL_SPEED) {
                         deflateSpeed = MAX_VERTICAL_SPEED;
                     }
@@ -92,14 +106,7 @@ var platformManager = (function () {
                         deflateSpeed = deflateSpeed / 2;
                     }
 
-                    // Determining the colour dependent on the deflateSpeed
-                    //
-                    // Math.floor is necessary because RGB wants whole numbers
-                    //
-                    colour = 'rgb(0,' + Math.floor(30 * (deflateSpeed * 10)) + ',0)';
                 }
-
-                //console.log('DeflateSpeed: ' + deflateSpeed + '\nDeflateType: ' + deflateType +'\nColour: ' + colour);
 
                 // Create the new platform from the
                 // variables generated above.
@@ -107,7 +114,15 @@ var platformManager = (function () {
                 //
                 var newPlatform = new Platform(x, y, width, height, deflateSpeed, deflateType, colour);
 
+
+                // Add platform to game objects array
+                // so that it can be updated and rendered
+                //
                 gameObjects.push(newPlatform);
+
+
+                // Increment platform count
+                //
                 currentPlatforms += 1;
             }
         }
@@ -217,13 +232,21 @@ var platformManager = (function () {
                             break;
                     }
                 } catch (e) {
+
+                    // empty catch block, don't have anything to do with the exception
+
                 }
 
             }
         }
     };
 
+    /**
+     * Resets the platform's generation counter
+     *
+     */
     this.resetPlatformGeneration = function () {
+
         currentPlatforms = 0;
     };
 

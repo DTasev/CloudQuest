@@ -15,14 +15,13 @@ var Platform = (function () {
  *   * @param fillColour Defines the colour of the platform on the canvas
      * @constructor
      */
-    function Platform(x, y, width, height, deflateSpeed, deflateType, fillColour) {
+    function Platform(x, y, width, height, deflateSpeed, deflateType) {
         // x is the right-most point on screen
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.deflateSpeed = deflateSpeed;
-        this.fillColour = fillColour;
         this.deflateType = deflateType;
 
         this.availableDeflateTypes = {

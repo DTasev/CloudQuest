@@ -17,7 +17,7 @@ var renderManager = (function () {
      * @param canvasContext
      * @param platformObject
      */
-    this.renderPlatform = function (canvasContext, platformObject) {
+    this.renderPlatform = function renderPlatform(canvasContext, platformObject) {
 
         var sprite = spriteAnimator.getPlatformSprite(platformObject);
 
@@ -37,7 +37,6 @@ var renderManager = (function () {
      * of the canvas' context
      *
      * @param canvasContext The canvas that the object will be drawn on.
-     * @param coinObject The object that will be drawn on the canvas.
      */
     this.renderCoin = function (canvasContext, coinObject) {
 
@@ -88,7 +87,7 @@ var renderManager = (function () {
      */
     this.renderRectangle = function (canvasContext, rectangleObject) {
 
-        canvasContext.fillStyle = rectangleObject.fillColour;
+        canvasContext.fillStyle = 'rgb(0,0,0)';
         canvasContext.fillRect(rectangleObject.x, rectangleObject.y, rectangleObject.width, rectangleObject.height);
 
     };

@@ -81,6 +81,7 @@ function handleInput(game) {
  * Updates the game's canvas depending on the state of the game
  */
 function update(canvas, mainMenu, game) {
+
     switch (game.currentGameState) {
 
         // Update menu state
@@ -94,7 +95,6 @@ function update(canvas, mainMenu, game) {
         // Update playing state
         //
         case game.gameStates.playing:
-            debugger;
 
             game.updatePlayingState(canvas, game.player, game.gameObjects);
 
@@ -136,7 +136,7 @@ var requestAnimFrame = (function () {
  * the references.
  *
  */
-var StartGameLoop = (function (){
+var StartGameLoop = (function () {
 
     var canvContext;
     var gameRef;
@@ -151,7 +151,7 @@ var StartGameLoop = (function (){
      * @param mainMenu The main menu class that will be updated/rendered
      * @param game The game class object
      */
-    function StartGameLoop(canvasContext, game, mainMenu){
+    function StartGameLoop(canvasContext, game, mainMenu) {
         canvContext = canvasContext;
         gameRef = game;
         mainMenuRef = mainMenu;

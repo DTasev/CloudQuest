@@ -72,7 +72,7 @@ var scoreManager = (function () {
     /**
      * Updates the score on the screen, also draws a coin
      */
-    this.update = function (canvasContext) {
+    this.updateScore = function (canvasContext) {
 
         // document.getElementById('gameScore').innerHTML = 'Score: ' + score + '<br/>Time Survived: ' + timeSurvived;
 
@@ -121,6 +121,10 @@ var scoreManager = (function () {
 
     this.getScore = function () {
         return score;
+    };
+
+    this.getTimer = function () {
+        return timeSurvived;
     };
 
     return this;
