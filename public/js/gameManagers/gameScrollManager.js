@@ -19,13 +19,35 @@ var gameScrollManager = (function () {
 
         // Scrolls all game objects down, including
         // the player object
-        //
+        //z
         for (var i = 0; i < gameObjects.length; i++) {
             gameObjects[i].y += scrollingSpeed;
         }
 
     };
 
+    /*
+     this.scrollGame = function (gameObjects) {
+
+
+     var playerAboveMiddle = (gameObjects[0].y + gameObjects[0].height / 2) - (canvas.height / 2);
+
+     // Scrolls all game objects down, including
+     // the player object
+     //
+     for (var i = 0; i < gameObjects.length; i++) {
+
+     if (playerAboveMiddle < 0)
+     gameObjects[i].y += scrollingSpeed;
+
+     else if(playerAboveMiddle > 0)
+     gameObjects[i].y -= scrollingSpeed;
+     else if(playerAboveMiddle == 0)
+     {}
+     }
+
+     };
+     */
 
     /**
      * Reset's the game's scrolls speed upon death

@@ -28,63 +28,63 @@
 </canvas>
 
 <!-- Loads all the assets of the game - sound, sprites -->
-<script src="assetLoader.js"></script>
+<script src="js/assetManagers/assetLoader.js"></script>
 
 <!-- Applies gravity to all objects affected by gravity on the screen -->
-<script src="gravityManager.js"></script>
+<script src="js/gameObjectsManagers/gravityManager.js"></script>
 
 <!-- Has functions to detect if two objects are currently colliding -->
-<script src="collisionDetector.js"></script>
+<script src="js/collision/collisionDetector.js"></script>
 
 <!-- Has functions to resolve collisions between two objects -->
-<script src="collisionResolver.js"></script>
+<script src="js/collision/collisionResolver.js"></script>
 
 <!-- Scrolls all the game objects on the screen -->
-<script src="gameScrollManager.js"></script>
+<script src="js/gameManagers/gameScrollManager.js"></script>
 
 <!-- Keyboard controller class, makes the keyboard controls more responsive -->
-<script src="keyboardController.js"></script>
+<script src="js/keyboardMovement/keyboardController.js"></script>
 
 <!-- Updates the player's object dependent on the keyboard's input -->
-<script src="playerMovementManager.js"></script>
+<script src="js/keyboardMovement/playerMovementManager.js"></script>
 
 <!-- Provides functions to render different objects on the screen -->
-<script src="renderManager.js"></script>
+<script src="js/gameObjectsManagers/renderManager.js"></script>
 
 <!-- Handles the platforms, includes generation, deflation, removing and resetting -->
-<script src="platformManager.js"></script>
+<script src="js/gameObjectsManagers/platformManager.js"></script>
 
 <!-- Handles the score of the game, including the coin and timer score, also renders it-->
-<script src="scoreManager.js"></script>
+<script src="js/assetManagers/scoreManager.js"></script>
 
 <!-- Handles the sound of the game, includes sound library, playing, volume and mute -->
-<script src="soundManager.js"></script>
+<script src="js/assetManagers/soundManager.js"></script>
 
 <!-- Handles the coins in the game, includes generating new coins, removing coins -->
-<script src="coinManager.js"></script>
+<script src="js/gameObjectsManagers/coinManager.js"></script>
 
 <!-- Handles the sprite frame animations for the player, platforms and coins -->
-<script src="spriteAnimator.js"></script>
+<script src="js/assetManagers/spriteManager.js"></script>
 
 <!-- Handles the parallax background and the clouds in the background -->
-<script src="parallaxBackground.js"></script>
+<script src="js/parallaxBackground.js"></script>
 
 <!-- Handles the game's difficulty, making the game harder over time -->
-<script src="difficultyManager.js"></script>
+<script src="js/gameManagers/difficultyManager.js"></script>
 
 <!-- Game Objects -->
-<script src="platform.js"></script>
-<script src="player.js"></script>
-<script src="coin.js"></script>
+<script src="js/gameObjects/platform.js"></script>
+<script src="js/gameObjects/player.js"></script>
+<script src="js/gameObjects/coin.js"></script>
 
 <!-- Main Menu class file, containing the functions the main menu uses -->
-<script src="mainMenu.js"></script>
+<script src="js/mainMenu.js"></script>
 
 <!-- Game Class file, containing all of the function the game uses -->
-<script src="gameClass.js"></script>
+<script src="js/gameClass.js"></script>
 
 <!-- Main Game File, containing the Game Loop -->
-<script src="main.js"></script>
+<script src="js/main.js"></script>
 
 
 </body>
