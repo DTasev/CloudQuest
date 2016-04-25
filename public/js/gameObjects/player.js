@@ -1,5 +1,8 @@
 var Player = (function () {
 
+    Player.prototype = new GameObject();
+    Player.prototype.constructor = Player;
+
     /**
      * @param x X position of the object
      * @param y Y position of the object
@@ -10,13 +13,13 @@ var Player = (function () {
      * @constructor
      */
     function Player(x, y, width, height, runningSpeed, gravityWeight) {
-        // Coordinate Values
-        //
+
+        debugger;
+
         this.x          = x;
         this.y          = y;
         this.width      = width;
         this.height     = height;
-        this.fillColour = 'rgb(0,0,0)';
 
         // Values for object updates
         // such as movement and gravity
@@ -54,33 +57,6 @@ var Player = (function () {
         //
         this.currentState = 1;
     }
-
-
-    /**
-     * Returns the horizontal center of this object's rectangle.
-     * This is referred to as horizontal center, because
-     * it is calculated by using the horizontal (X) position of the
-     * object and the width.
-     *
-     * @returns {number} the center of the object, calculated from it's horizontal (X) position
-     */
-    Player.prototype.getHorizontalCenter = function () {
-
-        return (this.width + this.x) / 2;
-    };
-
-
-    /**
-     * Returns the vertical center of this object's rectangle.
-     * This is referred to as vertical center, because
-     * it is calculated by using the vertical (Y) position of the
-     * object and the height
-     *
-     * @returns {number} the center of the object, calculated from it's vertical (Y) position
-     */
-    Player.prototype.getVerticalCenter = function () {
-        return (this.height + this.y) / 2;
-    };
 
 
     /**

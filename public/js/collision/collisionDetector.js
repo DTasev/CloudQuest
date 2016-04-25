@@ -47,7 +47,7 @@ var collisionDetector = (function () {
             rectSides1.bottom < rectSides2.top ||
             rectSides1.top > rectSides2.bottom)) {
 
-
+debugger;
             var leftCollision = rectangle1.getHorizontalCenter() > rectangle2.getHorizontalCenter(); // check if colliding on left
 
             var rightCollision = rectangle1.getHorizontalCenter() < rectangle2.getHorizontalCenter(); // check if colliding on right
