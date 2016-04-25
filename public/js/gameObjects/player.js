@@ -1,5 +1,8 @@
 var Player = (function () {
 
+    // Inherit from gameObject?
+    // Doesn't get the getHorizontalCenter/getVerticalCenter
+    //
     Player.prototype = new GameObject();
     Player.prototype.constructor = Player;
 
