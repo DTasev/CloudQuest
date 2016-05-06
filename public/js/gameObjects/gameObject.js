@@ -56,4 +56,4 @@ var GameObject = (function () {
     };
 
     return GameObject;
-})
+})();
