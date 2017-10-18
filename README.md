@@ -3,4 +3,4 @@ Assignment
 
 Link to the web page: 
 
-http://users.aber.ac.uk/dbt/ftw/index.html
+http://dtasev.github.io/CloudQuest/
